@@ -1,25 +1,26 @@
-# SudokuExplainer (SE)
+# SukakuExplainer
 
-## 1.2.1
+SukakuExplainer is my modifications to SudokuExplainer to also solve pencilmark sudoku (sukaku).
 
-Nicolas Juillerat's SudokuExplainer
+There is discussion about sukaku here: http://forum.enjoysudoku.com/pencilmark-only-sudoku-t4929.html
 
-## 1.2.1.3
+This version of SukakuExplainer was first released here: http://forum.enjoysudoku.com/post280335.html (5 Aug 2019).
 
-gsf's (Glenn Fowler) serate modifications from: http://gsf.cococlyde.org/download/sudoku/serate.tgz used to rate sudoku puzzles for the Patterns Game: http://forum.enjoysudoku.com/patterns-game-t6290.html
-
-The Java binary can be downloaded from: http://gsf.cococlyde.org/download/sudoku/SudokuExplainer.jar
+There is an improved (faster) version of SukakuExplainer here: https://github.com/SudokuMonster/SukakuExplainer
 
 ## Usage - GUI
 
-  java.exe -jar SudokuExplainer.jar
+  java.exe -jar SukakuExplainer.jar
 
 ## Usage - serate
 
-  java.exe -Xrs -Xmx500m -cp SudokuExplainer.jar diuf.sudoku.test.serate --format="%g ED=%r/%p/%d" --input=puzzles.txt --output=output.txt
+ java.exe -Xrs -Xmx500m -cp SukakuExplainer.jar diuf.sudoku.test.serate --format="%g ED=%r/%p/%d" --input=puzzles.txt --output=puzzles.rated.txt
 
-## Usage - manual
+## Usage - hints
 
-  java.exe -cp SudokuExplainer.jar diuf.sudoku.test.serate -m
+  java.exe -Xrs -Xmx500m -cp SukakuExplainer.jar diuf.sudoku.test.hints --input=puzzle.txt
 
+## Usage - pencilmarks
+
+  java.exe -Xrs -Xmx500m -cp SukakuExplainer.jar diuf.sudoku.test.pencilmarks --input=puzzle.txt
 

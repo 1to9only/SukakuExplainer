@@ -127,8 +127,9 @@ public class Chaining implements IndirectHintProducer {
         for (int y = 0; y < 9; y++) {
             for (int x = 0; x < 9; x++) {
                 Cell cell = grid.getCell(x, y);
-                int cardinality = cell.getPotentialValues().cardinality();
+//c             int cardinality = cell.getPotentialValues().cardinality();
                 if (cell.getValue() == 0) { // the cell is empty
+                int cardinality = cell.getPotentialValues().cardinality();
                     if (cardinality > 1) {
                         // Iterate on all potential values that are not alone
                         for (int value = 1; value <= 9; value++) {
@@ -136,7 +137,7 @@ public class Chaining implements IndirectHintProducer {
                                 Potential pOn = new Potential(cell, value, true);
                                 doUnaryChaining(grid, pOn, result, isYChainEnabled, isXChainEnabled);
                             }
-                        } 
+                        }
                     }
                 } // if empty
             } // for x
@@ -157,8 +158,9 @@ public class Chaining implements IndirectHintProducer {
         for (int y = 0; y < 9; y++) {
             for (int x = 0; x < 9; x++) {
                 Cell cell = grid.getCell(x, y);
-                int cardinality = cell.getPotentialValues().cardinality();
+//c             int cardinality = cell.getPotentialValues().cardinality();
                 if (cell.getValue() == 0) { // the cell is empty
+                int cardinality = cell.getPotentialValues().cardinality();
                     if (cardinality > 2 || (cardinality > 1 && isDynamic)) {
                         // Prepare storage and accumulator for "Cell Reduction"
                         Map<Integer, LinkedSet<Potential>> valueToOn =
@@ -285,7 +287,7 @@ public class Chaining implements IndirectHintProducer {
         }
         for (Potential dstOn : cycles) {
             // Cycle found !!
-            assert dstOn.isOn; // Cycles are only looked for from "on" potentials
+//a         assert dstOn.isOn; // Cycles are only looked for from "on" potentials
             Potential dstOff = getReversedCycle(dstOn);
             ChainingHint hint = createCycleHint(grid, dstOn, dstOff, isYChainEnabled,
                     isXChainEnabled);
@@ -573,12 +575,13 @@ public class Chaining implements IndirectHintProducer {
         }
 
         if (isXChainEnabled) {
-            // Second rule: if there is only two positions for this potential, the other one gets on
-            List<Class<? extends Grid.Region>> partTypes = new ArrayList<Class<? extends Grid.Region>>(3);
-            partTypes.add(Grid.Block.class);
-            partTypes.add(Grid.Row.class);
-            partTypes.add(Grid.Column.class);
-            for (Class<? extends Grid.Region> partType : partTypes) {
+        //  // Second rule: if there is only two positions for this potential, the other one gets on
+        //  List<Class<? extends Grid.Region>> partTypes = new ArrayList<Class<? extends Grid.Region>>(3);
+        //  partTypes.add(Grid.Block.class);
+        //  partTypes.add(Grid.Row.class);
+        //  partTypes.add(Grid.Column.class);
+        //  for (Class<? extends Grid.Region> partType : partTypes) {
+            for (Class<? extends Grid.Region> partType : grid.getRegionTypes()) {
                 Grid.Region region = grid.getRegionAt(partType, p.cell.getX(), p.cell.getY());
                 BitSet potentialPositions = region.getPotentialPositions(p.value);
                 if (potentialPositions.cardinality() == 2) {
@@ -631,8 +634,8 @@ public class Chaining implements IndirectHintProducer {
                     if (!isParent(p, pOff)) {
                         // Not processed yet
                         pendingOff.add(pOff);
-                        assert length >= 1;
-                        if (length >= 1) // Seems this can be removed!
+//a                     assert length >= 1;
+//s                     if (length >= 1) // Seems this can be removed!
                             toOff.add(pOff);
                     }
                 }
@@ -650,8 +653,8 @@ public class Chaining implements IndirectHintProducer {
                     if (!toOn.contains(pOn)) {
                         // Not processed yet
                         pendingOn.add(pOn);
-                        assert length >= 1;
-                        if (length >= 1) // Seems this can be removed
+//a                     assert length >= 1;
+//s                     if (length >= 1) // Seems this can be removed
                             toOn.add(pOn);
                     }
                 }
@@ -675,13 +678,13 @@ public class Chaining implements IndirectHintProducer {
                         if (!chains.contains(pOff))
                             chains.add(pOff);
                     }
-                    if (!isParent(p, pOff)) { // Why this filter? (seems useless)
+//s                 if (!isParent(p, pOff)) { // Why this filter? (seems useless)
                         if (!toOff.contains(pOff)) {
                             // Not processed yet
                             pendingOff.add(pOff);
                             toOff.add(pOff);
                         }
-                    }
+//s                 }
                 }
             }
             while (!pendingOff.isEmpty()) {
@@ -817,7 +820,7 @@ public class Chaining implements IndirectHintProducer {
                             if (hint instanceof ChainingHint)
                                 nested = (ChainingHint)hint;
                             Map<Cell,BitSet> removable = hint.getRemovablePotentials();
-                            assert !removable.isEmpty();
+//a                         assert !removable.isEmpty();
                             for (Cell cell : removable.keySet()) {
                                 BitSet values = removable.get(cell);
                                 for (int value = values.nextSetBit(0); value != -1; value = values.nextSetBit(value + 1)) {
@@ -826,7 +829,7 @@ public class Chaining implements IndirectHintProducer {
                                             hint.toString(), nested);
                                     for (Potential p : parents) {
                                         Potential real = offPotentials.get(p);
-                                        assert real != null;
+//a                                     assert real != null;
                                         toOff.parents.add(real);
                                     }
                                     result.add(toOff);
@@ -850,18 +853,18 @@ public class Chaining implements IndirectHintProducer {
         Collection<Cell> cells = new LinkedHashSet<Cell>();
         Potential p = dstOn;
         while (!p.parents.isEmpty()) {
-            assert p.parents.size() == 1;
+//a         assert p.parents.size() == 1;
             cells.add(p.cell);
             p = p.parents.get(0);
         }
-        assert p.equals(dstOn); // dstOn should occur at begin and end
+//a     assert p.equals(dstOn); // dstOn should occur at begin and end
 
         // Build canceled potentials
         Collection<Potential> cancelForw = new LinkedHashSet<Potential>();
         Collection<Potential> cancelBack = new LinkedHashSet<Potential>();
         p = dstOn;
         while (!p.parents.isEmpty()) {
-            assert p.parents.size() == 1;
+//a         assert p.parents.size() == 1;
             Cell srcCell = grid.getCell(p.cell.getX(), p.cell.getY());
             for (Cell cell : srcCell.getHouseCells()) {
                 if (!cells.contains(cell) && cell.hasPotentialValue(p.value)) {
@@ -873,7 +876,7 @@ public class Chaining implements IndirectHintProducer {
             }
             p = p.parents.get(0);
         }
-        assert p.equals(dstOn); // dstOn should occur at begin and end
+//a     assert p.equals(dstOn); // dstOn should occur at begin and end
 
         // Build removable potentials
         Collection<Potential> cancel = cancelForw;
@@ -990,7 +993,7 @@ public class Chaining implements IndirectHintProducer {
 
     public String getCommonName(ChainingHint hint) {
         if (!isDynamic && !isMultipleEnabled) {
-            if (hint.isXChain) 
+            if (hint.isXChain)
                 return "X-Chain";
             else
                 return "Y-Chain";
