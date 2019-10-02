@@ -60,7 +60,7 @@ public class SudokuFrame extends JFrame implements Asker {
     private JCheckBox chkFilter = null;
     private JButton btnCheckValidity = null;
     private JButton btnApplyHint = null;
-    private JComboBox cmbViewSelector = null;
+    private JComboBox<String> cmbViewSelector = null;
     private JPanel hintsSouthPanel = null;
     private JPanel ratingPanel = null;
     private JLabel jLabel = null;
@@ -72,8 +72,10 @@ public class SudokuFrame extends JFrame implements Asker {
     private JMenuItem mitQuit = null;
     private JMenuItem mitLoad = null;
     private JMenuItem mitSave = null;
+    private JMenuItem mitSaveSukaku = null;
     private JMenu editMenu = null;
     private JMenuItem mitCopy = null;
+    private JMenuItem mitCopySukaku = null;
     private JMenuItem mitClear = null;
     private JMenuItem mitPaste = null;
     private JMenu toolMenu = null;
@@ -310,7 +312,7 @@ public class SudokuFrame extends JFrame implements Asker {
     }
 
     private void initialize() {
-        this.setTitle("Sudoku Explainer " + VERSION + "." + REVISION + SUBREV);
+        this.setTitle("Sukaku Explainer " + VERSION + "." + REVISION + SUBREV);
         JMenuBar menuBar = getJJMenuBar();
         setupLookAndFeelMenu();
         this.setJMenuBar(menuBar);
@@ -686,9 +688,9 @@ public class SudokuFrame extends JFrame implements Asker {
         return btnApplyHint;
     }
 
-    private JComboBox getCmbViewSelector() {
+    private JComboBox<String> getCmbViewSelector() {
         if (cmbViewSelector == null) {
-            cmbViewSelector = new JComboBox();
+            cmbViewSelector = new JComboBox<String>();
             cmbViewSelector.setToolTipText("Toggle view (only for chaining hints)");
             cmbViewSelector.addItemListener(new java.awt.event.ItemListener() {
                 public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -798,6 +800,8 @@ public class SudokuFrame extends JFrame implements Asker {
             setCommand(getMitLoad(), 'O');
             fileMenu.add(getMitSave());
             setCommand(getMitSave(), 'S');
+            fileMenu.add(getMitSaveSukaku());
+            setCommand(getMitSaveSukaku(), 'U');
             fileMenu.addSeparator();
             fileMenu.add(getMitQuit());
             setCommand(getMitQuit(), 'Q');
@@ -889,9 +893,9 @@ public class SudokuFrame extends JFrame implements Asker {
     private JMenuItem getMitSave() {
         if (mitSave == null) {
             mitSave = new JMenuItem();
-            mitSave.setText("Save...");
+            mitSave.setText("Save Sudoku...");
             mitSave.setMnemonic(java.awt.event.KeyEvent.VK_S);
-            mitSave.setToolTipText("Open the file selector to save the grid to a file");
+            mitSave.setToolTipText("Open the file selector to save the (sudoku) grid to a file");
             mitSave.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     try {
@@ -928,6 +932,48 @@ public class SudokuFrame extends JFrame implements Asker {
         return mitSave;
     }
 
+    private JMenuItem getMitSaveSukaku() {
+        if (mitSaveSukaku == null) {
+            mitSaveSukaku = new JMenuItem();
+            mitSaveSukaku.setText("Save Sukaku...");
+            mitSaveSukaku.setMnemonic(java.awt.event.KeyEvent.VK_U);
+            mitSaveSukaku.setToolTipText("Open the file selector to save the (sukaku) grid to a file");
+            mitSaveSukaku.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    try {
+                        JFileChooser chooser = new JFileChooser();
+                        chooser.setFileFilter(new TextFileFilter());
+                        if (defaultDirectory != null)
+                            chooser.setCurrentDirectory(defaultDirectory);
+                        int result = chooser.showSaveDialog(SudokuFrame.this);
+                        defaultDirectory = chooser.getCurrentDirectory();
+                        if (result == JFileChooser.APPROVE_OPTION) {
+                            File file = chooser.getSelectedFile();
+                            try {
+                                if (!file.getName().endsWith(".txt") &&
+                                        file.getName().indexOf('.') < 0)
+                                    file = new File(file.getCanonicalPath() + ".txt");
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
+                            if (file.exists()) {
+                                if (JOptionPane.showConfirmDialog(SudokuFrame.this,
+                                        "The file \"" + file.getName() + "\" already exists.\n" +
+                                        "Do you want to replace the existing file ?",
+                                        "Save", JOptionPane.OK_CANCEL_OPTION) != JOptionPane.OK_OPTION)
+                                    return;
+                            }
+                            engine.saveSukaku(file);
+                        }
+                    } catch (AccessControlException ex) {
+                        warnAccessError(ex);
+                    }
+                }
+            });
+        }
+        return mitSaveSukaku;
+    }
+
     private JMenu getEditMenu() {
         if (editMenu == null) {
             editMenu = new JMenu();
@@ -935,6 +981,8 @@ public class SudokuFrame extends JFrame implements Asker {
             editMenu.setMnemonic(java.awt.event.KeyEvent.VK_E);
             editMenu.add(getMitCopy());
             setCommand(getMitCopy(), 'C');
+            editMenu.add(getMitCopySukaku());
+            setCommand(getMitCopySukaku(), 'K');
             editMenu.add(getMitPaste());
             setCommand(getMitPaste(), 'V');
             editMenu.addSeparator();
@@ -947,9 +995,9 @@ public class SudokuFrame extends JFrame implements Asker {
     private JMenuItem getMitCopy() {
         if (mitCopy == null) {
             mitCopy = new JMenuItem();
-            mitCopy.setText("Copy grid");
+            mitCopy.setText("Copy Sudoku");
             mitCopy.setMnemonic(KeyEvent.VK_C);
-            mitCopy.setToolTipText("Copy the grid to the clipboard as plain text");
+            mitCopy.setToolTipText("Copy the (sudoku) grid to the clipboard as plain text");
             mitCopy.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     try {
@@ -961,6 +1009,25 @@ public class SudokuFrame extends JFrame implements Asker {
             });
         }
         return mitCopy;
+    }
+
+    private JMenuItem getMitCopySukaku() {
+        if (mitCopySukaku == null) {
+            mitCopySukaku = new JMenuItem();
+            mitCopySukaku.setText("Copy Sukaku");
+            mitCopySukaku.setMnemonic(KeyEvent.VK_K);
+            mitCopySukaku.setToolTipText("Copy the (sukaku) grid to the clipboard as plain text");
+            mitCopySukaku.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    try {
+                        engine.copySukaku();
+                    } catch (AccessControlException ex) {
+                        warnAccessError(ex);
+                    }
+                }
+            });
+        }
+        return mitCopySukaku;
     }
 
     private JMenuItem getMitClear() {

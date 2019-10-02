@@ -460,11 +460,15 @@ public class SudokuExplainer {
         this.grid.copyTo(copy);
         clearGrid();
         ErrorMessage message = SudokuIO.loadFromClipboard(grid);
-        if (message == null || !message.isFatal())
-    //      solver.rebuildPotentialValues();
-            ;
-        else
+        if (message == null || !message.isFatal()) {
+            if ( grid.isSudoku() == 1 )
+            {
+                solver.rebuildPotentialValues();
+            }
+        }
+        else {
             copy.copyTo(grid);
+        }
         if (message != null)
             JOptionPane.showMessageDialog(frame, message.toString(), "Paste",
                     (message.isFatal() ? JOptionPane.ERROR_MESSAGE : JOptionPane.WARNING_MESSAGE));
@@ -474,16 +478,24 @@ public class SudokuExplainer {
         SudokuIO.saveToClipboard(grid);
     }
 
+    public void copySukaku() {
+        SudokuIO.saveSukakuToClipboard(grid);
+    }
+
     public void loadGrid(File file) {
         Grid copy = new Grid();
         this.grid.copyTo(copy);
         clearGrid();
         ErrorMessage message = SudokuIO.loadFromFile(grid, file);
-        if (message == null || !message.isFatal())
-    //      solver.rebuildPotentialValues();
-            ;
-        else
+        if (message == null || !message.isFatal()) {
+            if ( grid.isSudoku() == 1 )
+            {
+                solver.rebuildPotentialValues();
+            }
+        }
+        else {
             copy.copyTo(grid);
+        }
         if (message != null)
             JOptionPane.showMessageDialog(frame, message.toString(), "Paste",
                     (message.isFatal() ? JOptionPane.ERROR_MESSAGE : JOptionPane.WARNING_MESSAGE));
@@ -491,6 +503,13 @@ public class SudokuExplainer {
 
     public void saveGrid(File file) {
         ErrorMessage message = SudokuIO.saveToFile(grid, file);
+        if (message != null)
+            JOptionPane.showMessageDialog(frame, message.toString(), "Paste",
+                    JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void saveSukaku(File file) {
+        ErrorMessage message = SudokuIO.saveSukakuToFile(grid, file);
         if (message != null)
             JOptionPane.showMessageDialog(frame, message.toString(), "Paste",
                     JOptionPane.ERROR_MESSAGE);
