@@ -45,188 +45,133 @@ public class SudokuIO {
     private static final String WARNING_MSG = "Warning: the Sudoku format was not recognized.\nThe Sudoku may not have been read correctly";
 
     private static int loadFromReader(Grid grid, Reader reader) throws IOException {
-        boolean isValid = true;
         List<String> lines = new ArrayList<String>();
         LineNumberReader lineReader = new LineNumberReader(reader);
         String line = lineReader.readLine();
         while (line != null) {
-            if (line.length() >= 9)
-                lines.add(line);
-            else
-                isValid = false;
+            lines.add(line);
             line = lineReader.readLine();
         }
-        if (lines.size() >= 9 && lines.size() <= 30) {
+        if (lines.size() > 1) {
+            String allLines = "";
             String[] arrLines = new String[lines.size()];
             lines.toArray(arrLines);
             for (int i = 0; i < arrLines.length; i++)
-                arrLines[i] = arrLines[i].trim();
-            int result = loadFromLines(grid, arrLines);
-            if (result == RES_OK && !isValid)
-                result = RES_WARN;
+                allLines += arrLines[i];
+            int result = loadFromSingleLine(grid, allLines);
             return result;
-        } else if (lines.size() == 1) {
+        } else
+        if (lines.size() == 1) {
             int result = loadFromSingleLine(grid, lines.get(0));
-            if (result == RES_OK && !isValid)
-                result = RES_WARN;
             return result;
         }
         return RES_ERROR;
     }
 
-    private static int loadFromLines(Grid grid, String[] lines) {
-        boolean isStandard = (lines.length == 9);
-
-        int lineSize = lines.length / 9;
-        int loffset = (lineSize - 1) / 2;
-        int borderLines = lines.length - 9 * lineSize;
-        if (borderLines < 0)
-            borderLines = 0;
-        int outerLines; // Number of lines before the grid
-        int innerLines; // Number of additional lines between blocks
-        if (borderLines % 4 == 0) {
-            outerLines = borderLines / 4;
-            innerLines = outerLines;
-        } else {
-            outerLines = 0;
-            innerLines = borderLines / 2;
-        }
-        int index = outerLines + loffset;
-        for (int y = 0; y < 9; y++) {
-            /*
-             * This is very ugly code, without real logic. Maybe a case-by-case version
-             * would be more understandable. Or I should try some real AI stuff...
-             */
-            String line = lines[index];
-
-            // Check line format
-            if (line.length() != 9)
-                isStandard = false;
-            for (int i = 0; i < line.length(); i++) {
-                char ch = line.charAt(i);
-                if (ch != '.' && (ch < '0' || ch > '9'))
-                    isStandard = false;
-            }
-
-            // Read line
-            int cellSize = (line.length() + 1) / 9;
-            int borderChars = line.length() - 9 * cellSize;
-            if (borderChars < 0)
-                borderChars = 0;
-            int outerChars, innerChars;
-            if (borderChars % 4 == 0 || (borderChars % 4 == 3 && cellSize == 2 && borderChars > 4)) {
-                innerChars = (borderChars + 1) / 4;
-                outerChars = (borderChars - innerChars * 2) / 2;
-            } else {
-                outerChars = 0;
-                // The last cell, if cell size > 1, may only have half its size
-                innerChars = (borderChars + cellSize / 2) / 2;
-            }
-            int pos = outerChars;
-            for (int x = 0; x < 9; x++) {
-                for (int offset = 0; offset < cellSize; offset++) {
-                    if (pos + offset < line.length()) {
-                        char ch = line.charAt(pos + offset);
-                        int value = 0;
-                        if (ch >= '1' && ch <= '9')
-                            value = ch - '0';
-                        if (offset == 0 || value > 0)
-                            grid.setCellValue(x, y, value);
-                    }
-                }
-
-                pos += cellSize;
-                if (x == 2 || x == 5)
-                    pos += innerChars;
-            }
-
-            index += lineSize;
-            if (y == 2 || y == 5)
-                index += innerLines;
-        }
-        return (isStandard ? RES_OK : RES_WARN);
-    }
-
     private static int loadFromSingleLine(Grid grid, String line) {
-        boolean isStandard = (line.length() == 81) | (line.length() == 729);
-        // Detect Sudoku Susser format (Although the SS cannot cut/past to itself)
-    if ( line.length() < 729 )
-    {
-        if (line.endsWith("\t"))
-            line = line.substring(0, line.length() - 1);
-        boolean hasAlphaLabel = false;
-        for (int i = 0; i < line.length() - 81; i++) {
-            if (Character.isLetter(line.charAt(i)))
-                hasAlphaLabel = true;
-        }
-        for (int i = line.length() - 81; i < line.length(); i++) {
-            if (i >= 0 && Character.isLetter(line.charAt(i)))
-                hasAlphaLabel = false;
-        }
-        if (hasAlphaLabel && line.length() > 81)
-            line = line.substring(line.length() - 81);
-        else if (line.trim().length() >= 81)
-            line = line.trim();
-    }
+        line += " "; // extra char
+        int cellnum = 0;
+        int cluenum = 0;
+        int linelen = line.length();
+        char ch = 0;
 
-        if (line.length() >= 81) {
-    if ( line.length() >= 729 )
-    {
+        int ispad = 0;
+        int grpcnt = 0;
+        int grpmax = 0;
+        int cluecount = 0;
+        while ( cluenum < linelen ) {
+            ch = line.charAt(cluenum++);
+            if (ch >= '1' && ch <= '9') { cluecount++; ispad = 0; grpcnt++; }
+            else
+            if (ch == '.' || ch == '0') { cluecount++; ispad = 0; grpcnt++; }
+            else
+            if ( ispad == 0 ) { ispad = 1; if ( grpcnt > grpmax ) { grpmax = grpcnt; } grpcnt = 0; }
+        }
+
+        cellnum = 0;
+        cluenum = 0;
+
+        if ( ( grpmax > 1 && grpmax <= 9 && cluecount > 81 ) ||
+             cluecount >= 729 ) {   // sukaku   // clue clue - cell clues, if count=9 then next cell
+            boolean prevchispad = true;         // clue pad  - next cell clues to follow
+            boolean chispad = true;             // pad  clue - cell clues follow
+            int cluecounter = 0;                // pad  pad  - consecutive pads are ignored
+
             for (int i = 0; i < 81; i++) {
                 grid.setCellValue(i % 9, i / 9, 0);
                 Cell cell = grid.getCell(i % 9, i / 9);
                 cell.clearPotentialValues();
             }
-            for (int i = 0; i < 729; i++) {
-                int cl = i / 9;  // cell
-                char ch = line.charAt(i);
-
+            while ( cellnum < 81 && cluenum < linelen ) {
+                prevchispad = chispad;
+                ch = line.charAt(cluenum++);
+                chispad = true;
                 if (ch >= '1' && ch <= '9') {
-                    int value = (ch - '0');
-                    Cell cell = grid.getCell(cl % 9, cl / 9);
+                    int value = ch - '0';
+                    Cell cell = grid.getCell(cellnum % 9, cellnum / 9);
                     cell.addPotentialValue(value);
+                    chispad = false;
+                    cluecounter++;
+                    if ( cluecounter == 9 ) {
+                       cluecounter = 0;
+                       cellnum++;
+                    }
+                }
+                else
+                if (ch == '.' || ch == '0') {
+                    chispad = false;
+                    cluecounter++;
+                    if ( cluecounter == 9 ) {
+                       cluecounter = 0;
+                       cellnum++;
+                    }
+                }
+                if ( chispad == true && prevchispad == false && cluecounter != 0 ) {
+                   cluecounter = 0;
+                   cellnum++;
                 }
             }
-            // fix naked singles
-            for (int i = 0; i < 81; i++) {
-                Cell cell = grid.getCell(i % 9, i / 9);
-                if ( cell.getPotentialValues().cardinality() == 1 ) {
-                    int singleclue = cell.getPotentialValues().nextSetBit(0);
-                    boolean isnakedsingle = true;
-                    for (Cell housecell : cell.getHouseCells()) {
-                        if ( housecell.hasPotentialValue(singleclue) ) {
-                            isnakedsingle = false;
-                            break;
+            if ( cellnum == 81 ) {
+                // fix naked singles
+                for (int i = 0; i < 81; i++) {
+                    Cell cell = grid.getCell(i % 9, i / 9);
+                    if ( cell.getPotentialValues().cardinality() == 1 ) {
+                        int singleclue = cell.getPotentialValues().nextSetBit(0);
+                        boolean isnakedsingle = true;
+                        for (Cell housecell : cell.getHouseCells()) {
+                            if ( housecell.hasPotentialValue(singleclue) ) {
+                                isnakedsingle = false;
+                                break;
+                            }
+                        }
+                        if ( isnakedsingle )
+                        {
+                            cell.setValue( singleclue);
+                            cell.clearPotentialValues();
                         }
                     }
-                    if ( isnakedsingle )
-                    {
-                        cell.setValue( singleclue);
-                        cell.clearPotentialValues();
-                    }
                 }
+                grid.setSukaku();
             }
-            grid.setSukaku();
-    }
-    else
-    {
-            int rowGap = (line.length() - 81) / 8;
-            int srcIndex = 0;
-            for (int y = 0; y < 9; y++) {
-                for (int x = 0; x < 9; x++) {
-                    char ch = line.charAt(srcIndex++);
-                    int value = 0;
-                    if (ch >= '1' && ch <= '9')
-                        value = ch - '0';
-                    else if (ch != '.' && ch != '0')
-                        isStandard = false;
-                    grid.setCellValue(x, y, value);
-                }
-                srcIndex += rowGap;
-            }
-    }
-            return (isStandard ? RES_OK : RES_WARN);
+            return ( cellnum==81 ? RES_OK : RES_WARN);
         }
+
+        if ( cluecount >= 81 ) { // sudoku
+            while ( cellnum < 81 && cluenum < linelen ) {
+                ch = line.charAt(cluenum++);
+                if (ch >= '1' && ch <= '9') {
+                    int value = ch - '0';
+                    grid.setCellValue(cellnum % 9, cellnum / 9, value);
+                    cellnum++;
+                }
+                else
+                if (ch == '.' || ch == '0') {
+                    cellnum++;
+                }
+            }
+            return ( cellnum==81 ? RES_OK : RES_WARN);
+        }
+
         return RES_ERROR;
     }
 
