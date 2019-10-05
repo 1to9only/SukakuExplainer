@@ -38,6 +38,7 @@ public class SudokuExplainer {
     private List<Hint> filteredHints = null; // All hints (filtered)
     private boolean isFiltered = true;
     private List<Hint> selectedHints = new ArrayList<Hint>(); // Currently selected hint
+    private Stack<Grid> gridStack = new Stack<Grid>(); // Stack for undo
 
     // Cache for filter
     Set<Cell> givenCells = new HashSet<Cell>(); // Cell values already encountered
@@ -46,6 +47,7 @@ public class SudokuExplainer {
 
     public SudokuExplainer() {
         grid = new Grid();
+        gridStack = new Stack<Grid>();
         solver = new Solver(grid);
         solver.rebuildPotentialValues();
         frame = new SudokuFrame();
@@ -243,6 +245,7 @@ public class SudokuExplainer {
      */
     public void cellValueTyped(Cell cell, int value) {
         int oldValue = cell.getValue();
+        if ( oldValue != value ) { pushGrid(); }
         cell.setValue(value);
         if (value == 0 || oldValue != 0)
             solver.rebuildPotentialValues();
@@ -258,6 +261,7 @@ public class SudokuExplainer {
     }
 
     public void candidateTyped(Cell cell, int candidate) {
+        pushGrid();
         if (cell.hasPotentialValue(candidate))
             cell.removePotentialValue(candidate);
         else
@@ -287,6 +291,7 @@ public class SudokuExplainer {
 
     public void clearGrid() {
         grid = new Grid();
+        gridStack = new Stack<Grid>();
         solver = new Solver(grid);
         solver.rebuildPotentialValues();
         panel.setSudokuGrid(grid);
@@ -296,6 +301,7 @@ public class SudokuExplainer {
 
     public void setGrid(Grid grid) {
         this.grid = grid;
+        gridStack = new Stack<Grid>();
         solver = new Solver(grid);
         solver.rebuildPotentialValues();
         panel.setSudokuGrid(grid);
@@ -429,7 +435,28 @@ public class SudokuExplainer {
         }
     }
 
+    private void pushGrid() {
+        Grid copy = new Grid();
+        this.grid.copyTo(copy);
+        this.gridStack.push(copy);
+    }
+
+    private void popGrid() {
+        if (!this.gridStack.isEmpty()) {
+            Grid prev = this.gridStack.pop();
+            prev.copyTo(this.grid);
+        //  this.solver.rebuildPotentialValues();
+            clearHints();
+            repaintAll();
+        }
+    }
+
+    public void UndoStep() {
+        popGrid();
+    }
+
     public void applySelectedHints() {
+        pushGrid();
         for (Hint hint : selectedHints)
             hint.apply();
         clearHints();
@@ -465,6 +492,7 @@ public class SudokuExplainer {
             {
                 solver.rebuildPotentialValues();
             }
+            gridStack = new Stack<Grid>();
         }
         else {
             copy.copyTo(grid);
@@ -492,6 +520,7 @@ public class SudokuExplainer {
             {
                 solver.rebuildPotentialValues();
             }
+            gridStack = new Stack<Grid>();
         }
         else {
             copy.copyTo(grid);
