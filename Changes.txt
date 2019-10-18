@@ -1,5 +1,9 @@
 Changes:
 
+20191018:
+- made Full Symmetry only initial option in GenerateDialog
+- disabled thread priority lowering in Solver
+
 20191007:
 - added Candidate Masks, based on code from https://github.com/blindlf/SudokuExplainer
 - commented out all assert statements

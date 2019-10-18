@@ -229,7 +229,7 @@ public class Solver {
      * if the sudoku is valid.
      */
     public Hint checkValidity() {
-        int oldPriority = lowerPriority();
+//      int oldPriority = lowerPriority();
         SingleHintAccumulator accu = new SingleHintAccumulator();
         try {
             for (WarningHintProducer producer : validatorHintProducers)
@@ -237,7 +237,7 @@ public class Solver {
             for (WarningHintProducer producer : warningHintProducers)
                 producer.getHints(grid, accu);
         } catch (InterruptedException willProbablyHappen) {}
-        normalPriority(oldPriority);
+//      normalPriority(oldPriority);
         return accu.getHint();
     }
 
@@ -265,7 +265,7 @@ public class Solver {
     public void gatherHints(List<Hint> previousHints, final List<Hint> result,
             HintsAccumulator accu, Asker asker) {
 
-        int oldPriority = lowerPriority();
+//      int oldPriority = lowerPriority();
         boolean isAdvanced = false;
         try {
             for (HintProducer producer : directHintProducers)
@@ -303,11 +303,11 @@ public class Solver {
         } catch (InterruptedException willProbablyHappen) {}
         if (!isAdvanced)
             isUsingAdvanced = false;
-        normalPriority(oldPriority);
+//      normalPriority(oldPriority);
     }
 
     public List<Hint> getAllHints(Asker asker) {
-        int oldPriority = lowerPriority();
+//      int oldPriority = lowerPriority();
         List<Hint> result = new ArrayList<Hint>();
         HintsAccumulator accu = new DefaultHintsAccumulator(result);
         try {
@@ -343,7 +343,7 @@ public class Solver {
                 }
             }
         } catch (InterruptedException cannotHappen) {}
-        normalPriority(oldPriority);
+//      normalPriority(oldPriority);
         return result;
     }
 
@@ -382,7 +382,7 @@ public class Solver {
      * be solved without recursive guessing (brute-force).
      */
     public Map<Rule,Integer> solve(Asker asker) {
-        int oldPriority = lowerPriority();
+//      int oldPriority = lowerPriority();
         // rebuildPotentialValues();
         Map<Rule,Integer> usedRules = new TreeMap<Rule,Integer>(new RuleComparer());
         boolean isUsingAdvanced = false;
@@ -419,7 +419,7 @@ public class Solver {
                 usedRules.put(rule, 1);
             hint.apply();
         }
-        normalPriority(oldPriority);
+//      normalPriority(oldPriority);
         return usedRules;
     }
 
@@ -436,7 +436,7 @@ public class Solver {
      * given bounds. An arbitrary out-of-bounds value else.
      */
     public double analyseDifficulty(double min, double max) {
-        int oldPriority = lowerPriority();
+//      int oldPriority = lowerPriority();
         try {
             double difficulty = Double.NEGATIVE_INFINITY;
             while (!isSolved()) {
@@ -470,7 +470,7 @@ public class Solver {
             }
             return difficulty;
         } finally {
-            normalPriority(oldPriority);
+//          normalPriority(oldPriority);
         }
     }
 
