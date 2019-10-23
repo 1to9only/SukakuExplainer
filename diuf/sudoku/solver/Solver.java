@@ -116,13 +116,13 @@ public class Solver {
         addIfWorth(SolvingTechnique.BivalueUniversalGrave, indirectHintProducers, new BivalueUniversalGrave());
         addIfWorth(SolvingTechnique.AlignedPairExclusion, indirectHintProducers, new AlignedPairExclusion());
         chainingHintProducers = new ArrayList<IndirectHintProducer>();
-        addIfWorth(SolvingTechnique.ForcingChainCycle, chainingHintProducers, new Chaining(false, false, false, 0));
+        addIfWorth(SolvingTechnique.ForcingChainCycle, chainingHintProducers, new Chaining(false, false, false, 0, true, 0));
         addIfWorth(SolvingTechnique.AlignedTripletExclusion, chainingHintProducers, new AlignedExclusion(3));
-        addIfWorth(SolvingTechnique.NishioForcingChain, chainingHintProducers, new Chaining(false, true, true, 0));
-        addIfWorth(SolvingTechnique.MultipleForcingChain, chainingHintProducers, new Chaining(true, false, false, 0));
-        addIfWorth(SolvingTechnique.DynamicForcingChain, chainingHintProducers, new Chaining(true, true, false, 0));
+        addIfWorth(SolvingTechnique.NishioForcingChain, chainingHintProducers, new Chaining(false, true, true, 0, true, 0));
+        addIfWorth(SolvingTechnique.MultipleForcingChain, chainingHintProducers, new Chaining(true, false, false, 0, true, 0));
+        addIfWorth(SolvingTechnique.DynamicForcingChain, chainingHintProducers, new Chaining(true, true, false, 0, true, 0));
         chainingHintProducers2 = new ArrayList<IndirectHintProducer>();
-        addIfWorth(SolvingTechnique.DynamicForcingChainPlus, chainingHintProducers2, new Chaining(true, true, false, 1));
+        addIfWorth(SolvingTechnique.DynamicForcingChainPlus, chainingHintProducers2, new Chaining(true, true, false, 1, true, 0));
         // These rules are not really solving techs. They check the validity of the puzzle
         validatorHintProducers = new ArrayList<WarningHintProducer>();
         validatorHintProducers.add(new NoDoubles());
@@ -132,11 +132,12 @@ public class Solver {
         warningHintProducers.add(new BruteForceAnalysis(false));
         // These are very slow. We add them only as "rescue"
         advancedHintProducers = new ArrayList<IndirectHintProducer>();
-        addIfWorth(SolvingTechnique.NestedForcingChain, advancedHintProducers, new Chaining(true, true, false, 2));
-        addIfWorth(SolvingTechnique.NestedForcingChain, advancedHintProducers, new Chaining(true, true, false, 3));
+        addIfWorth(SolvingTechnique.NestedForcingChain, advancedHintProducers, new Chaining(true, true, false, 2, true, 0));
+        addIfWorth(SolvingTechnique.NestedForcingChain, advancedHintProducers, new Chaining(true, true, false, 3, true, 0));
         experimentalHintProducers = new ArrayList<IndirectHintProducer>(); // Two levels of nesting !?
-        addIfWorth(SolvingTechnique.NestedForcingChain, experimentalHintProducers, new Chaining(true, true, false, 4));
-        addIfWorth(SolvingTechnique.NestedForcingChain, experimentalHintProducers, new Chaining(true, true, false, 5));
+        addIfWorth(SolvingTechnique.NestedForcingChain, experimentalHintProducers, new Chaining(true, true, false, 4, true, 0));
+        addIfWorth(SolvingTechnique.NestedForcingChain, experimentalHintProducers, new Chaining(true, true, false, 4, true, 1));
+        addIfWorth(SolvingTechnique.NestedForcingChain, experimentalHintProducers, new Chaining(true, true, false, 4, true, 2));
     }
 
     /**
@@ -417,7 +418,7 @@ public class Solver {
                 usedRules.put(rule, usedRules.get(rule) + 1);
             else
                 usedRules.put(rule, 1);
-            hint.apply();
+            hint.apply(grid);
         }
 //      normalPriority(oldPriority);
         return usedRules;
@@ -466,7 +467,7 @@ public class Solver {
                     break;
                 if (difficulty > max)
                     break;
-                hint.apply();
+                hint.apply(grid);
             }
             return difficulty;
         } finally {
@@ -507,7 +508,7 @@ public class Solver {
                 double ruleDiff = rule.getDifficulty();
                 if (ruleDiff > difficulty)
                     difficulty = ruleDiff;
-                hint.apply();
+                hint.apply(grid);
                 if (pearl == 0.0) {
                     if (diamond == 0.0)
                         diamond = difficulty;
@@ -562,7 +563,7 @@ public class Solver {
                 double ruleDiff = rule.getDifficulty();
                 if (ruleDiff > difficulty)
                     difficulty = ruleDiff;
-                hint.apply();
+                hint.apply(grid);
 
                 String s = "";
                 for (int i = 0; i < 81; i++) {
@@ -696,7 +697,7 @@ public class Solver {
                 double ruleDiff = rule.getDifficulty();
                 if (ruleDiff > difficulty)
                     difficulty = ruleDiff;
-                hint.apply();
+                hint.apply(grid);
 
                 s = "";
                 for (int i = 0; i < 81; i++) {

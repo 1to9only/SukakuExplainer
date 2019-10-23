@@ -458,7 +458,7 @@ public class SudokuExplainer {
     public void applySelectedHints() {
         pushGrid();
         for (Hint hint : selectedHints)
-            hint.apply();
+            hint.apply(grid);
         clearHints();
         repaintAll();
     }

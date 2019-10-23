@@ -1,5 +1,9 @@
 Changes:
 
+20191023:
+- slightly improved SolvingTechnique, NakedSingle, Chaining
+- added parallel processing, based on code from https://github.com/SudokuMonster/SukakuExplainer
+
 20191018:
 - made Full Symmetry only initial option in GenerateDialog
 - disabled thread priority lowering in Solver

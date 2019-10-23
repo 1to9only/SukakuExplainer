@@ -336,6 +336,7 @@ public class GenerateDialog extends JDialog {
             }
         });
         optionPanel.add(chkAnalysis);
+        chkAnalysis.setSelected(true);
     }
 
     private void generate() {
