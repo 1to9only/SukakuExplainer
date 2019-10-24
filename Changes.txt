@@ -1,5 +1,8 @@
 Changes:
 
+20191024:
+- commented out thread priority code in Solver
+
 20191023:
 - slightly improved SolvingTechnique, NakedSingle, Chaining
 - added parallel processing, based on code from https://github.com/SudokuMonster/SukakuExplainer

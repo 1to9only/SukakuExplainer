@@ -5,7 +5,7 @@
  */
 package diuf.sudoku.solver;
 
-import java.security.*;
+//port java.security.*;
 import java.util.*;
 
 import diuf.sudoku.*;
@@ -196,30 +196,30 @@ public class Solver {
         cancelBy(Grid.Column.class);
     }
 
-    /**
-     * Lower the current thread's priority.
-     * @return the previous thread's priority
-     */
-    private int lowerPriority() {
-        try {
-            int result = Thread.currentThread().getPriority();
-            Thread.currentThread().setPriority((Thread.NORM_PRIORITY + Thread.MIN_PRIORITY * 2) / 3);
-            return result;
-        } catch (AccessControlException ex) {}
-        return 0;
-    }
-
-    /**
-     * Reset the current thread's priority to the given value.
-     * Typically, the given value is the value returned by
-     * {@link #lowerPriority()}.
-     * @param priority the new priority
-     */
-    private void normalPriority(int priority) {
-        try {
-            Thread.currentThread().setPriority(priority);
-        } catch (AccessControlException ex) {}
-    }
+//  /**
+//   * Lower the current thread's priority.
+//   * @return the previous thread's priority
+//   */
+//  private int lowerPriority() {
+//      try {
+//          int result = Thread.currentThread().getPriority();
+//          Thread.currentThread().setPriority((Thread.NORM_PRIORITY + Thread.MIN_PRIORITY * 2) / 3);
+//          return result;
+//      } catch (AccessControlException ex) {}
+//      return 0;
+//  }
+//
+//  /**
+//   * Reset the current thread's priority to the given value.
+//   * Typically, the given value is the value returned by
+//   * {@link #lowerPriority()}.
+//   * @param priority the new priority
+//   */
+//  private void normalPriority(int priority) {
+//      try {
+//          Thread.currentThread().setPriority(priority);
+//      } catch (AccessControlException ex) {}
+//  }
 
     /**
      * Get the first available validity warning hint.
