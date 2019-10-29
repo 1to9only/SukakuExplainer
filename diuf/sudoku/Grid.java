@@ -272,7 +272,10 @@ public class Grid {
         public BitSet getPotentialPositions(int value) {
             BitSet result = new BitSet(9);
             for (int index = 0; index < 9; index++) {
-                result.set(index, getCell(index).hasPotentialValue(value));
+            //  result.set(index, getCell(index).hasPotentialValue(value));
+                if ( getCell(index).hasPotentialValue(value) ) {
+                    result.set(index);
+                }
             }
             return result;
         }

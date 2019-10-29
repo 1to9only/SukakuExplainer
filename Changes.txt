@@ -1,5 +1,9 @@
 Changes:
 
+20191029:
+- fixed parallel processing threads finishing order
+- slightly improved Grid
+
 20191024:
 - commented out thread priority code in Solver
 

@@ -246,19 +246,16 @@ public class Chaining implements IndirectHintProducer {
         //process the collected cells in parallel
         ConcurrentLinkedQueue<ChainingHint> parallelResult = new ConcurrentLinkedQueue<ChainingHint>();
         List<MultipleChainsHintsCollector> threads = new ArrayList<MultipleChainsHintsCollector>();
+        Thread lastThread = null;
         for(Cell cell : cellsToProcess) {
-            MultipleChainsHintsCollector t = new MultipleChainsHintsCollector(this, grid, cell, parallelResult);
+            MultipleChainsHintsCollector t = new MultipleChainsHintsCollector(this, grid, cell, parallelResult, lastThread);
             threads.add(t);
             t.start();
+            lastThread = t;
         }
-        for(MultipleChainsHintsCollector t : threads) {
-            try {
-                t.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            finally {}
-        }
+        try {
+            lastThread.join();
+        } catch (InterruptedException e) {}
         result.addAll(parallelResult);
         return result;
     }
@@ -268,16 +265,24 @@ public class Chaining implements IndirectHintProducer {
         private ConcurrentLinkedQueue<ChainingHint> accumulator;
         private final Grid grid = new Grid();
         private final Cell cell;
-        MultipleChainsHintsCollector(Chaining caller, Grid grid, Cell cell, ConcurrentLinkedQueue<ChainingHint> result) {
+        private final Thread previousThread;
+        MultipleChainsHintsCollector(Chaining caller, Grid grid, Cell cell, ConcurrentLinkedQueue<ChainingHint> result, Thread lastThread) {
             this.chaining = new Chaining(caller.isMultipleEnabled, caller.isDynamic, caller.isNisho, caller.level, false, caller.nestingLimit);
             accumulator = result;
             grid.copyTo(this.grid);
             this.cell = this.grid.getCell(cell.getX(), cell.getY());
+            previousThread = lastThread;
         }
         @Override
         public void run() {
             int cardinality = this.cell.getPotentialValues().cardinality();
-            accumulator.addAll(chaining.getMultipleChainsHintList(this.grid, this.cell, cardinality));
+            List<ChainingHint> result = chaining.getMultipleChainsHintList(this.grid, this.cell, cardinality);
+            if ( previousThread != null ) {
+                try {
+                    previousThread.join();
+                } catch (InterruptedException e) {}
+            }
+            accumulator.addAll(result);
         }
     }
 
