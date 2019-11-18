@@ -1,5 +1,8 @@
 Changes:
 
+20191118:
+- changed to PLAIN font for GUI grid, black given cells, blue solved cells
+
 20191029:
 - fixed parallel processing threads finishing order
 - slightly improved Grid
@@ -17,6 +20,7 @@ Changes:
 
 20191007:
 - added Candidate Masks, based on code from https://github.com/blindlf/SudokuExplainer
+
 - commented out all assert statements
 
 20191005:
@@ -28,6 +32,9 @@ Changes:
 - added Copy/Save Sudoku/Sukaku menu options in GUI
 - minor (cosmetic) changes
 - built using jdk-8u221
+
+
+
 
 Release: 1.2.1.3-SukakuExplainer
 - as released on 5 Aug 2019

@@ -148,6 +148,7 @@ public class SudokuIO {
                         {
                             cell.setValue( singleclue);
                             cell.clearPotentialValues();
+                            cell.setGiven();
                         }
                     }
                 }
