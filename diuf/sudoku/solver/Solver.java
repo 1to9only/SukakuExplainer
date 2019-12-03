@@ -170,7 +170,6 @@ public class Solver {
             for (int x = 0; x < 9; x++) {
                 Cell cell = grid.getCell(x, y);
                 if (cell.getValue() == 0) {
-                    cell.resetGiven();
                     for (int value = 1; value <= 9; value++)
                         cell.addPotentialValue(value);
                 }
