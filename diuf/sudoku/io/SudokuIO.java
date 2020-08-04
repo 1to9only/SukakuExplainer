@@ -336,4 +336,103 @@ public class SudokuIO {
         }
     }
 
+    private static void savePathToWriter(Stack<String> pathStack, Writer writer) throws IOException {
+        Stack<String> tempStack = new Stack<String>();
+        while ( !pathStack.isEmpty() ) {
+            tempStack.push( pathStack.pop());
+        }
+        int crdonce = 0;
+        int lineonce = 0;
+        while ( !tempStack.isEmpty() ) {
+            String z = tempStack.pop();
+            String x = z.substring( 0, 2);
+            pathStack.push(z);
+
+            z = z.substring( 2);
+            if ( x.charAt( 0)=='G' ) {
+                int crd = 1;
+                for (int i = 0; i < 81; i++) {
+                    x = z.substring( i*9, (i+1)*9);
+                    x = x.replace( ".", "");
+                    int n = x.length();
+                    if ( n > crd ) { crd = n; }
+                }
+
+                if ( crdonce == 0 ) {
+                    if ( lineonce == 1 ) {
+                        writer.write( "\r\n");
+                    }
+
+                    String s = "";
+                    for (int i=0; i<3; i++ ) {
+                        s = "+";
+                        for (int j=0; j<3; j++ ) {
+                            for (int k=0; k<3; k++ ) { s += "-";
+                                for (int l=0; l<crd; l++ ) { s += "-";
+                                }
+                            }
+                            s += "-+";
+                        }
+                        writer.write(s + "\r\n");
+
+                        for (int j=0; j<3; j++ ) {
+                            s = "|";
+                            for (int k=0; k<3; k++ ) {
+                                for (int l=0; l<3; l++ ) { s += " ";
+                                    int c = ((((i*3)+j)*3)+k)*3+l;
+                                    x = z.substring( c*9, (c+1)*9);
+                                    x = x.replace( ".", "");
+                                    int cnt = x.length();
+                                    s += x;
+                                    for (int pad=cnt; pad<crd; pad++ ) { s += " ";
+                                    }
+                                }
+                                s += " |";
+                            }
+                            writer.write(s + "\r\n");
+                        }
+                    }
+
+                    s = "+";
+                    for (int j=0; j<3; j++ ) {
+                        for (int k=0; k<3; k++ ) { s += "-";
+                            for (int l=0; l<crd; l++ ) { s += "-";
+                            }
+                        }
+                        s += "-+";
+                    }
+                    writer.write(s + "\r\n");
+
+                    if ( crd == 1 ) {
+                       crdonce = 1;
+                    }
+                }
+            }
+            else {
+                writer.write(z + "\r\n");
+            }
+            lineonce = 1;
+        }
+    }
+
+    public static ErrorMessage savePathToFile(Stack<String> pathStack, File file) {
+        Writer writer = null;
+        try {
+            FileWriter fwriter = new FileWriter(file);
+            writer = new BufferedWriter(fwriter);
+            savePathToWriter(pathStack, writer);
+            return null;
+        } catch (IOException ex) {
+            return new ErrorMessage("Error while writing file {0}:\n{1}", file, ex);
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
+
 }

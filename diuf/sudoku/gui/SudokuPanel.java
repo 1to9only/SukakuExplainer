@@ -106,7 +106,7 @@ public class SudokuPanel extends JPanel {
                             || (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
                         if (value != 0) { // Check that the cell is empty
                             // Toggle a candidate
-                            engine.candidateTyped(target, value);
+                            engine.candidateMouTyped(target, value);
                             repaintCell(target);
                         }
                     } else {
@@ -114,12 +114,12 @@ public class SudokuPanel extends JPanel {
                             if ( target.hasPotentialValue( value) )
                             {
                                 // Set the cell's value
-                                engine.cellValueTyped(target, value);
+                                engine.cellValueMouTyped(target, value);
                                 repaint();
                             }
                         } else {
                             // Clear the cell's value
-                            engine.cellValueTyped(target, 0);
+                            engine.cellValueMouTyped(target, 0);
                             repaint();
                         }
                     }
@@ -176,14 +176,14 @@ public class SudokuPanel extends JPanel {
                     }
                 } else if (code == KeyEvent.VK_DELETE || code == KeyEvent.VK_BACK_SPACE) {
                     if (selectedCell != null) {
-                        engine.cellValueTyped(selectedCell, 0);
+                        engine.cellValueKbdTyped(selectedCell, 0);
                         repaint();
                     }
                 } else if (code >= KeyEvent.VK_1 && code <= KeyEvent.VK_9) {
                     if ((e.getModifiers() & InputEvent.CTRL_MASK) != 0) {
                         int value = (code - KeyEvent.VK_0);
                         if (selectedCell != null) {
-                            engine.candidateTyped(selectedCell, value);
+                            engine.candidateKbdTyped(selectedCell, value);
                             repaintCell(selectedCell);
                         }
                     }
@@ -200,11 +200,11 @@ public class SudokuPanel extends JPanel {
                     char ch = e.getKeyChar();
                     if (ch >= '1' && ch <= '9') {
                         int value = ch - '0';
-                        engine.cellValueTyped(selectedCell, value);
+                        engine.cellValueKbdTyped(selectedCell, value);
                         repaint();
                         isProcessed = true;
                     } else if (ch == ' ' || ch == '0') {
-                        engine.cellValueTyped(selectedCell, 0);
+                        engine.cellValueKbdTyped(selectedCell, 0);
                         selectedCell.setValue(0);
                         repaint();
                         isProcessed = true;

@@ -74,6 +74,7 @@ public class SudokuFrame extends JFrame implements Asker {
     private JMenuItem mitLoad = null;
     private JMenuItem mitSave = null;
     private JMenuItem mitSaveSukaku = null;
+    private JMenuItem mitSavePath = null;
     private JMenu editMenu = null;
     private JMenuItem mitCopy = null;
     private JMenuItem mitCopySukaku = null;
@@ -836,6 +837,8 @@ public class SudokuFrame extends JFrame implements Asker {
             fileMenu.add(getMitSaveSukaku());
             setCommand(getMitSaveSukaku(), 'U');
             fileMenu.addSeparator();
+            fileMenu.add(getMitSavePath());
+            fileMenu.addSeparator();
             fileMenu.add(getMitQuit());
             setCommand(getMitQuit(), 'Q');
         }
@@ -1005,6 +1008,47 @@ public class SudokuFrame extends JFrame implements Asker {
             });
         }
         return mitSaveSukaku;
+    }
+
+    private JMenuItem getMitSavePath() {
+        if (mitSavePath == null) {
+            mitSavePath = new JMenuItem();
+            mitSavePath.setText("Save Solution Path...");
+            mitSavePath.setToolTipText("Open the file selector to save the sudoku (partial/complete) solution path to a file");
+            mitSavePath.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    try {
+                        JFileChooser chooser = new JFileChooser();
+                        chooser.setFileFilter(new TextFileFilter());
+                        if (defaultDirectory != null)
+                            chooser.setCurrentDirectory(defaultDirectory);
+                        int result = chooser.showSaveDialog(SudokuFrame.this);
+                        defaultDirectory = chooser.getCurrentDirectory();
+                        if (result == JFileChooser.APPROVE_OPTION) {
+                            File file = chooser.getSelectedFile();
+                            try {
+                                if (!file.getName().endsWith(".txt") &&
+                                        file.getName().indexOf('.') < 0)
+                                    file = new File(file.getCanonicalPath() + ".txt");
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
+                            if (file.exists()) {
+                                if (JOptionPane.showConfirmDialog(SudokuFrame.this,
+                                        "The file \"" + file.getName() + "\" already exists.\n" +
+                                        "Do you want to replace the existing file ?",
+                                        "Save", JOptionPane.OK_CANCEL_OPTION) != JOptionPane.OK_OPTION)
+                                    return;
+                            }
+                            engine.savePath(file);
+                        }
+                    } catch (AccessControlException ex) {
+                        warnAccessError(ex);
+                    }
+                }
+            });
+        }
+        return mitSavePath;
     }
 
     private JMenu getEditMenu() {
