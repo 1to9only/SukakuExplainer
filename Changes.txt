@@ -1,5 +1,8 @@
 Changes:
 
+20200821:
+- in text output, SE hints to show candidate elimination(s) and any cell placement
+
 20200804:
 - added option to Save Solution Path...
 - built using jdk-8u261

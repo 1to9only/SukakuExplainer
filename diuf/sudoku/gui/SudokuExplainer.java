@@ -513,7 +513,7 @@ public class SudokuExplainer {
         pushStep( grid);
         for (Hint hint : selectedHints) {
             hint.apply(grid);
-            pushHint( hint.toString());
+            pushHint( hint);
         }
         clearHints();
         repaintAll();
@@ -707,8 +707,31 @@ public class SudokuExplainer {
         this.pathStack.push("M:Mouse:Candidate:"+s);    // cell solved by mouse (candidate)
     }
 
-    public void pushHint(String s) {
-        this.pathStack.push("H:"+s);    // cell solved by hint
+    public void pushHint(Hint hint) {
+        String s = "";
+        if (hint instanceof IndirectHint) {
+            IndirectHint iHint = (IndirectHint)hint;
+            if ( iHint.isWorth() ) {
+                int countCells = 0;
+                Map<Cell, BitSet> remPots = iHint.getRemovablePotentials();
+                for (Cell cell : remPots.keySet()) {
+                    BitSet cellPots = remPots.get(cell);
+                    if ( countCells == 0 ) { s += ":"; }
+                    if ( countCells > 0 ) { s += ","; }
+                    s += " -";
+                    for (int pv=1; pv<=9; pv++ ) {
+                        if ( cellPots.get( pv) ) { s += pv; }
+                    }
+                    s += "r" + (cell.getY()+1) + "c" + (cell.getX()+1);
+                    countCells++;
+                }
+                Cell cell = iHint.getCell();
+                if (cell != null) {
+                    s += ": r" + (cell.getY()+1) + "c" + (cell.getX()+1) + "=" + iHint.getValue();
+                }
+            }
+        }
+        this.pathStack.push("H:"+hint.toString()+s);    // cell solved by hint
     }
 
     private void popStep() {

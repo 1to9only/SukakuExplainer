@@ -576,6 +576,28 @@ public class Solver {
                 w /= 10;
                 s += w + "." + p;
                 s += ", " + hint.toString();
+                if (hint instanceof IndirectHint) {
+                    IndirectHint iHint = (IndirectHint)hint;
+                    if ( iHint.isWorth() ) {
+                        int countCells = 0;
+                        Map<Cell, BitSet> remPots = iHint.getRemovablePotentials();
+                        for (Cell cell : remPots.keySet()) {
+                            BitSet cellPots = remPots.get(cell);
+                            if ( countCells == 0 ) { s += ":"; }
+                            if ( countCells > 0 ) { s += ","; }
+                            s += " -";
+                            for (int pv=1; pv<=9; pv++ ) {
+                                if ( cellPots.get( pv) ) { s += pv; }
+                            }
+                            s += "r" + (cell.getY()+1) + "c" + (cell.getX()+1);
+                            countCells++;
+                        }
+                        Cell cell = iHint.getCell();
+                        if (cell != null) {
+                            s += ": r" + (cell.getY()+1) + "c" + (cell.getX()+1) + "=" + iHint.getValue();
+                        }
+                    }
+                }
                 System.out.println(s);
                 System.out.flush();
 
@@ -710,6 +732,28 @@ public class Solver {
                 w /= 10;
                 s += w + "." + p;
                 s += ", " + hint.toString();
+                if (hint instanceof IndirectHint) {
+                    IndirectHint iHint = (IndirectHint)hint;
+                    if ( iHint.isWorth() ) {
+                        int countCells = 0;
+                        Map<Cell, BitSet> remPots = iHint.getRemovablePotentials();
+                        for (Cell cell : remPots.keySet()) {
+                            BitSet cellPots = remPots.get(cell);
+                            if ( countCells == 0 ) { s += ":"; }
+                            if ( countCells > 0 ) { s += ","; }
+                            s += " -";
+                            for (int pv=1; pv<=9; pv++ ) {
+                                if ( cellPots.get( pv) ) { s += pv; }
+                            }
+                            s += "r" + (cell.getY()+1) + "c" + (cell.getX()+1);
+                            countCells++;
+                        }
+                        Cell cell = iHint.getCell();
+                        if (cell != null) {
+                            s += ": r" + (cell.getY()+1) + "c" + (cell.getX()+1) + "=" + iHint.getValue();
+                        }
+                    }
+                }
                 System.out.println(s);
                 System.out.flush();
 
