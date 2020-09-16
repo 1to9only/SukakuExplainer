@@ -26,13 +26,14 @@ public class SudokuPanel extends JPanel {
 
     private static final long serialVersionUID = 3709127163156966626L;
 
-    private int CELL_OUTER_SIZE = 45;
-    private int CELL_INNER_SIZE = 39;
+    private int CELL_OUTER_SIZE = 49;
+    private int CELL_INNER_SIZE = 43;
     private int GRID_GAP_SIZE = 2;
     private int LEGEND_GAP_SIZE = 42;
     private int CELL_PAD = (CELL_OUTER_SIZE - CELL_INNER_SIZE) / 2;
     private int GRID_SIZE = CELL_OUTER_SIZE * 9;
-    private String FONT_NAME = "Verdana";
+    private String CLUE_FONT_NAME = "Arial Black";
+    private String FONT_NAME = "Arial";
     private int FONT_SIZE_SMALL = 12;
     private int FONT_SIZE_BIG = 36;
     private int FONT_SIZE_LEGEND = 24;
@@ -56,8 +57,41 @@ public class SudokuPanel extends JPanel {
     private Font bigFont;
     private Font legendFont;
 
-    private Color candidateMaskColor = new Color(0, 255, 255, 127);
-    private Color potentialMaskColor = new Color(0, 255, 0, 127);
+    // 1to9only: all the colors used are defined here.
+
+    private Color backgroundColor = new Color(248, 248, 248, 127);      // background
+
+    private Color borderColor = new Color(64, 64, 64);                  // border
+    private Color legendColor = Color.gray;                             // legend
+    private Color completedColor = new Color(170, 170, 170);            // legend completed
+    private Color shadowColor = new Color(140, 140, 140);               // legend completed
+
+    private Color givenValueColor = Color.black;                        // given cell text color
+    private Color solvedValueColor = Color.blue;                        // solved cell text color
+    private Color selectedColor = Color.orange;                         // selected cell background color
+    private Color focusedColor = Color.yellow;                          // focused cell background color
+    private Color selectedfocusedValueColor = Color.black;              // selected and focused candidate
+    private Color selectedfocusedColor = Color.magenta;                 // selected and focused candidate
+
+    private Color candidateMaskColor = new Color(0, 255, 255, 127);     // candidate mask
+    private Color potentialMaskColor = new Color(0, 255, 0, 127);       // potential mask
+
+    private Color potentialColor = new Color(160, 160, 160);            // candidate text color
+    private Color potentialAltColor = new Color(96, 96, 96);            // candidate (in selected cell)
+    private Color highlight13DColor = Color.black;                      // candidate highlighted 3D
+    private Color highlight23DColor = Color.yellow;                     // candidate highlighted 3D
+
+    private Color redCellColor = Color.red;                             // hint red cell background
+    private Color greenCellColor = new Color(192, 255, 255);            // hint green cell background (turquoise!)
+
+    private Color hintGreenRegionColor = new  Color(0, 192, 0);         // hint green region
+    private Color hintBlueRegionColor = Color.blue;                     // hint blue region
+
+    private Color redPotentialColor = Color.red;                        // hint red potential
+    private Color greenPotentialColor = new  Color(0, 224, 0);          // hint green potential
+    private Color orangePotentialColor = new  Color(224, 128, 0);       // hint orange potential (red alt)
+    private Color bluePotentialColor = Color.blue;                      // hint blue potential
+    private Color linkColor = Color.red;                                // hint link
 
     public SudokuPanel(SudokuFrame parent) {
         super();
@@ -66,7 +100,7 @@ public class SudokuPanel extends JPanel {
             rescale();
         initialize();
         super.setOpaque(false);
-        smallFont = new Font(FONT_NAME, Font.PLAIN, FONT_SIZE_SMALL);
+        smallFont = new Font(CLUE_FONT_NAME, Font.PLAIN, FONT_SIZE_SMALL);
         bigFont = new Font(FONT_NAME, Font.PLAIN, FONT_SIZE_BIG);
         legendFont = new Font(FONT_NAME, Font.PLAIN, FONT_SIZE_LEGEND);
     }
@@ -378,9 +412,9 @@ public class SudokuPanel extends JPanel {
 
     private void drawStringCentered3D(Graphics g, String s, int x, int y) {
         Color color = g.getColor();
-        g.setColor(Color.black);
+        g.setColor(highlight13DColor);
         drawStringCentered(g, s, x, y + 1);
-        g.setColor(Color.yellow);
+        g.setColor(highlight23DColor);
         drawStringCentered(g, s, x - 1, y);
         g.setColor(color);
         drawStringCentered(g, s, x, y);
@@ -389,54 +423,52 @@ public class SudokuPanel extends JPanel {
     private boolean initPotentialColor(Graphics g, Cell cell, int value) {
         boolean isHighlighted = false;
         boolean isRed = false;
-        Color col = Color.gray;
-        if (bluePotentials != null) {
-            BitSet blueValues = bluePotentials.get(cell);
-            if (blueValues != null && blueValues.get(value)) {
-                col = Color.blue;
-                isHighlighted = true;
-            }
-        }
+        Color col = potentialColor;
+        if (cell == selectedCell)
+            col = potentialAltColor;
+        if (cell == selectedCell && value == focusedCandidate)
+            col = selectedfocusedValueColor;
         if (redPotentials != null) {
             BitSet redValues = redPotentials.get(cell);
             if (redValues != null && redValues.get(value)) {
-                col = Color.red;
+                col = redPotentialColor;
                 isHighlighted = true;
                 isRed = true;
+            }
+        }
+        if (bluePotentials != null) {
+            BitSet blueValues = bluePotentials.get(cell);
+            if (blueValues != null && blueValues.get(value)) {
+                col = bluePotentialColor;
+                isHighlighted = true;
             }
         }
         if (greenPotentials != null) {
             BitSet greenValues = greenPotentials.get(cell);
             if (greenValues != null && greenValues.get(value)) {
                 if (isRed) {
-                    col = new Color(224, 128, 0);
+                    col = orangePotentialColor;
                 } else {
-                    col = new Color(0, 224, 0);
+                    col = greenPotentialColor;
                     isHighlighted = true;
                 }
             }
         }
-        if (cell == selectedCell)
-            col = new Color(
-                    (col.getRed() + Color.orange.getRed()) / 2,
-                    (col.getGreen() + Color.orange.getGreen()) / 2,
-                    (col.getBlue() + Color.orange.getBlue()) / 2);
-        if (cell == selectedCell && value == focusedCandidate)
-            col = Color.black;
         g.setColor(col);
         return isHighlighted;
     }
 
     private void initFillColor(Graphics g, Cell cell) {
-        Color col = Color.white;
+        Color col = backgroundColor;
         if (redCells != null && redCells.contains(cell))
-            col = Color.red;
+            col = redCellColor;
         else if (greenCells != null && greenCells.contains(cell))
-            col = new Color(192, 255, 255);
-        else if (cell == selectedCell)
-            col = Color.orange;
+            col = greenCellColor;
+        else
+        if (cell == selectedCell)
+            col = selectedColor;
         else if (cell == focusedCell)
-            col = Color.yellow;
+            col = focusedColor;
         else {
             boolean showing = Settings.getInstance().isShowingCandidateMasks();
             if ( showing == true ) {
@@ -460,13 +492,7 @@ public class SudokuPanel extends JPanel {
     }
 
     private void initValueColor(Graphics g, Cell cell) {
-        Color col = cell.isGiven() ? Color.black : Color.blue;
-    //  if (cell == selectedCell)
-    //      col = new Color(
-    //              (col.getRed() + Color.orange.getRed()) / 2,
-    //              (col.getGreen() + Color.orange.getGreen()) / 2,
-    //              (col.getBlue() + Color.orange.getBlue()) / 2);
-        g.setColor(col);
+        g.setColor(cell.isGiven()?givenValueColor:solvedValueColor);
     }
 
     @Override
@@ -527,7 +553,7 @@ public class SudokuPanel extends JPanel {
 
     private void paintLegend(Graphics g) {
         g.setFont(legendFont);
-        g.setColor(new Color(0, 32, 64));
+        g.setColor(legendColor);
         Settings settings = Settings.getInstance();
         for (int i = 0; i < 9; i++) {
             String xLegend;
@@ -540,8 +566,22 @@ public class SudokuPanel extends JPanel {
                 yLegend = "R" + (i + 1);
             else
                 yLegend = Integer.toString(i + 1);
-            drawStringCentered(g, yLegend,
-                    LEGEND_GAP_SIZE / 2, CELL_OUTER_SIZE * i + GRID_GAP_SIZE + CELL_OUTER_SIZE / 2);
+            if (engine.isValueAllGiven(grid, i+1)) {
+                g.setColor(completedColor);
+                drawStringCentered(g, yLegend,
+                        LEGEND_GAP_SIZE / 2,
+                        CELL_OUTER_SIZE * i + GRID_GAP_SIZE + CELL_OUTER_SIZE / 2);
+                g.setColor(shadowColor);
+                drawStringCentered(g, yLegend,
+                        LEGEND_GAP_SIZE / 2 + 1,
+                        CELL_OUTER_SIZE * i + GRID_GAP_SIZE + CELL_OUTER_SIZE / 2 + 1);
+            } else {
+                g.setColor(legendColor);
+                drawStringCentered(g, yLegend,
+                        LEGEND_GAP_SIZE / 2,
+                        CELL_OUTER_SIZE * i + GRID_GAP_SIZE + CELL_OUTER_SIZE / 2);
+            }
+            g.setColor(legendColor);
             drawStringCentered(g, xLegend,
                     LEGEND_GAP_SIZE + i * CELL_OUTER_SIZE + CELL_OUTER_SIZE / 2,
                     CELL_OUTER_SIZE * 9 + GRID_GAP_SIZE + LEGEND_GAP_SIZE / 2);
@@ -568,10 +608,10 @@ public class SudokuPanel extends JPanel {
             int lineWidth;
             if (i % 3 == 0) {
                 lineWidth = 4;
-                g.setColor(Color.black);
+                g.setColor(borderColor);
             } else {
                 lineWidth = 2;
-                g.setColor(Color.blue.darker());
+                g.setColor(borderColor);
             }
             int offset = lineWidth / 2;
             g.fillRect(i * CELL_OUTER_SIZE - offset, 0 - offset, lineWidth, GRID_SIZE + lineWidth);
@@ -581,7 +621,7 @@ public class SudokuPanel extends JPanel {
 
     private void paintHighlightedRegions(Graphics g) {
         if (blueRegions != null) {
-            Color[] colors = new Color[] {new Color(0, 0, 192), new Color(0, 128, 0)};
+            Color[] colors = new Color[] {hintBlueRegionColor, hintGreenRegionColor};
             for (int rev = 0; rev < 2; rev++) {
                 for (int i = 0; i < blueRegions.length; i++) {
                     int index = (rev == 0 ? i : blueRegions.length - 1 - i);
@@ -640,7 +680,7 @@ public class SudokuPanel extends JPanel {
                         boolean paintIt = Settings.getInstance().isShowingCandidates();
                         if (cell == this.selectedCell && value == this.focusedCandidate) {
                             // Paint magenta selection
-                            g.setColor(Color.magenta);
+                            g.setColor(selectedfocusedColor);
                             g.fillRect(
                                     x * CELL_OUTER_SIZE + CELL_PAD + (index % 3) * (CELL_INNER_SIZE / 3),
                                     y * CELL_OUTER_SIZE + CELL_PAD + (index / 3) * (CELL_INNER_SIZE / 3),
@@ -734,7 +774,7 @@ public class SudokuPanel extends JPanel {
     }
 
     private void paintLinks(Graphics g) {
-        g.setColor(Color.orange);
+        g.setColor(linkColor);
         if (links != null) {
             Collection<Line> paintedLines = new ArrayList<Line>();
             for (Link link : links) {
@@ -794,30 +834,21 @@ public class SudokuPanel extends JPanel {
                         double rx = ex - ux * 5 - uy * 2;
                         double ry = ey - uy * 5 + ux * 2;
                         g.fillPolygon(new int[] {(int)(ex + mx), (int)(rx + mx), (int)(lx + mx)},
-                                new int[] {(int)(ey + my), (int)(ry + my), (int)(ly + my)}, 3);
+                                      new int[] {(int)(ey + my), (int)(ry + my), (int)(ly + my)}, 3);
                     }
                     paintedLines.add(line);
                 }
                 // Draw the line
-                if (dstValue == 0 && srcValue == 0) {
-                    Color oldColor = g.getColor();
-                    //g.setColor(Color.magenta);
-                    g.drawLine((int)(sx + mx), (int)(sy + my), (int)(ex + mx), (int)(ey + my));
-                    g.setColor(oldColor);
-                } else {
-                    g.drawLine((int)(sx + mx), (int)(sy + my), (int)(ex + mx), (int)(ey + my));
-                }
+                g.drawLine((int)(sx + mx), (int)(sy + my), (int)(ex + mx), (int)(ey + my));
             }
         }
     }
 
     private void paintCursor() {
-        /*
-    if (selectedCell == focusedCell)
-      this.setCursor(new Cursor(Cursor.TEXT_CURSOR));
-    else
-      this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-         */
+//  if (selectedCell == focusedCell)
+//      this.setCursor(new Cursor(Cursor.TEXT_CURSOR));
+//  else
+//      this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }
 
 }

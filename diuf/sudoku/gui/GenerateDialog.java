@@ -63,8 +63,8 @@ public class GenerateDialog extends JDialog {
     private JCheckBox chkAnalysis;
 
     private EnumSet<Symmetry> symmetries = EnumSet.noneOf(Symmetry.class);
-    private Difficulty difficulty = Difficulty.Easy;
-    private boolean isExact = true;
+    private Difficulty difficulty = Difficulty.Diabolical;
+    private boolean isExact = false;
 
     private GeneratorThread generator = null;
     private List<Grid> sudokuList = new ArrayList<Grid>();
@@ -84,7 +84,7 @@ public class GenerateDialog extends JDialog {
 //      symmetries.add(Symmetry.BiDiagonal);
 //      symmetries.add(Symmetry.Rotational180);
 //      symmetries.add(Symmetry.Rotational90);
-        symmetries.add(Symmetry.Full);
+        symmetries.add(Symmetry.None);
 
         sudokuList.add(engine.getGrid());
     }
@@ -149,7 +149,7 @@ public class GenerateDialog extends JDialog {
                                 GenerateDialog.this,
                                 "<html><body>" +
                                 "<b>Warning</b>: not all solving techniques are enabled.<br>" +
-                                "The Sudoku Explainer may not be able to generate<br>" +
+                                "The Sukaku Explainer may not be able to generate<br>" +
                                 "a Sudoku with the selected parameters (it may loop<br>" +
                                 "for ever until you stop it).<br><br>" +
                                 "Do you want to continue anyway?" +
@@ -256,7 +256,7 @@ public class GenerateDialog extends JDialog {
         ButtonGroup group = new ButtonGroup();
         group.add(chkExactDifficulty);
         group.add(chkMaximumDifficulty);
-        chkExactDifficulty.setSelected(true);
+        chkMaximumDifficulty.setSelected(true);
 
         JPanel pnlDifficulty = new JPanel();
         pnlDifficulty.setLayout(new BorderLayout());
@@ -296,7 +296,7 @@ public class GenerateDialog extends JDialog {
             }
         });
         optionPanel.add(chkAnalysis);
-        chkAnalysis.setSelected(true);
+        chkAnalysis.setSelected(false);
     }
 
     private void generate() {
@@ -400,7 +400,7 @@ public class GenerateDialog extends JDialog {
 
     private void refreshSudokuPanel() {
         Grid sudoku = sudokuList.get(sudokuIndex);
-        engine.setGrid(sudoku);
+        engine.newGrid(sudoku);
         btnPrev.setEnabled(sudokuIndex > 0);
         btnNext.setEnabled(sudokuIndex < sudokuList.size() - 1);
 

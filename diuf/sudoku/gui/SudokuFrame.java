@@ -75,6 +75,7 @@ public class SudokuFrame extends JFrame implements Asker {
     private JMenuItem mitSave = null;
     private JMenuItem mitSaveSukaku = null;
     private JMenuItem mitSavePath = null;
+    private JCheckBoxMenuItem mitIncludePencils = null;
     private JMenu editMenu = null;
     private JMenuItem mitCopy = null;
     private JMenuItem mitCopySukaku = null;
@@ -112,6 +113,18 @@ public class SudokuFrame extends JFrame implements Asker {
     private JPanel pnlEnabledTechniques = null;
     private JLabel lblEnabledTechniques = null;
 
+    private JMenu mitRecentFile = null;
+    private JMenuItem mitRecentFile01 = null;
+    private JMenuItem mitRecentFile02 = null;
+    private JMenuItem mitRecentFile03 = null;
+    private JMenuItem mitRecentFile04 = null;
+    private JMenuItem mitRecentFile05 = null;
+    private JMenuItem mitRecentFile06 = null;
+    private JMenuItem mitRecentFile07 = null;
+    private JMenuItem mitRecentFile08 = null;
+    private JMenuItem mitRecentFile09 = null;
+    private JMenuItem mitRecentFile10 = null;
+    private JMenuItem mitClearList = null;
 
     public SudokuFrame() {
         super();
@@ -411,8 +424,7 @@ public class SudokuFrame extends JFrame implements Asker {
                     TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
             hintsTree.setCellRenderer(new HintsTreeCellRenderer());
             hintsTree.setExpandsSelectedPaths(true);
-            hintsTree
-            .addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
+            hintsTree.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
 
                 public void valueChanged(javax.swing.event.TreeSelectionEvent e) {
                     if (hintsTree.isEnabled()) {
@@ -471,12 +483,12 @@ public class SudokuFrame extends JFrame implements Asker {
         if (sudokuContainer == null) {
             sudokuContainer = new JPanel();
             sudokuContainer.setLayout(new BorderLayout());
-            sudokuContainer.setBorder(javax.swing.BorderFactory
-                    .createTitledBorder(null, "Sudoku Grid",
-                            javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                            javax.swing.border.TitledBorder.DEFAULT_POSITION,
-                            new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
-                            new java.awt.Color(51, 51, 51)));
+            sudokuContainer.setBorder(javax.swing.BorderFactory.createTitledBorder(
+                    null, "Sudoku Grid",
+                    javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+                    javax.swing.border.TitledBorder.DEFAULT_POSITION,
+                    new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
+                    new java.awt.Color(128, 128, 128)));
             sudokuContainer.add(getSudokuPanel(), java.awt.BorderLayout.CENTER);
             sudokuContainer.add(getViewSelectionPanel(), java.awt.BorderLayout.SOUTH);
         }
@@ -487,12 +499,12 @@ public class SudokuFrame extends JFrame implements Asker {
         if (hintDetailContainer == null) {
             hintDetailContainer = new JPanel();
             hintDetailContainer.setLayout(new BorderLayout());
-            hintDetailContainer.setBorder(javax.swing.BorderFactory
-                    .createTitledBorder(null, "Explanations",
-                            javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                            javax.swing.border.TitledBorder.DEFAULT_POSITION,
-                            new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
-                            new java.awt.Color(51, 51, 51)));
+            hintDetailContainer.setBorder(javax.swing.BorderFactory.createTitledBorder(
+                    null, "Explanations",
+                    javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+                    javax.swing.border.TitledBorder.DEFAULT_POSITION,
+                    new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
+                    new java.awt.Color(128, 128, 128)));
             hintDetailContainer.add(getHintsDetailScrollPane(), BorderLayout.CENTER);
         }
         return hintDetailContainer;
@@ -537,10 +549,12 @@ public class SudokuFrame extends JFrame implements Asker {
 
             buttonsPane = new JPanel();
             buttonsPane.setLayout(new GridBagLayout());
-            buttonsPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
-                    "Actions", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                    javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font(
-                            "Dialog", java.awt.Font.BOLD, 12), null));
+            buttonsPane.setBorder(javax.swing.BorderFactory.createTitledBorder(
+                    null, "Actions",
+                    javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+                    javax.swing.border.TitledBorder.DEFAULT_POSITION,
+                    new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),    // null));
+                    new java.awt.Color(128, 128, 128)));
 
             buttonsPane.add(getBtnCheckValidity(),   gridBagConstraints0);
             buttonsPane.add(getBtnApplyHintAndGet(), gridBagConstraints1);
@@ -552,7 +566,6 @@ public class SudokuFrame extends JFrame implements Asker {
         }
         return buttonsPane;
     }
-
 
     private JButton getBtnGetNextHint() {
         if (btnGetNextHint == null) {
@@ -665,8 +678,9 @@ public class SudokuFrame extends JFrame implements Asker {
             hintsTreePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
                     null, "Hints classification",
                     javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                    javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font(
-                            "Dialog", java.awt.Font.BOLD, 12), null));
+                    javax.swing.border.TitledBorder.DEFAULT_POSITION,
+                    new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),    // null));
+                    new java.awt.Color(128, 128, 128)));
             hintsTreePanel.add(getHintsTreeScrollPane(), java.awt.BorderLayout.CENTER);
             hintsTreePanel.add(getHintsSouthPanel(), java.awt.BorderLayout.SOUTH);
         }
@@ -832,12 +846,14 @@ public class SudokuFrame extends JFrame implements Asker {
             fileMenu.addSeparator();
             fileMenu.add(getMitLoad());
             setCommand(getMitLoad(), 'O');
+            fileMenu.add(getMitRecentFile());
             fileMenu.add(getMitSave());
             setCommand(getMitSave(), 'S');
             fileMenu.add(getMitSaveSukaku());
             setCommand(getMitSaveSukaku(), 'U');
             fileMenu.addSeparator();
             fileMenu.add(getMitSavePath());
+            fileMenu.add(getMitIncludePencils());
             fileMenu.addSeparator();
             fileMenu.add(getMitQuit());
             setCommand(getMitQuit(), 'Q');
@@ -915,8 +931,11 @@ public class SudokuFrame extends JFrame implements Asker {
                             chooser.setCurrentDirectory(defaultDirectory);
                         int result = chooser.showOpenDialog(SudokuFrame.this);
                         defaultDirectory = chooser.getCurrentDirectory();
-                        if (result == JFileChooser.APPROVE_OPTION)
-                            engine.loadGrid(chooser.getSelectedFile());
+                        if (result == JFileChooser.APPROVE_OPTION) {
+                            File selectedFile = chooser.getSelectedFile();
+                            engine.loadGrid(selectedFile);
+                            addRecentFile(selectedFile.toString());
+                        }
                     } catch (AccessControlException ex) {
                         warnAccessError(ex);
                     }
@@ -1010,6 +1029,256 @@ public class SudokuFrame extends JFrame implements Asker {
         return mitSaveSukaku;
     }
 
+    private JMenu getMitRecentFile() {
+        if (mitRecentFile == null) {
+            mitRecentFile = new JMenu();
+            mitRecentFile.setText("Recent File (load only)");
+            mitRecentFile.add(getMitRecentFile01());
+            mitRecentFile.add(getMitRecentFile02());
+            mitRecentFile.add(getMitRecentFile03());
+            mitRecentFile.add(getMitRecentFile04());
+            mitRecentFile.add(getMitRecentFile05());
+            mitRecentFile.add(getMitRecentFile06());
+            mitRecentFile.add(getMitRecentFile07());
+            mitRecentFile.add(getMitRecentFile08());
+            mitRecentFile.add(getMitRecentFile09());
+            mitRecentFile.add(getMitRecentFile10());
+            mitRecentFile.addSeparator();
+            mitRecentFile.add(getMitClearList());
+        }
+        return mitRecentFile;
+    }
+
+    private JMenuItem getMitRecentFile01() {
+        if (mitRecentFile01 == null) {
+            mitRecentFile01 = new JMenuItem();
+            mitRecentFile01.setText("No File");
+            mitRecentFile01.setVisible(true);
+            mitRecentFile01.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    String filepath = mitRecentFile01.getText();
+                  if ( !filepath.equals("No File") ) {
+                    File selectedFile = new File(filepath);
+                    engine.loadGrid(selectedFile);
+                  }
+                }
+            });
+        }
+        return mitRecentFile01;
+    }
+
+    private JMenuItem getMitRecentFile02() {
+        if (mitRecentFile02 == null) {
+            mitRecentFile02 = new JMenuItem();
+            mitRecentFile02.setText("No File");
+            mitRecentFile02.setVisible(false);
+            mitRecentFile02.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    String filepath = mitRecentFile02.getText();
+                    File selectedFile = new File(filepath);
+                    engine.loadGrid(selectedFile);
+                }
+            });
+        }
+        return mitRecentFile02;
+    }
+
+    private JMenuItem getMitRecentFile03() {
+        if (mitRecentFile03 == null) {
+            mitRecentFile03 = new JMenuItem();
+            mitRecentFile03.setText("No File");
+            mitRecentFile03.setVisible(false);
+            mitRecentFile03.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    String filepath = mitRecentFile03.getText();
+                    File selectedFile = new File(filepath);
+                    engine.loadGrid(selectedFile);
+                }
+            });
+        }
+        return mitRecentFile03;
+    }
+
+    private JMenuItem getMitRecentFile04() {
+        if (mitRecentFile04 == null) {
+            mitRecentFile04 = new JMenuItem();
+            mitRecentFile04.setText("No File");
+            mitRecentFile04.setVisible(false);
+            mitRecentFile04.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    String filepath = mitRecentFile04.getText();
+                    File selectedFile = new File(filepath);
+                    engine.loadGrid(selectedFile);
+                }
+            });
+        }
+        return mitRecentFile04;
+    }
+
+    private JMenuItem getMitRecentFile05() {
+        if (mitRecentFile05 == null) {
+            mitRecentFile05 = new JMenuItem();
+            mitRecentFile05.setText("No File");
+            mitRecentFile05.setVisible(false);
+            mitRecentFile05.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    String filepath = mitRecentFile05.getText();
+                    File selectedFile = new File(filepath);
+                    engine.loadGrid(selectedFile);
+                }
+            });
+        }
+        return mitRecentFile05;
+    }
+
+    private JMenuItem getMitRecentFile06() {
+        if (mitRecentFile06 == null) {
+            mitRecentFile06 = new JMenuItem();
+            mitRecentFile06.setText("No File");
+            mitRecentFile06.setVisible(false);
+            mitRecentFile06.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    String filepath = mitRecentFile06.getText();
+                    File selectedFile = new File(filepath);
+                    engine.loadGrid(selectedFile);
+                }
+            });
+        }
+        return mitRecentFile06;
+    }
+
+    private JMenuItem getMitRecentFile07() {
+        if (mitRecentFile07 == null) {
+            mitRecentFile07 = new JMenuItem();
+            mitRecentFile07.setText("No File");
+            mitRecentFile07.setVisible(false);
+            mitRecentFile07.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    String filepath = mitRecentFile07.getText();
+                    File selectedFile = new File(filepath);
+                    engine.loadGrid(selectedFile);
+                }
+            });
+        }
+        return mitRecentFile07;
+    }
+
+    private JMenuItem getMitRecentFile08() {
+        if (mitRecentFile08 == null) {
+            mitRecentFile08 = new JMenuItem();
+            mitRecentFile08.setText("No File");
+            mitRecentFile08.setVisible(false);
+            mitRecentFile08.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    String filepath = mitRecentFile08.getText();
+                    File selectedFile = new File(filepath);
+                    engine.loadGrid(selectedFile);
+                }
+            });
+        }
+        return mitRecentFile08;
+    }
+
+    private JMenuItem getMitRecentFile09() {
+        if (mitRecentFile09 == null) {
+            mitRecentFile09 = new JMenuItem();
+            mitRecentFile09.setText("No File");
+            mitRecentFile09.setVisible(false);
+            mitRecentFile09.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    String filepath = mitRecentFile09.getText();
+                    File selectedFile = new File(filepath);
+                    engine.loadGrid(selectedFile);
+                }
+            });
+        }
+        return mitRecentFile09;
+    }
+
+    private JMenuItem getMitRecentFile10() {
+        if (mitRecentFile10 == null) {
+            mitRecentFile10 = new JMenuItem();
+            mitRecentFile10.setText("No File");
+            mitRecentFile10.setVisible(false);
+            mitRecentFile10.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    String filepath = mitRecentFile10.getText();
+                    File selectedFile = new File(filepath);
+                    engine.loadGrid(selectedFile);
+                }
+            });
+        }
+        return mitRecentFile10;
+    }
+
+    private JMenuItem getMitClearList() {
+        if (mitClearList == null) {
+            mitClearList = new JMenuItem();
+            mitClearList.setText("Clear List");
+            mitClearList.setVisible(false);
+            mitClearList.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    mitRecentFile01.setText("No File"); mitRecentFile01.setVisible(true);
+                    mitRecentFile02.setText("No File"); mitRecentFile02.setVisible(false);
+                    mitRecentFile03.setText("No File"); mitRecentFile03.setVisible(false);
+                    mitRecentFile04.setText("No File"); mitRecentFile04.setVisible(false);
+                    mitRecentFile05.setText("No File"); mitRecentFile05.setVisible(false);
+                    mitRecentFile06.setText("No File"); mitRecentFile06.setVisible(false);
+                    mitRecentFile07.setText("No File"); mitRecentFile07.setVisible(false);
+                    mitRecentFile08.setText("No File"); mitRecentFile08.setVisible(false);
+                    mitRecentFile09.setText("No File"); mitRecentFile09.setVisible(false);
+                    mitRecentFile10.setText("No File"); mitRecentFile10.setVisible(false);
+                    mitClearList.setVisible(false);
+                }
+            });
+        }
+        return mitClearList;
+    }
+
+    private void addRecentFile( String filepath) {
+        int found = 0;
+        // check filepath does not already exist in recent file list
+        if ( found == 0 && mitRecentFile01.getText().equals(filepath) ) { found = 1; }
+        if ( found == 0 && mitRecentFile02.getText().equals(filepath) ) { found = 1; }
+        if ( found == 0 && mitRecentFile03.getText().equals(filepath) ) { found = 1; }
+        if ( found == 0 && mitRecentFile04.getText().equals(filepath) ) { found = 1; }
+        if ( found == 0 && mitRecentFile05.getText().equals(filepath) ) { found = 1; }
+        if ( found == 0 && mitRecentFile06.getText().equals(filepath) ) { found = 1; }
+        if ( found == 0 && mitRecentFile07.getText().equals(filepath) ) { found = 1; }
+        if ( found == 0 && mitRecentFile08.getText().equals(filepath) ) { found = 1; }
+        if ( found == 0 && mitRecentFile09.getText().equals(filepath) ) { found = 1; }
+        if ( found == 0 && mitRecentFile10.getText().equals(filepath) ) { found = 1; }
+        // add filepath in unused slot of recent file list
+        if ( found == 0 && mitRecentFile01.getText().equals("No File") ) { mitRecentFile01.setText(filepath); mitRecentFile01.setVisible(true); found = 1; }
+        if ( found == 0 && mitRecentFile02.getText().equals("No File") ) { mitRecentFile02.setText(filepath); mitRecentFile02.setVisible(true); found = 1; }
+        if ( found == 0 && mitRecentFile03.getText().equals("No File") ) { mitRecentFile03.setText(filepath); mitRecentFile03.setVisible(true); found = 1; }
+        if ( found == 0 && mitRecentFile04.getText().equals("No File") ) { mitRecentFile04.setText(filepath); mitRecentFile04.setVisible(true); found = 1; }
+        if ( found == 0 && mitRecentFile05.getText().equals("No File") ) { mitRecentFile05.setText(filepath); mitRecentFile05.setVisible(true); found = 1; }
+        if ( found == 0 && mitRecentFile06.getText().equals("No File") ) { mitRecentFile06.setText(filepath); mitRecentFile06.setVisible(true); found = 1; }
+        if ( found == 0 && mitRecentFile07.getText().equals("No File") ) { mitRecentFile07.setText(filepath); mitRecentFile07.setVisible(true); found = 1; }
+        if ( found == 0 && mitRecentFile08.getText().equals("No File") ) { mitRecentFile08.setText(filepath); mitRecentFile08.setVisible(true); found = 1; }
+        if ( found == 0 && mitRecentFile09.getText().equals("No File") ) { mitRecentFile09.setText(filepath); mitRecentFile09.setVisible(true); found = 1; }
+        if ( found == 0 && mitRecentFile10.getText().equals("No File") ) { mitRecentFile10.setText(filepath); mitRecentFile10.setVisible(true); found = 1; }
+        // recent file list is full, shuffle up, and add at bottom
+        if ( found == 0 ) {
+            mitRecentFile01.setText(mitRecentFile02.getText());
+            mitRecentFile02.setText(mitRecentFile03.getText());
+            mitRecentFile03.setText(mitRecentFile04.getText());
+            mitRecentFile04.setText(mitRecentFile05.getText());
+            mitRecentFile05.setText(mitRecentFile06.getText());
+            mitRecentFile06.setText(mitRecentFile07.getText());
+            mitRecentFile07.setText(mitRecentFile08.getText());
+            mitRecentFile08.setText(mitRecentFile09.getText());
+            mitRecentFile09.setText(mitRecentFile10.getText());
+            mitRecentFile10.setText(filepath);
+            found = 1;
+        }
+        if ( found == 1 )
+        {
+            mitClearList.setVisible(true);
+        }
+    }
+
     private JMenuItem getMitSavePath() {
         if (mitSavePath == null) {
             mitSavePath = new JMenuItem();
@@ -1040,7 +1309,7 @@ public class SudokuFrame extends JFrame implements Asker {
                                         "Save", JOptionPane.OK_CANCEL_OPTION) != JOptionPane.OK_OPTION)
                                     return;
                             }
-                            engine.savePath(file);
+                            engine.savePath(file,mitIncludePencils.isSelected());
                         }
                     } catch (AccessControlException ex) {
                         warnAccessError(ex);
@@ -1049,6 +1318,21 @@ public class SudokuFrame extends JFrame implements Asker {
             });
         }
         return mitSavePath;
+    }
+
+    private JCheckBoxMenuItem getMitIncludePencils() {
+        if (mitIncludePencils == null) {
+            mitIncludePencils = new JCheckBoxMenuItem();
+            mitIncludePencils.setText("Include pencilmarks");
+            mitIncludePencils.setToolTipText("Include pencilmarks in the saved solution");
+            mitIncludePencils.setSelected(true);
+            mitIncludePencils.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                    /* nop */ ;
+                }
+            });
+        }
+        return mitIncludePencils;
     }
 
     private JMenu getEditMenu() {
@@ -1207,7 +1491,7 @@ public class SudokuFrame extends JFrame implements Asker {
                         engine.analyse();
                     } catch (UnsupportedOperationException ex) {
                         JOptionPane.showMessageDialog(SudokuFrame.this,
-                                "The Sudoku Explainer failed to solve this Sudoku\n" +
+                                "The Sukaku Explainer failed to solve this Sudoku\n" +
                                 "using the solving techniques that are currently enabled.",
                                 "Analysis", JOptionPane.ERROR_MESSAGE);
                     }
@@ -1447,7 +1731,7 @@ public class SudokuFrame extends JFrame implements Asker {
         if (mitAbout == null) {
             mitAbout = new JMenuItem();
             mitAbout.setText("About");
-            mitAbout.setToolTipText("Get information about the Sudoku Explainer application");
+            mitAbout.setToolTipText("Get information about the Sukaku Explainer application");
             mitAbout.setMnemonic(java.awt.event.KeyEvent.VK_A);
             mitAbout.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {

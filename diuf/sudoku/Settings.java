@@ -6,7 +6,19 @@
 package diuf.sudoku;
 
 import java.util.*;
-import java.util.prefs.*;
+//port java.util.prefs.*;
+
+import java.io.FileWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import javax.swing.UIManager;
 
 /**
  * Global settings of the application.
@@ -20,14 +32,15 @@ public class Settings {
 
     private static Settings instance = null;
 
-    private boolean isRCNotation = false;
+    private static String jsonFilename = "SukakuExplainer.json";
+
+    private boolean isRCNotation = true;
     private boolean isAntialiasing = true;
     private boolean isShowingCandidates = true;
     private boolean isShowingCandidateMasks = true;
-    private String lookAndFeelClassName = null;
+    private String  lookAndFeelClassName = null;
 
     private EnumSet<SolvingTechnique> techniques;
-
 
     private Settings() {
         init();
@@ -129,39 +142,60 @@ public class Settings {
         techniques = EnumSet.allOf(SolvingTechnique.class);
     }
 
+    @SuppressWarnings("unchecked")
     public void load() {
-        try {
-            Preferences prefs = Preferences.userNodeForPackage(Settings.class);
-            if (prefs == null)
-                return; // What can I do there ?
-            isRCNotation = prefs.getBoolean("isRCNotation", isRCNotation);
-            isAntialiasing = prefs.getBoolean("isAntialiasing", isAntialiasing);
-            isShowingCandidates = prefs.getBoolean("isShowingCandidates", isShowingCandidates);
-            isShowingCandidateMasks = prefs.getBoolean("isShowingCandidateMasks", isShowingCandidateMasks);
-            lookAndFeelClassName = prefs.get("lookAndFeelClassName", lookAndFeelClassName);
-        } catch (SecurityException ex) {
-            // Maybe we are running from an applet. Do nothing
+        JSONParser jsonParser = new JSONParser();
+        try (FileReader reader = new FileReader(jsonFilename)) {
+            Object obj = jsonParser.parse(reader);
+            JSONArray jSettings = (JSONArray)obj;
+            jSettings.forEach( Item -> {
+                JSONObject stgObject = (JSONObject)Item;
+                JSONObject stgDetails = (JSONObject)stgObject.get("Settings");
+
+                String isRCN = (String)stgDetails.get("isRCNotation");
+                String isAnt = (String)stgDetails.get("isAntialiasing");
+                String isSCa = (String)stgDetails.get("isShowingCandidates");
+                String isSCM = (String)stgDetails.get("isShowingCandidateMasks");
+
+                isRCNotation = isRCN.equals("true")?true:false;
+                isAntialiasing = isAnt.equals("true")?true:false;
+                isShowingCandidates = isSCa.equals("true")?true:false;
+                isShowingCandidateMasks = isSCM.equals("true")?true:false;
+
+                lookAndFeelClassName = (String)stgDetails.get("lookAndFeelClassName");
+            });
+
+        } catch (FileNotFoundException e) {
+        //  create new json file
+            lookAndFeelClassName = UIManager.getSystemLookAndFeelClassName();
+            save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void save() {
-        try {
-            Preferences prefs = Preferences.userNodeForPackage(Settings.class);
-            if (prefs == null)
-                return;
-            prefs.putBoolean("isRCNotation", isRCNotation);
-            prefs.putBoolean("isAntialiasing", isAntialiasing);
-            prefs.putBoolean("isShowingCandidates", isShowingCandidates);
-            prefs.putBoolean("isShowingCandidateMasks", isShowingCandidateMasks);
-            if (lookAndFeelClassName != null)
-                prefs.put("lookAndFeelClassName", lookAndFeelClassName);
-            try {
-                prefs.flush();
-            } catch (BackingStoreException ex) {
-                ex.printStackTrace();
-            }
-        } catch (SecurityException ex) {
-            // Maybe we are running from an applet. Do nothing
+        JSONObject stgDetails = new JSONObject();
+        stgDetails.put("isRCNotation", isRCNotation?"true":"false");
+        stgDetails.put("isAntialiasing", isAntialiasing?"true":"false");
+        stgDetails.put("isShowingCandidates", isShowingCandidates?"true":"false");
+        stgDetails.put("isShowingCandidateMasks", isShowingCandidateMasks?"true":"false");
+        stgDetails.put("lookAndFeelClassName", lookAndFeelClassName);
+
+        JSONObject stgObject = new JSONObject();
+        stgObject.put("Settings", stgDetails);
+
+        JSONArray jSettings = new JSONArray();
+        jSettings.add(stgObject);
+
+        try (FileWriter file = new FileWriter(jsonFilename)) {
+            file.write(jSettings.toJSONString());
+            file.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

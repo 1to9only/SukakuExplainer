@@ -21,19 +21,19 @@ public class serate {
             System.err.println("<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML//EN\">");
             System.err.println("<HTML>");
             System.err.println("<HEAD>");
-            System.err.println("<TITLE>Sudoku Explainer serate man document</TITLE>");
+            System.err.println("<TITLE>Sukaku Explainer serate man document</TITLE>");
             System.err.println("</HEAD>");
             System.err.println("<BODY bgcolor=white>");
             System.err.println("<PRE>");
         }
         System.err.println("NAME");
-        System.err.println("  serate - Sudoku Explainer command line rating");
+        System.err.println("  serate - Sukaku Explainer command line rating");
         System.err.println("");
         System.err.println("SYNOPSIS");
         System.err.println("  serate [ --diamond ] [ --format=FORMAT ] [ --input=FILE ] [ --output=FILE ] [ --pearl ] [ puzzle ... ]");
         System.err.println("");
         System.err.println("DESCRIPTION");
-        System.err.println("  serate is a Sudoku Explainer command line entry point that rates one or more");
+        System.err.println("  serate is a Sukaku Explainer command line entry point that rates one or more");
         System.err.println("  input puzzles.  If an --input=FILE option is specified then 81-character puzzle");
         System.err.println("  strings are read from that file, otherwise if 81-character puzzle operands are");
         System.err.println("  not specified the puzzles are read from the standard input.  If an --output=FILE");
@@ -75,7 +75,7 @@ public class serate {
         System.err.println("  -p, --pearl");
         System.err.println("      Terminate rating if the puzzle is not a pearl.");
         System.err.println("  -V, --version");
-        System.err.println("      Print the Sudoku Explainer (serate) version and exit.");
+        System.err.println("      Print the Sukaku Explainer (serate) version and exit.");
         System.err.println("");
         System.err.println("INVOCATION");
         System.err.println("  java -Xrs -Xmx500m -cp SudokuExplainer.jar diuf.sudoku.test.serate ...");
@@ -84,9 +84,9 @@ public class serate {
         System.err.println("  SudokuExplainer(1), sudoku(1)");
         System.err.println("");
         System.err.println("IMPLEMENTATION");
-        System.err.println("  version     serate " + VERSION + " (Sudoku Explainer) " + RELEASE);
-        System.err.println("  author      Nicolas Juillerat");
-        System.err.println("  copyright   Copyright (c) 2006-2009 Nicolas Juillerat");
+        System.err.println("  version     serate " + VERSION + " (Sukaku Explainer) " + RELEASE);
+        System.err.println("  authors     Nicolas Juillerat, 1to9only");
+        System.err.println("  copyright   Copyright (c) 2006-2009 Nicolas Juillerat, (c) 2019-2020 1to9only");
         System.err.println("  license     Lesser General Public License (LGPL)");
         if (html != 0) {
             System.err.println("</PRE>");

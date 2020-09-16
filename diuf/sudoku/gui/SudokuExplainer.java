@@ -9,8 +9,12 @@ import java.io.*;
 import java.util.*;
 
 import javax.swing.*;
+import javax.swing.UIManager.*;
+import com.formdev.flatlaf.*;
 
 import diuf.sudoku.*;
+import diuf.sudoku.Cell.*;
+import diuf.sudoku.Grid.*;
 import diuf.sudoku.io.*;
 import diuf.sudoku.solver.*;
 import diuf.sudoku.tools.*;
@@ -238,6 +242,15 @@ public class SudokuExplainer {
         frame.setExplanations(HtmlLoader.loadHtml(this, "Multiple.html"));
     }
 
+    public boolean isValueAllGiven(Grid grid, int value) {
+        Region[] regions = grid.getRegions(Grid.Row.class);
+        for (Region region : regions) {
+            if (!region.contains(value))
+                return false;
+        }
+        return true;
+    }
+
     /**
      * Invoked when the user manually types a value in a cell of
      * the sudoku grid.
@@ -269,11 +282,13 @@ public class SudokuExplainer {
     public void candidateKbdTyped(Cell cell, int candidate) {
         pushGrid();
         pushStep( grid);
-        pushKbdCandidate( cell.getX(), cell.getY(), candidate);
-        if (cell.hasPotentialValue(candidate))
+        if (cell.hasPotentialValue(candidate)) {
+            pushKbdCandidateRemove( cell.getX(), cell.getY(), candidate);
             cell.removePotentialValue(candidate);
-        else
+        } else {
+            pushKbdCandidateAdd( cell.getX(), cell.getY(), candidate);
             cell.addPotentialValue(candidate);
+        }
         solver.cancelPotentialValues();
     }
 
@@ -308,11 +323,13 @@ public class SudokuExplainer {
     public void candidateMouTyped(Cell cell, int candidate) {
         pushGrid();
         pushStep( grid);
-        pushMouCandidate( cell.getX(), cell.getY(), candidate);
-        if (cell.hasPotentialValue(candidate))
+        if (cell.hasPotentialValue(candidate)) {
+            pushMouCandidateRemove( cell.getX(), cell.getY(), candidate);
             cell.removePotentialValue(candidate);
-        else
+        } else {
+            pushMouCandidateAdd( cell.getX(), cell.getY(), candidate);
             cell.addPotentialValue(candidate);
+        }
         solver.cancelPotentialValues();
     }
 
@@ -356,7 +373,20 @@ public class SudokuExplainer {
         panel.setSudokuGrid(grid);
         panel.clearSelection();
         clearHints();
-        frame.setExplanations("");
+        frame.setExplanations("<html><body><h2>Working...</h2></body></html>");
+        pushSudoku(grid);
+    }
+
+    public void newGrid(Grid grid) {
+        this.grid = grid;
+        gridStack = new Stack<Grid>();
+        pathStack = new Stack<String>(); // Stack for solution path
+        solver = new Solver(grid);
+        solver.rebuildPotentialValues();
+        panel.setSudokuGrid(grid);
+        panel.clearSelection();
+        clearHints();
+        frame.setExplanations("<html><body><h2>Finished.</h2></body></html>");
         pushSudoku(grid);
     }
 
@@ -371,6 +401,15 @@ public class SudokuExplainer {
         selectedHints.clear();
         panel.clearSelection();
         repaintAll();
+    }
+
+    public void clearHintsOnly() {
+        unfilteredHints = null;
+        resetFilterCache();
+        filterHints();
+        selectedHints.clear();
+    //  panel.clearSelection();
+    //  repaintAll();
     }
 
     public void clearHints0() {
@@ -459,6 +498,8 @@ public class SudokuExplainer {
     }
 
     public void getNextHint() {
+        clearHintsOnly();
+      if ( !solver.isSolved() ) {
         try {
             Hint hint = getNextHintImpl();
             if (hint != null) {
@@ -469,9 +510,15 @@ public class SudokuExplainer {
         } catch (Throwable ex) {
             displayError(ex);
         }
+      }
+      else {
+        frame.setExplanations("<html><body><h2>The Sudoku has been solved !</h2></body></html>");
+      }
     }
 
     public void getAllHints() {
+        clearHintsOnly();
+      if ( !solver.isSolved() ) {
         try {
             unfilteredHints = solver.getAllHints(frame);
             selectedHints.clear();
@@ -483,6 +530,10 @@ public class SudokuExplainer {
         } catch (Throwable ex) {
             displayError(ex);
         }
+      }
+      else {
+        frame.setExplanations("<html><body><h2>The Sudoku has been solved !</h2></body></html>");
+      }
     }
 
     private void pushGrid() {
@@ -517,13 +568,18 @@ public class SudokuExplainer {
         }
         clearHints();
         repaintAll();
+        if ( solver.isSolved() ) {
+            frame.setExplanations("<html><body><h2>The Sudoku has been solved !</h2></body></html>");
+        }
       }
      }
     }
 
     public void applySelectedHintsAndContinue() {
         applySelectedHints();
+      if ( !solver.isSolved() ) {
         getNextHint();
+      }
     }
 
     private void repaintHintsTree() {
@@ -620,9 +676,9 @@ public class SudokuExplainer {
                     JOptionPane.ERROR_MESSAGE);
     }
 
-    public void savePath(File file) {
+    public void savePath(File file, boolean inclpm) {
       if ( !this.pathStack.isEmpty() ) {
-        ErrorMessage message = SudokuIO.savePathToFile( pathStack, file);
+        ErrorMessage message = SudokuIO.savePathToFile( pathStack, inclpm, file);
         if (message != null)
             JOptionPane.showMessageDialog(frame, message.toString(), "Save Solution Path",
                     JOptionPane.ERROR_MESSAGE);
@@ -692,8 +748,13 @@ public class SudokuExplainer {
         this.pathStack.push("K:Keyboard:Value:"+s);     // cell solved by keyboard (value)
     }
 
-    public void pushKbdCandidate(int x, int y, int candidate) {
-        String s = "r" + (y+1) + "c" + (x+1) + "=" + candidate;
+    public void pushKbdCandidateRemove(int x, int y, int candidate) {
+        String s = "-" + candidate + "r" + (y+1) + "c" + (x+1);
+        this.pathStack.push("K:Keyboard:Candidate:"+s); // cell solved by keyboard (candidate)
+    }
+
+    public void pushKbdCandidateAdd(int x, int y, int candidate) {
+        String s = "+" + candidate + "r" + (y+1) + "c" + (x+1);
         this.pathStack.push("K:Keyboard:Candidate:"+s); // cell solved by keyboard (candidate)
     }
 
@@ -702,8 +763,13 @@ public class SudokuExplainer {
         this.pathStack.push("M:Mouse:Value:"+s);        // cell solved by mouse (value)
     }
 
-    public void pushMouCandidate(int x, int y, int candidate) {
-        String s = "r" + (y+1) + "c" + (x+1) + "=" + candidate;
+    public void pushMouCandidateRemove(int x, int y, int candidate) {
+        String s = "-" + candidate + "r" + (y+1) + "c" + (x+1);
+        this.pathStack.push("M:Mouse:Candidate:"+s);    // cell solved by mouse (candidate)
+    }
+
+    public void pushMouCandidateAdd(int x, int y, int candidate) {
+        String s = "+" + candidate + "r" + (y+1) + "c" + (x+1);
         this.pathStack.push("M:Mouse:Candidate:"+s);    // cell solved by mouse (candidate)
     }
 
@@ -749,6 +815,7 @@ public class SudokuExplainer {
      */
     public void solve() {
         clearHints();
+      if ( !solver.isSolved() ) {
         unfilteredHints = new ArrayList<Hint>();
         Hint hint = solver.bruteForceSolve();
         if (hint != null) {
@@ -757,6 +824,10 @@ public class SudokuExplainer {
         }
         filterHints();
         repaintAll();
+      }
+      else {
+        frame.setExplanations("<html><body><h2>The Sudoku has been solved !</h2></body></html>");
+      }
     }
 
     /**
@@ -767,6 +838,7 @@ public class SudokuExplainer {
     public Hint analyse() {
         try {
             clearHints();
+          if ( !solver.isSolved() ) {
             unfilteredHints = new ArrayList<Hint>();
             Hint hint = solver.analyse(frame);
             if (hint != null) {
@@ -775,6 +847,11 @@ public class SudokuExplainer {
             }
             filterHints();
             return hint;
+          }
+          else {
+            frame.setExplanations("<html><body><h2>The Sudoku has been solved !</h2></body></html>");
+            return null;
+          }
         } catch (UnsupportedOperationException ex) {
             throw ex;
         } catch (Throwable ex) {
@@ -791,6 +868,7 @@ public class SudokuExplainer {
      */
     public void showHint(Hint hint) {
         clearHints();
+      if ( !solver.isSolved() ) {
         unfilteredHints = new ArrayList<Hint>();
         if (hint != null) {
             unfilteredHints.add(hint);
@@ -798,6 +876,10 @@ public class SudokuExplainer {
         }
         filterHints();
         repaintAll();
+      }
+      else {
+        frame.setExplanations("<html><body><h2>The Sudoku has been solved !</h2></body></html>");
+      }
     }
 
     /**
@@ -806,6 +888,7 @@ public class SudokuExplainer {
      */
     public void getClue(boolean isBig) {
         clearHints();
+      if ( !solver.isSolved() ) {
         Hint hint = getNextHintImpl();
         if (hint != null) {
             if (hint instanceof Rule) {
@@ -829,6 +912,10 @@ public class SudokuExplainer {
                 repaintAll();
             }
         }
+      }
+      else {
+        frame.setExplanations("<html><body><h2>The Sudoku has been solved !</h2></body></html>");
+      }
     }
 
     /**
@@ -838,12 +925,14 @@ public class SudokuExplainer {
      */
     public static void main(String[] args) {
         try {
-            String lookAndFeelClassName = Settings.getInstance().getLookAndFeelClassName();
-            if (lookAndFeelClassName == null)
-                lookAndFeelClassName = UIManager.getSystemLookAndFeelClassName();
-            UIManager.setLookAndFeel(lookAndFeelClassName);
+//          String lookAndFeelClassName = Settings.getInstance().getLookAndFeelClassName();
+//          if (lookAndFeelClassName == null)
+//              lookAndFeelClassName = UIManager.getSystemLookAndFeelClassName();
+//          UIManager.setLookAndFeel(lookAndFeelClassName);
+            UIManager.setLookAndFeel( new FlatDarkLaf());
         } catch(Exception e) {
-            e.printStackTrace();
+//          e.printStackTrace();
+            System.err.println( "Failed to initialize new LookAndFeel");
         }
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {

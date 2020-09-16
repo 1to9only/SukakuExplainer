@@ -112,7 +112,7 @@ public class TechniquesSelectDialog extends JDialog {
                         .showConfirmDialog(
                                 TechniquesSelectDialog.this,
                                 "Warning: you have disabled both Hidden Single and Naked Single.\n"
-                                + "Without them, the Sudoku Explainer will fail to solve most Sudokus.\n"
+                                + "Without them, the Sukaku Explainer will fail to solve most Sudokus.\n"
                                 + "Do you want to continue anyway?",
                                 TechniquesSelectDialog.this.getTitle(),
                                 JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
@@ -171,10 +171,11 @@ public class TechniquesSelectDialog extends JDialog {
 
     private JPanel getMethodsPanel() {
         if (methodsPanel == null) {
-            TitledBorder titledBorder = BorderFactory.createTitledBorder(null,
-                    "Available solving techniques", TitledBorder.CENTER,
-                    TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12),
-                    new Color(51, 51, 51));
+            TitledBorder titledBorder = BorderFactory.createTitledBorder(
+                    null, "Available solving techniques",
+                    TitledBorder.CENTER,
+                    TitledBorder.DEFAULT_POSITION,
+                    new Font("Dialog", Font.BOLD, 12), null);
             titledBorder.setBorder(null);
             titledBorder.setTitle("");
             GridLayout gridLayout1 = new GridLayout();

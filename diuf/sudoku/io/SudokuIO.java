@@ -336,7 +336,7 @@ public class SudokuIO {
         }
     }
 
-    private static void savePathToWriter(Stack<String> pathStack, Writer writer) throws IOException {
+    private static void savePathToWriter(Stack<String> pathStack, boolean inclpm, Writer writer) throws IOException {
         Stack<String> tempStack = new Stack<String>();
         while ( !pathStack.isEmpty() ) {
             tempStack.push( pathStack.pop());
@@ -363,6 +363,7 @@ public class SudokuIO {
                         writer.write( "\r\n");
                     }
 
+                  if ( inclpm ) {
                     String s = "";
                     for (int i=0; i<3; i++ ) {
                         s = "+";
@@ -402,11 +403,49 @@ public class SudokuIO {
                         s += "-+";
                     }
                     writer.write(s + "\r\n");
+                  }
 
                     if ( crd == 1 ) {
                        crdonce = 1;
                     }
                 }
+            }
+            else
+            if ( x.charAt( 0)==':' ) {
+                if ( z.length() == 81 ) {
+                    String s = "";
+                    for (int i=0; i<3; i++ ) {
+                        s = "+";
+                        for (int j=0; j<3; j++ ) {
+                            for (int k=0; k<3; k++ ) { s += "--";
+                            }
+                            s += "-+";
+                        }
+                        writer.write(s + "\r\n");
+
+                        for (int j=0; j<3; j++ ) {
+                            s = "|";
+                            for (int k=0; k<3; k++ ) {
+                                for (int l=0; l<3; l++ ) { s += " ";
+                                    int c = ((((i*3)+j)*3)+k)*3+l;
+                                    s += z.substring( c, c+1);
+                                }
+                                s += " |";
+                            }
+                            writer.write(s + "\r\n");
+                        }
+                    }
+
+                    s = "+";
+                    for (int j=0; j<3; j++ ) {
+                        for (int k=0; k<3; k++ ) { s += "--";
+                        }
+                        s += "-+";
+                    }
+                    writer.write(s + "\r\n");
+
+                }
+                writer.write(z + "\r\n");
             }
             else {
                 writer.write(z + "\r\n");
@@ -415,12 +454,12 @@ public class SudokuIO {
         }
     }
 
-    public static ErrorMessage savePathToFile(Stack<String> pathStack, File file) {
+    public static ErrorMessage savePathToFile(Stack<String> pathStack, boolean inclpm, File file) {
         Writer writer = null;
         try {
             FileWriter fwriter = new FileWriter(file);
             writer = new BufferedWriter(fwriter);
-            savePathToWriter(pathStack, writer);
+            savePathToWriter(pathStack, inclpm, writer);
             return null;
         } catch (IOException ex) {
             return new ErrorMessage("Error while writing file {0}:\n{1}", file, ex);

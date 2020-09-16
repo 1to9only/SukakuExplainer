@@ -1,5 +1,12 @@
 Changes:
 
+20200916:
+- some changes reverted, some improvements
+- improve stop button response in generate dialog
+- add Dark Look and Feel from: https://www.formdev.com/flatlaf/ [0.41]
+- add recent sudoku files list (for load only)
+- settings saved to a json file
+
 20200821:
 - in text output, SE hints to show candidate elimination(s) and any cell placement
 
