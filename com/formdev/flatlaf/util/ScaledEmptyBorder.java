@@ -1,11 +1,11 @@
 /*
- * Copyright 2019 FormDev Software GmbH
+ * Copyright 2020 FormDev Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,34 +14,26 @@
  * limitations under the License.
  */
 
-package com.formdev.flatlaf.ui;
+package com.formdev.flatlaf.util;
 
 import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Component;
 import java.awt.Insets;
-import javax.swing.plaf.BorderUIResource;
+import javax.swing.border.EmptyBorder;
 
 /**
- * Empty border for various components.
- *
- * The insets are scaled.
+ * Empty border that scales insets.
  *
  * @author Karl Tauber
  */
-public class FlatEmptyBorder
-	extends BorderUIResource.EmptyBorderUIResource
+public class ScaledEmptyBorder
+	extends EmptyBorder
 {
-    private static final long serialVersionUID = -4584340588331556526L;
-
-	public FlatEmptyBorder() {
-		super( 0, 0, 0, 0 );
-	}
-
-	public FlatEmptyBorder( int top, int left, int bottom, int right ) {
+	public ScaledEmptyBorder( int top, int left, int bottom, int right ) {
 		super( top, left, bottom, right );
 	}
 
-	public FlatEmptyBorder( Insets insets ) {
+	public ScaledEmptyBorder( Insets insets ) {
 		super( insets );
 	}
 
@@ -52,15 +44,10 @@ public class FlatEmptyBorder
 
 	@Override
 	public Insets getBorderInsets( Component c, Insets insets ) {
-		boolean leftToRight = left == right || c.getComponentOrientation().isLeftToRight();
-		insets.left = scale( leftToRight ? left : right );
+		insets.left = scale( left );
 		insets.top = scale( top );
-		insets.right = scale( leftToRight ? right : left );
+		insets.right = scale( right );
 		insets.bottom = scale( bottom );
 		return insets;
-	}
-
-	public Insets getUnscaledBorderInsets() {
-		return super.getBorderInsets();
 	}
 }
