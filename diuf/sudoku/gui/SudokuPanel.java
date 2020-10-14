@@ -26,16 +26,16 @@ public class SudokuPanel extends JPanel {
 
     private static final long serialVersionUID = 3709127163156966626L;
 
-    private int CELL_OUTER_SIZE = 49;
-    private int CELL_INNER_SIZE = 43;
+    private int CELL_OUTER_SIZE = 45+21;
+    private int CELL_INNER_SIZE = 39+21;
     private int GRID_GAP_SIZE = 2;
     private int LEGEND_GAP_SIZE = 42;
     private int CELL_PAD = (CELL_OUTER_SIZE - CELL_INNER_SIZE) / 2;
     private int GRID_SIZE = CELL_OUTER_SIZE * 9;
-    private String CLUE_FONT_NAME = "Arial Black";
+    private String CLUE_FONT_NAME = "Arial Bold";
     private String FONT_NAME = "Arial";
-    private int FONT_SIZE_SMALL = 12;
-    private int FONT_SIZE_BIG = 36;
+    private int FONT_SIZE_SMALL = 12+6;
+    private int FONT_SIZE_BIG = 36+12;
     private int FONT_SIZE_LEGEND = 24;
 
     private Grid grid;
@@ -829,10 +829,10 @@ public class SudokuPanel extends JPanel {
                     }
                     if (dstValue > 0) {
                         // Draw arrow
-                        double lx = ex - ux * 5 + uy * 2;
-                        double ly = ey - uy * 5 - ux * 2;
-                        double rx = ex - ux * 5 - uy * 2;
-                        double ry = ey - uy * 5 + ux * 2;
+                        double lx = ex - ux * 10 + uy * 4;
+                        double ly = ey - uy * 10 - ux * 4;
+                        double rx = ex - ux * 10 - uy * 4;
+                        double ry = ey - uy * 10 + ux * 4;
                         g.fillPolygon(new int[] {(int)(ex + mx), (int)(rx + mx), (int)(lx + mx)},
                                       new int[] {(int)(ey + my), (int)(ry + my), (int)(ly + my)}, 3);
                     }

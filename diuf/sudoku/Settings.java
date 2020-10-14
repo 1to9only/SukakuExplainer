@@ -37,7 +37,7 @@ public class Settings {
     private boolean isRCNotation = true;
     private boolean isAntialiasing = true;
     private boolean isShowingCandidates = true;
-    private boolean isShowingCandidateMasks = true;
+    private boolean isShowingCandidateMasks = false;
     private String  lookAndFeelClassName = null;
 
     private EnumSet<SolvingTechnique> techniques;
@@ -140,6 +140,13 @@ public class Settings {
 
     private void init() {
         techniques = EnumSet.allOf(SolvingTechnique.class);
+    }
+
+    public void NoDirectTechniques() {
+        techniques = EnumSet.allOf(SolvingTechnique.class);
+        techniques.remove(SolvingTechnique.DirectPointing);
+        techniques.remove(SolvingTechnique.DirectHiddenPair);
+        techniques.remove(SolvingTechnique.DirectHiddenTriplet);
     }
 
     @SuppressWarnings("unchecked")

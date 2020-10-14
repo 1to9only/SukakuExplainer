@@ -407,10 +407,7 @@ public class SudokuFrame extends JFrame implements Asker {
     private JScrollPane getHintsDetailScrollPane() {
         if (hintDetailsPane == null) {
             hintDetailsPane = new JScrollPane();
-            if (getToolkit().getScreenSize().height < 800)
-                hintDetailsPane.setPreferredSize(new java.awt.Dimension(700,110));
-            else
-                hintDetailsPane.setPreferredSize(new java.awt.Dimension(800,200));
+            hintDetailsPane.setPreferredSize(new java.awt.Dimension(1000,200));
             hintDetailsPane.setViewportView(getHintDetailArea());
         }
         return hintDetailsPane;
@@ -463,7 +460,7 @@ public class SudokuFrame extends JFrame implements Asker {
     private JScrollPane getHintsTreeScrollPane() {
         if (hintsTreeScrollpane == null) {
             hintsTreeScrollpane = new JScrollPane();
-            hintsTreeScrollpane.setPreferredSize(new Dimension(100, 100));
+            hintsTreeScrollpane.setPreferredSize(new Dimension(200, 200));
             hintsTreeScrollpane.setViewportView(getHintsTree());
         }
         return hintsTreeScrollpane;

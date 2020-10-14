@@ -1,5 +1,11 @@
 Changes:
 
+20201014:
+- make cell size bigger, and other changes
+
+20201013:
+- from: https://www.formdev.com/flatlaf/ [update to 0.42]
+
 20200916:
 - some changes reverted, some improvements
 - improve stop button response in generate dialog

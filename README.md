@@ -24,3 +24,7 @@ There is an improved (faster) version of SukakuExplainer here: https://github.co
 
   java.exe -Xrs -Xmx500m -cp SukakuExplainer.jar diuf.sudoku.test.pencilmarks --input=puzzle.txt
 
+## Usage - Tester (Analyzer)
+
+  java.exe -Xrs -Xmx500m -cp SukakuExplainer.jar diuf.sudoku.test.Tester puzzles.txt puzzles.log
+
