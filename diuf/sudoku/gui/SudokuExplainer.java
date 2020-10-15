@@ -34,6 +34,7 @@ import diuf.sudoku.tools.*;
 public class SudokuExplainer {
 
     private Grid grid; // The Sudoku grid
+    private Grid savedgrid; // The saved Sudoku grid
     private Solver solver; // The Sudoku solver
     private SudokuFrame frame; // The main gui frame
     private SudokuPanel panel; // The sudoku grid panel
@@ -52,6 +53,7 @@ public class SudokuExplainer {
 
     public SudokuExplainer() {
         grid = new Grid();
+        savedgrid = new Grid();
         gridStack = new Stack<Grid>();
         pathStack = new Stack<String>(); // Stack for solution path
         solver = new Solver(grid);
@@ -355,17 +357,45 @@ public class SudokuExplainer {
 
     public void clearGrid() {
         grid = new Grid();
+        savedgrid = new Grid();
         gridStack = new Stack<Grid>();
         pathStack = new Stack<String>(); // Stack for solution path
         solver = new Solver(grid);
         solver.rebuildPotentialValues();
         panel.setSudokuGrid(grid);
+        panel.clearSelection();
         clearHints();
         frame.showWelcomeText();
     }
 
+    public void restartGrid() {
+        if ( this.gridStack.isEmpty() ) {
+            if ( this.pathStack.isEmpty() ) {
+                JOptionPane.showMessageDialog(frame, "Cannot restart, no puzzle!", "Restart", JOptionPane.WARNING_MESSAGE);
+            }
+            else {
+                JOptionPane.showMessageDialog(frame, "Cannot restart, not started!", "Restart", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+        else {
+            if ( JOptionPane.showConfirmDialog(frame, "Restart, Are you sure?", "Restart", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION ) {
+                savedgrid.copyTo(grid);
+                gridStack = new Stack<Grid>();
+                pathStack = new Stack<String>(); // Stack for solution path
+                solver = new Solver(grid);
+            //  solver.rebuildPotentialValues();
+                panel.setSudokuGrid(grid);
+                panel.clearSelection();
+                clearHints();
+                frame.showWelcomeText();
+                pushSudoku(grid);
+            }
+        }
+    }
+
     public void setGrid(Grid grid) {
         this.grid = grid;
+        grid.copyTo(savedgrid);
         gridStack = new Stack<Grid>();
         pathStack = new Stack<String>(); // Stack for solution path
         solver = new Solver(grid);
@@ -374,11 +404,11 @@ public class SudokuExplainer {
         panel.clearSelection();
         clearHints();
         frame.setExplanations("<html><body><h2>Working...</h2></body></html>");
-        pushSudoku(grid);
     }
 
     public void newGrid(Grid grid) {
         this.grid = grid;
+        grid.copyTo(savedgrid);
         gridStack = new Stack<Grid>();
         pathStack = new Stack<String>(); // Stack for solution path
         solver = new Solver(grid);
@@ -616,6 +646,7 @@ public class SudokuExplainer {
             {
                 pushSukaku(grid);
             }
+            grid.copyTo(savedgrid);
         }
         else {
             copy.copyTo(grid);
@@ -631,6 +662,10 @@ public class SudokuExplainer {
 
     public void copySukaku() {
         SudokuIO.saveSukakuToClipboard(grid);
+    }
+
+    public void copyPencilMarks() {
+        SudokuIO.savePencilMarksToClipboard(grid);
     }
 
     public void loadGrid(File file) {
@@ -653,6 +688,7 @@ public class SudokuExplainer {
             {
                 pushSukaku(grid);
             }
+            grid.copyTo(savedgrid);
         }
         else {
             copy.copyTo(grid);
@@ -673,6 +709,13 @@ public class SudokuExplainer {
         ErrorMessage message = SudokuIO.saveSukakuToFile(grid, file);
         if (message != null)
             JOptionPane.showMessageDialog(frame, message.toString(), "Save Sukaku",
+                    JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void savePencilMarks(File file) {
+        ErrorMessage message = SudokuIO.savePencilMarksToFile(grid, file);
+        if (message != null)
+            JOptionPane.showMessageDialog(frame, message.toString(), "Save PencilMarks",
                     JOptionPane.ERROR_MESSAGE);
     }
 

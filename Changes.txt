@@ -1,5 +1,8 @@
 Changes:
 
+20201015:
+- add new menu options: restart, save/copy pencilmarks
+
 20201014:
 - make cell size bigger, and other changes
 

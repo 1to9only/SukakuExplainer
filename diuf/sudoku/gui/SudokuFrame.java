@@ -70,15 +70,18 @@ public class SudokuFrame extends JFrame implements Asker {
     private JMenuBar jJMenuBar = null;
     private JMenu fileMenu = null;
     private JMenuItem mitNew = null;
+    private JMenuItem mitRestart = null;
     private JMenuItem mitQuit = null;
     private JMenuItem mitLoad = null;
     private JMenuItem mitSave = null;
     private JMenuItem mitSaveSukaku = null;
+    private JMenuItem mitSavePencilMarks = null;
     private JMenuItem mitSavePath = null;
     private JCheckBoxMenuItem mitIncludePencils = null;
     private JMenu editMenu = null;
     private JMenuItem mitCopy = null;
     private JMenuItem mitCopySukaku = null;
+    private JMenuItem mitCopyPencilMarks = null;
     private JMenuItem mitClear = null;
     private JMenuItem mitPaste = null;
     private JMenu toolMenu = null;
@@ -840,6 +843,7 @@ public class SudokuFrame extends JFrame implements Asker {
             setCommand(getMitNew(), 'N');
             fileMenu.add(getMitGenerate());
             setCommand(getMitGenerate(), 'G');
+            fileMenu.add(getMitRestart());
             fileMenu.addSeparator();
             fileMenu.add(getMitLoad());
             setCommand(getMitLoad(), 'O');
@@ -848,6 +852,8 @@ public class SudokuFrame extends JFrame implements Asker {
             setCommand(getMitSave(), 'S');
             fileMenu.add(getMitSaveSukaku());
             setCommand(getMitSaveSukaku(), 'U');
+            fileMenu.add(getMitSavePencilMarks());
+            setCommand(getMitSavePencilMarks(), 'P');
             fileMenu.addSeparator();
             fileMenu.add(getMitSavePath());
             fileMenu.add(getMitIncludePencils());
@@ -872,6 +878,20 @@ public class SudokuFrame extends JFrame implements Asker {
             });
         }
         return mitNew;
+    }
+
+    private JMenuItem getMitRestart() {
+        if (mitRestart == null) {
+            mitRestart = new JMenuItem();
+            mitRestart.setText("Restart...");
+            mitRestart.setToolTipText("Restart the grid");
+            mitRestart.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    engine.restartGrid();
+                }
+            });
+        }
+        return mitRestart;
     }
 
     private JMenuItem getMitQuit() {
@@ -1024,6 +1044,48 @@ public class SudokuFrame extends JFrame implements Asker {
             });
         }
         return mitSaveSukaku;
+    }
+
+    private JMenuItem getMitSavePencilMarks() {
+        if (mitSavePencilMarks == null) {
+            mitSavePencilMarks = new JMenuItem();
+            mitSavePencilMarks.setText("Save pencilmarks...");
+            mitSavePencilMarks.setMnemonic(java.awt.event.KeyEvent.VK_P);
+            mitSavePencilMarks.setToolTipText("Open the file selector to save the pencilmarks to a file");
+            mitSavePencilMarks.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    try {
+                        JFileChooser chooser = new JFileChooser();
+                        chooser.setFileFilter(new TextFileFilter());
+                        if (defaultDirectory != null)
+                            chooser.setCurrentDirectory(defaultDirectory);
+                        int result = chooser.showSaveDialog(SudokuFrame.this);
+                        defaultDirectory = chooser.getCurrentDirectory();
+                        if (result == JFileChooser.APPROVE_OPTION) {
+                            File file = chooser.getSelectedFile();
+                            try {
+                                if (!file.getName().endsWith(".txt") &&
+                                        file.getName().indexOf('.') < 0)
+                                    file = new File(file.getCanonicalPath() + ".txt");
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
+                            if (file.exists()) {
+                                if (JOptionPane.showConfirmDialog(SudokuFrame.this,
+                                        "The file \"" + file.getName() + "\" already exists.\n" +
+                                        "Do you want to replace the existing file ?",
+                                        "Save", JOptionPane.OK_CANCEL_OPTION) != JOptionPane.OK_OPTION)
+                                    return;
+                            }
+                            engine.savePencilMarks(file);
+                        }
+                    } catch (AccessControlException ex) {
+                        warnAccessError(ex);
+                    }
+                }
+            });
+        }
+        return mitSavePencilMarks;
     }
 
     private JMenu getMitRecentFile() {
@@ -1341,6 +1403,8 @@ public class SudokuFrame extends JFrame implements Asker {
             setCommand(getMitCopy(), 'C');
             editMenu.add(getMitCopySukaku());
             setCommand(getMitCopySukaku(), 'K');
+            editMenu.add(getMitCopyPencilMarks());
+            setCommand(getMitCopyPencilMarks(), 'M');
             editMenu.add(getMitPaste());
             setCommand(getMitPaste(), 'V');
             editMenu.addSeparator();
@@ -1386,6 +1450,25 @@ public class SudokuFrame extends JFrame implements Asker {
             });
         }
         return mitCopySukaku;
+    }
+
+    private JMenuItem getMitCopyPencilMarks() {
+        if (mitCopyPencilMarks == null) {
+            mitCopyPencilMarks = new JMenuItem();
+            mitCopyPencilMarks.setText("Copy pencilmarks");
+            mitCopyPencilMarks.setMnemonic(KeyEvent.VK_M);
+            mitCopyPencilMarks.setToolTipText("Copy the pencilmarks to the clipboard as plain text");
+            mitCopyPencilMarks.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    try {
+                        engine.copyPencilMarks();
+                    } catch (AccessControlException ex) {
+                        warnAccessError(ex);
+                    }
+                }
+            });
+        }
+        return mitCopyPencilMarks;
     }
 
     private JMenuItem getMitClear() {
