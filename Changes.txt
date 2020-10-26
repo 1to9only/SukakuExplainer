@@ -1,5 +1,8 @@
 Changes:
 
+20201026:
+- fix solve+applyhint for solving grid, and other improvements
+
 20201015:
 - add new menu options: restart, save/copy pencilmarks
 

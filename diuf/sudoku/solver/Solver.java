@@ -447,18 +447,27 @@ public class Solver {
                 try {
                     for (HintProducer producer : directHintProducers)
                         producer.getHints(grid, accu);
+                  if ( max > 2.5 )
                     for (IndirectHintProducer producer : indirectHintProducers)
                         producer.getHints(grid, accu);
+                  if ( max > 6.2 )
                     for (IndirectHintProducer producer : chainingHintProducers)
                         producer.getHints(grid, accu);
+                  if ( max > 8.5 )
                     for (IndirectHintProducer producer : chainingHintProducers2)
                         producer.getHints(grid, accu);
                     // Only used for generator. Ignore advanced/experimental techniques
+                //if ( max > 9.0 )
+                //  for (IndirectHintProducer producer : advancedHintProducers)
+                //      producer.getHints(grid, accu);
+                //if ( max > 9.5 )
+                //  for (IndirectHintProducer producer : experimentalHintProducers)
+                //      producer.getHints(grid, accu);
                 } catch (InterruptedException willHappen) {}
                 Hint hint = accu.getHint();
                 if (hint == null) {
-                    System.err.println("Failed to solve:\n" + grid.toString());
-                    return Double.MAX_VALUE;
+                //  System.err.println("Failed to solve:\n" + grid.toString());
+                    return 20.0;
                 }
 //a             assert hint instanceof Rule;
                 Rule rule = (Rule)hint;
