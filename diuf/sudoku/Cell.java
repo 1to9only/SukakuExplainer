@@ -109,10 +109,12 @@ public class Cell {
         this.potentialValues.clear();
         for (Class<? extends Grid.Region> regionType : grid.getRegionTypes()) {
             Grid.Region region = grid.getRegionAt(regionType, this.x, this.y);
+          if ( region != null ) {
             for (int i = 0; i < 9; i++) {
                 Cell other = region.getCell(i);
                 other.removePotentialValue(value);
             }
+          }
         }
     }
 
@@ -181,9 +183,12 @@ public class Cell {
         for (Class<? extends Grid.Region> regionType : grid.getRegionTypes()) {
             // Get region on which this cell is
             Grid.Region region = grid.getRegionAt(regionType, x, y);
+          if ( region != null ) {
             // Add all cell of that region
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < 9; i++) {
                 result.add(region.getCell(i));
+            }
+          }
         }
         // Remove this cell
         result.remove(this);

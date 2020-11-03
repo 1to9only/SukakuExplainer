@@ -60,6 +60,7 @@ public class SudokuFrame extends JFrame implements Asker {
     private JPanel hintsTreePanel = null;
     private JCheckBox chkFilter = null;
     private JButton btnCheckValidity = null;
+    private JButton btnApplySingles = null;
     private JButton btnApplyHint = null;
     private JComboBox<String> cmbViewSelector = null;
     private JPanel hintsSouthPanel = null;
@@ -73,12 +74,15 @@ public class SudokuFrame extends JFrame implements Asker {
     private JMenuItem mitRestart = null;
     private JMenuItem mitQuit = null;
     private JMenuItem mitLoad = null;
+    private JMenuItem mitSave81 = null;
     private JMenuItem mitSave = null;
     private JMenuItem mitSaveSukaku = null;
     private JMenuItem mitSavePencilMarks = null;
+    private JMenuItem mitSaveAsImage = null;
     private JMenuItem mitSavePath = null;
     private JCheckBoxMenuItem mitIncludePencils = null;
     private JMenu editMenu = null;
+    private JMenuItem mitCopy81 = null;
     private JMenuItem mitCopy = null;
     private JMenuItem mitCopySukaku = null;
     private JMenuItem mitCopyPencilMarks = null;
@@ -128,6 +132,18 @@ public class SudokuFrame extends JFrame implements Asker {
     private JMenuItem mitRecentFile09 = null;
     private JMenuItem mitRecentFile10 = null;
     private JMenuItem mitClearList = null;
+
+    private JMenu VariantsMenu = null;
+    private JCheckBoxMenuItem mitLatinSquare = null;
+    private JCheckBoxMenuItem mitDiagonals = null;
+    private JCheckBoxMenuItem mitDisjointGroups = null;
+    private JCheckBoxMenuItem mitWindoku = null;
+    private JCheckBoxMenuItem mitClover = null;
+    private JCheckBoxMenuItem mitAsterisk = null;
+    private JCheckBoxMenuItem mitCenterDot = null;
+    private JCheckBoxMenuItem mitGirandola = null;
+    private JCheckBoxMenuItem mitHalloween = null;
+    private JCheckBoxMenuItem mitPerCent = null;
 
     public SudokuFrame() {
         super();
@@ -532,6 +548,11 @@ public class SudokuFrame extends JFrame implements Asker {
             gridBagConstraints3.weightx = 1.0D;
             gridBagConstraints3.gridy = 0;
 
+            GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+            gridBagConstraints4.gridx = 4;
+            gridBagConstraints4.weightx = 1.0D;
+            gridBagConstraints4.gridy = 0;
+
             GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
             gridBagConstraints5.gridx = 5;
             gridBagConstraints5.weightx = 1.0D;
@@ -559,12 +580,60 @@ public class SudokuFrame extends JFrame implements Asker {
             buttonsPane.add(getBtnCheckValidity(),   gridBagConstraints0);
             buttonsPane.add(getBtnApplyHintAndGet(), gridBagConstraints1);
             buttonsPane.add(getBtnGetNextHint(),     gridBagConstraints2);
-            buttonsPane.add(getBtnApplyHint(),       gridBagConstraints3);
+            buttonsPane.add(getBtnApplySingles(),    gridBagConstraints3);
+            buttonsPane.add(getBtnApplyHint(),       gridBagConstraints4);
             buttonsPane.add(getBtnGetAllHints(),     gridBagConstraints5);
             buttonsPane.add(getBtnUndoStep(),        gridBagConstraints6);
             buttonsPane.add(getBtnQuit(),            gridBagConstraints7);
         }
         return buttonsPane;
+    }
+
+    private JButton getBtnCheckValidity() {
+        if (btnCheckValidity == null) {
+            btnCheckValidity = new JButton();
+            btnCheckValidity.setText("Check validity");
+            btnCheckValidity.setToolTipText("Verify the validity of the entered Sudoku");
+            btnCheckValidity.setMnemonic(java.awt.event.KeyEvent.VK_V);
+            btnCheckValidity.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    if (engine.checkValidity())
+                        setExplanations(HtmlLoader.loadHtml(this, "Valid.html"));
+                }
+            });
+        }
+        return btnCheckValidity;
+    }
+
+    private JButton getBtnApplySingles() {
+        if (btnApplySingles == null) {
+            btnApplySingles = new JButton();
+            btnApplySingles.setText("Apply Singles");
+            btnApplySingles.setToolTipText("Apply all (hidden and naked) singles");
+            btnApplySingles.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    engine.ApplySingles();
+                }
+            });
+        }
+        return btnApplySingles;
+    }
+
+    JButton getBtnApplyHintAndGet() {
+        if (btnApplyHintAndGet == null) {
+            btnApplyHintAndGet = new JButton();
+            btnApplyHintAndGet.setText("Solve step");
+            btnApplyHintAndGet.setMnemonic(java.awt.event.KeyEvent.VK_S);
+            btnApplyHintAndGet.setToolTipText("Apply the current hint (if any is shown), and get an hint for the next step");
+            btnApplyHintAndGet.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12));
+            btnApplyHintAndGet.addActionListener(new java.awt.event.ActionListener() {
+
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    engine.applySelectedHintsAndContinue();
+                }
+            });
+        }
+        return btnApplyHintAndGet;
     }
 
     private JButton getBtnGetNextHint() {
@@ -581,6 +650,22 @@ public class SudokuFrame extends JFrame implements Asker {
             });
         }
         return btnGetNextHint;
+    }
+
+    private JButton getBtnApplyHint() {
+        if (btnApplyHint == null) {
+            btnApplyHint = new JButton();
+            btnApplyHint.setText("Apply hint");
+            btnApplyHint.setMnemonic(KeyEvent.VK_P);
+            btnApplyHint.setToolTipText("Apply the selected hint(s)");
+            btnApplyHint.setEnabled(false);
+            btnApplyHint.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    engine.applySelectedHints();
+                }
+            });
+        }
+        return btnApplyHint;
     }
 
     private JButton getBtnGetAllHints() {
@@ -613,23 +698,6 @@ public class SudokuFrame extends JFrame implements Asker {
             });
         }
         return btnUndoStep;
-    }
-
-    JButton getBtnApplyHintAndGet() {
-        if (btnApplyHintAndGet == null) {
-            btnApplyHintAndGet = new JButton();
-            btnApplyHintAndGet.setText("Solve step");
-            btnApplyHintAndGet.setMnemonic(java.awt.event.KeyEvent.VK_S);
-            btnApplyHintAndGet.setToolTipText("Apply the current hint (if any is shown), and get an hint for the next step");
-            btnApplyHintAndGet.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12));
-            btnApplyHintAndGet.addActionListener(new java.awt.event.ActionListener() {
-
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    engine.applySelectedHintsAndContinue();
-                }
-            });
-        }
-        return btnApplyHintAndGet;
     }
 
     private JButton getBtnQuit() {
@@ -702,38 +770,6 @@ public class SudokuFrame extends JFrame implements Asker {
             });
         }
         return chkFilter;
-    }
-
-    private JButton getBtnCheckValidity() {
-        if (btnCheckValidity == null) {
-            btnCheckValidity = new JButton();
-            btnCheckValidity.setText("Check validity");
-            btnCheckValidity.setToolTipText("Verify the validity of the entered Sudoku");
-            btnCheckValidity.setMnemonic(java.awt.event.KeyEvent.VK_V);
-            btnCheckValidity.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    if (engine.checkValidity())
-                        setExplanations(HtmlLoader.loadHtml(this, "Valid.html"));
-                }
-            });
-        }
-        return btnCheckValidity;
-    }
-
-    private JButton getBtnApplyHint() {
-        if (btnApplyHint == null) {
-            btnApplyHint = new JButton();
-            btnApplyHint.setText("Apply hint");
-            btnApplyHint.setMnemonic(KeyEvent.VK_P);
-            btnApplyHint.setToolTipText("Apply the selected hint(s)");
-            btnApplyHint.setEnabled(false);
-            btnApplyHint.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    engine.applySelectedHints();
-                }
-            });
-        }
-        return btnApplyHint;
     }
 
     private JComboBox<String> getCmbViewSelector() {
@@ -825,6 +861,7 @@ public class SudokuFrame extends JFrame implements Asker {
             jJMenuBar.add(getEditMenu());
             jJMenuBar.add(getToolMenu());
             jJMenuBar.add(getOptionsMenu());
+            jJMenuBar.add(getVariantsMenu());
             jJMenuBar.add(getHelpMenu());
         }
         return jJMenuBar;
@@ -848,12 +885,14 @@ public class SudokuFrame extends JFrame implements Asker {
             fileMenu.add(getMitLoad());
             setCommand(getMitLoad(), 'O');
             fileMenu.add(getMitRecentFile());
+            fileMenu.add(getMitSave81());
             fileMenu.add(getMitSave());
             setCommand(getMitSave(), 'S');
             fileMenu.add(getMitSaveSukaku());
             setCommand(getMitSaveSukaku(), 'U');
             fileMenu.add(getMitSavePencilMarks());
             setCommand(getMitSavePencilMarks(), 'P');
+            fileMenu.add(getMitSaveAsImage());
             fileMenu.addSeparator();
             fileMenu.add(getMitSavePath());
             fileMenu.add(getMitIncludePencils());
@@ -880,6 +919,35 @@ public class SudokuFrame extends JFrame implements Asker {
         return mitNew;
     }
 
+    private JMenuItem getMitGenerate() {
+        if (mitGenerate == null) {
+            mitGenerate = new JMenuItem();
+            mitGenerate.setText("Generate...");
+            mitGenerate.setMnemonic(KeyEvent.VK_G);
+            mitGenerate.setToolTipText("Open a dialog to generate a random Sudoku puzzle");
+            mitGenerate.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    if (generateDialog == null || !generateDialog.isVisible()) {
+                        generateDialog = new GenerateDialog(SudokuFrame.this, engine);
+                        generateDialog.pack();
+                        centerDialog(generateDialog);
+                    }
+                    generateDialog.setVisible(true);
+                }
+            });
+        }
+        return mitGenerate;
+    }
+
+    private void centerDialog(JDialog dlg) {
+        Point frameLocation = SudokuFrame.this.getLocation();
+        Dimension frameSize = SudokuFrame.this.getSize();
+        Dimension windowSize = dlg.getSize();
+        dlg.setLocation(
+                frameLocation.x + (frameSize.width - windowSize.width) / 2,
+                frameLocation.y + (frameSize.height - windowSize.height) / 3);
+    }
+
     private JMenuItem getMitRestart() {
         if (mitRestart == null) {
             mitRestart = new JMenuItem();
@@ -892,21 +960,6 @@ public class SudokuFrame extends JFrame implements Asker {
             });
         }
         return mitRestart;
-    }
-
-    private JMenuItem getMitQuit() {
-        if (mitQuit == null) {
-            mitQuit = new JMenuItem();
-            mitQuit.setText("Quit");
-            mitQuit.setMnemonic(java.awt.event.KeyEvent.VK_Q);
-            mitQuit.setToolTipText("Bye bye");
-            mitQuit.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    quit();
-                }
-            });
-        }
-        return mitQuit;
     }
 
     private void warnAccessError(AccessControlException ex) {
@@ -933,6 +986,22 @@ public class SudokuFrame extends JFrame implements Asker {
 
     }
 
+    private class PngFileFilter extends javax.swing.filechooser.FileFilter {
+
+        @Override
+        public boolean accept(File f) {
+            if (f.isDirectory())
+                return true;
+            return f.getName().toLowerCase().endsWith(".png");
+        }
+
+        @Override
+        public String getDescription() {
+            return "PNG image files (*.png)";
+        }
+
+    }
+
     private JMenuItem getMitLoad() {
         if (mitLoad == null) {
             mitLoad = new JMenuItem();
@@ -950,8 +1019,9 @@ public class SudokuFrame extends JFrame implements Asker {
                         defaultDirectory = chooser.getCurrentDirectory();
                         if (result == JFileChooser.APPROVE_OPTION) {
                             File selectedFile = chooser.getSelectedFile();
-                            engine.loadGrid(selectedFile);
-                            addRecentFile(selectedFile.toString());
+                            if ( engine.loadGrid(selectedFile) == 1 ) {
+                                addRecentFile(selectedFile.toString()); // add after successful load
+                            }
                         }
                     } catch (AccessControlException ex) {
                         warnAccessError(ex);
@@ -960,6 +1030,47 @@ public class SudokuFrame extends JFrame implements Asker {
             });
         }
         return mitLoad;
+    }
+
+    private JMenuItem getMitSave81() {
+        if (mitSave81 == null) {
+            mitSave81 = new JMenuItem();
+            mitSave81.setText("Save 81-chars...");
+            mitSave81.setToolTipText("Open the file selector to save the (sudoku) grid to a file");
+            mitSave81.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    try {
+                        JFileChooser chooser = new JFileChooser();
+                        chooser.setFileFilter(new TextFileFilter());
+                        if (defaultDirectory != null)
+                            chooser.setCurrentDirectory(defaultDirectory);
+                        int result = chooser.showSaveDialog(SudokuFrame.this);
+                        defaultDirectory = chooser.getCurrentDirectory();
+                        if (result == JFileChooser.APPROVE_OPTION) {
+                            File file = chooser.getSelectedFile();
+                            try {
+                                if (!file.getName().endsWith(".txt")) // &&
+                                    //  file.getName().indexOf('.') < 0)
+                                    file = new File(file.getCanonicalPath() + ".txt");
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
+                            if (file.exists()) {
+                                if (JOptionPane.showConfirmDialog(SudokuFrame.this,
+                                        "The file \"" + file.getName() + "\" already exists.\n" +
+                                        "Do you want to replace the existing file ?",
+                                        "Save", JOptionPane.OK_CANCEL_OPTION) != JOptionPane.OK_OPTION)
+                                    return;
+                            }
+                            engine.saveGrid81(file);
+                        }
+                    } catch (AccessControlException ex) {
+                        warnAccessError(ex);
+                    }
+                }
+            });
+        }
+        return mitSave81;
     }
 
     private JMenuItem getMitSave() {
@@ -980,8 +1091,8 @@ public class SudokuFrame extends JFrame implements Asker {
                         if (result == JFileChooser.APPROVE_OPTION) {
                             File file = chooser.getSelectedFile();
                             try {
-                                if (!file.getName().endsWith(".txt") &&
-                                        file.getName().indexOf('.') < 0)
+                                if (!file.getName().endsWith(".txt")) // &&
+                                    //  file.getName().indexOf('.') < 0)
                                     file = new File(file.getCanonicalPath() + ".txt");
                             } catch (IOException ex) {
                                 ex.printStackTrace();
@@ -1022,8 +1133,8 @@ public class SudokuFrame extends JFrame implements Asker {
                         if (result == JFileChooser.APPROVE_OPTION) {
                             File file = chooser.getSelectedFile();
                             try {
-                                if (!file.getName().endsWith(".txt") &&
-                                        file.getName().indexOf('.') < 0)
+                                if (!file.getName().endsWith(".txt")) // &&
+                                    //  file.getName().indexOf('.') < 0)
                                     file = new File(file.getCanonicalPath() + ".txt");
                             } catch (IOException ex) {
                                 ex.printStackTrace();
@@ -1064,8 +1175,8 @@ public class SudokuFrame extends JFrame implements Asker {
                         if (result == JFileChooser.APPROVE_OPTION) {
                             File file = chooser.getSelectedFile();
                             try {
-                                if (!file.getName().endsWith(".txt") &&
-                                        file.getName().indexOf('.') < 0)
+                                if (!file.getName().endsWith(".txt")) // &&
+                                    //  file.getName().indexOf('.') < 0)
                                     file = new File(file.getCanonicalPath() + ".txt");
                             } catch (IOException ex) {
                                 ex.printStackTrace();
@@ -1086,6 +1197,47 @@ public class SudokuFrame extends JFrame implements Asker {
             });
         }
         return mitSavePencilMarks;
+    }
+
+    private JMenuItem getMitSaveAsImage() {
+        if (mitSaveAsImage == null) {
+            mitSaveAsImage = new JMenuItem();
+            mitSaveAsImage.setText("Save as image...");
+            mitSaveAsImage.setToolTipText("Open the file selector to save grid as a png image to a file");
+            mitSaveAsImage.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    try {
+                        JFileChooser chooser = new JFileChooser();
+                        chooser.setFileFilter(new PngFileFilter());
+                        if (defaultDirectory != null)
+                            chooser.setCurrentDirectory(defaultDirectory);
+                        int result = chooser.showSaveDialog(SudokuFrame.this);
+                        defaultDirectory = chooser.getCurrentDirectory();
+                        if (result == JFileChooser.APPROVE_OPTION) {
+                            File file = chooser.getSelectedFile();
+                            try {
+                                if (!file.getName().endsWith(".png")) // &&
+                                    //  file.getName().indexOf('.') < 0)
+                                    file = new File(file.getCanonicalPath() + ".png");
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
+                            if (file.exists()) {
+                                if (JOptionPane.showConfirmDialog(SudokuFrame.this,
+                                        "The file \"" + file.getName() + "\" already exists.\n" +
+                                        "Do you want to replace the existing file ?",
+                                        "Save", JOptionPane.OK_CANCEL_OPTION) != JOptionPane.OK_OPTION)
+                                    return;
+                            }
+                            sudokuPanel.saveAsImage(file);
+                        }
+                    } catch (AccessControlException ex) {
+                        warnAccessError(ex);
+                    }
+                }
+            });
+        }
+        return mitSaveAsImage;
     }
 
     private JMenu getMitRecentFile() {
@@ -1355,8 +1507,8 @@ public class SudokuFrame extends JFrame implements Asker {
                         if (result == JFileChooser.APPROVE_OPTION) {
                             File file = chooser.getSelectedFile();
                             try {
-                                if (!file.getName().endsWith(".txt") &&
-                                        file.getName().indexOf('.') < 0)
+                                if (!file.getName().endsWith(".txt")) // &&
+                                    //  file.getName().indexOf('.') < 0)
                                     file = new File(file.getCanonicalPath() + ".txt");
                             } catch (IOException ex) {
                                 ex.printStackTrace();
@@ -1394,11 +1546,27 @@ public class SudokuFrame extends JFrame implements Asker {
         return mitIncludePencils;
     }
 
+    private JMenuItem getMitQuit() {
+        if (mitQuit == null) {
+            mitQuit = new JMenuItem();
+            mitQuit.setText("Quit");
+            mitQuit.setMnemonic(java.awt.event.KeyEvent.VK_Q);
+            mitQuit.setToolTipText("Bye bye");
+            mitQuit.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    quit();
+                }
+            });
+        }
+        return mitQuit;
+    }
+
     private JMenu getEditMenu() {
         if (editMenu == null) {
             editMenu = new JMenu();
             editMenu.setText("Edit");
             editMenu.setMnemonic(java.awt.event.KeyEvent.VK_E);
+            editMenu.add(getMitCopy81());
             editMenu.add(getMitCopy());
             setCommand(getMitCopy(), 'C');
             editMenu.add(getMitCopySukaku());
@@ -1431,6 +1599,24 @@ public class SudokuFrame extends JFrame implements Asker {
             });
         }
         return mitCopy;
+    }
+
+    private JMenuItem getMitCopy81() {
+        if (mitCopy81 == null) {
+            mitCopy81 = new JMenuItem();
+            mitCopy81.setText("Copy 81-chars");
+            mitCopy81.setToolTipText("Copy the (sudoku) grid to the clipboard as plain text");
+            mitCopy81.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    try {
+                        engine.copyGrid81();
+                    } catch (AccessControlException ex) {
+                        warnAccessError(ex);
+                    }
+                }
+            });
+        }
+        return mitCopy81;
     }
 
     private JMenuItem getMitCopySukaku() {
@@ -1471,21 +1657,6 @@ public class SudokuFrame extends JFrame implements Asker {
         return mitCopyPencilMarks;
     }
 
-    private JMenuItem getMitClear() {
-        if (mitClear == null) {
-            mitClear = new JMenuItem();
-            mitClear.setText("Clear grid");
-            mitClear.setMnemonic(KeyEvent.VK_E);
-            mitClear.setToolTipText("Clear the grid");
-            mitClear.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    engine.clearGrid();
-                }
-            });
-        }
-        return mitClear;
-    }
-
     private JMenuItem getMitPaste() {
         if (mitPaste == null) {
             mitPaste = new JMenuItem();
@@ -1503,6 +1674,21 @@ public class SudokuFrame extends JFrame implements Asker {
             });
         }
         return mitPaste;
+    }
+
+    private JMenuItem getMitClear() {
+        if (mitClear == null) {
+            mitClear = new JMenuItem();
+            mitClear.setText("Clear grid");
+            mitClear.setMnemonic(KeyEvent.VK_E);
+            mitClear.setToolTipText("Clear the grid");
+            mitClear.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    engine.clearGrid();
+                }
+            });
+        }
+        return mitClear;
     }
 
     private JMenu getToolMenu() {
@@ -1542,6 +1728,36 @@ public class SudokuFrame extends JFrame implements Asker {
         return toolMenu;
     }
 
+    private JMenuItem getMitResetPotentials() {
+        if (mitResetPotentials == null) {
+            mitResetPotentials = new JMenuItem();
+            mitResetPotentials.setText("Reset potential values");
+            mitResetPotentials.setToolTipText("Recompute the remaining possible values for the empty cells");
+            mitResetPotentials.setMnemonic(java.awt.event.KeyEvent.VK_R);
+            mitResetPotentials.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    engine.resetPotentials();
+                }
+            });
+        }
+        return mitResetPotentials;
+    }
+
+    private JMenuItem getMitClearHints() {
+        if (mitClearHints == null) {
+            mitClearHints = new JMenuItem();
+            mitClearHints.setText("Clear hint(s)");
+            mitClearHints.setMnemonic(KeyEvent.VK_C);
+            mitClearHints.setToolTipText("Clear the hint list");
+            mitClearHints.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    engine.clearHints();
+                }
+            });
+        }
+        return mitClearHints;
+    }
+
     private JMenuItem getMitCheckValidity() {
         if (mitCheckValidity == null) {
             mitCheckValidity = new JMenuItem();
@@ -1556,29 +1772,6 @@ public class SudokuFrame extends JFrame implements Asker {
             });
         }
         return mitCheckValidity;
-    }
-
-    private JMenuItem getMitAnalyse() {
-        if (mitAnalyse == null) {
-            mitAnalyse = new JMenuItem();
-            mitAnalyse.setText("Analyze");
-            mitAnalyse.setMnemonic(KeyEvent.VK_Y);
-            mitAnalyse.setToolTipText("List the rules required to solve the Sudoku " +
-            "and get its average difficulty");
-            mitAnalyse.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    try {
-                        engine.analyse();
-                    } catch (UnsupportedOperationException ex) {
-                        JOptionPane.showMessageDialog(SudokuFrame.this,
-                                "The Sukaku Explainer failed to solve this Sudoku\n" +
-                                "using the solving techniques that are currently enabled.",
-                                "Analysis", JOptionPane.ERROR_MESSAGE);
-                    }
-                }
-            });
-        }
-        return mitAnalyse;
     }
 
     private JMenuItem getMitSolveStep() {
@@ -1657,6 +1850,36 @@ public class SudokuFrame extends JFrame implements Asker {
         return mitUndoStep;
     }
 
+    private JMenuItem getMitGetSmallClue() {
+        if (mitGetSmallClue == null) {
+            mitGetSmallClue = new JMenuItem();
+            mitGetSmallClue.setText("Get a small clue");
+            mitGetSmallClue.setMnemonic(KeyEvent.VK_M);
+            mitGetSmallClue.setToolTipText("Get some information on the next solving step");
+            mitGetSmallClue.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    engine.getClue(false);
+                }
+            });
+        }
+        return mitGetSmallClue;
+    }
+
+    private JMenuItem getMitGetBigClue() {
+        if (mitGetBigClue == null) {
+            mitGetBigClue = new JMenuItem();
+            mitGetBigClue.setText("Get a big clue");
+            mitGetBigClue.setMnemonic(KeyEvent.VK_B);
+            mitGetBigClue.setToolTipText("Get more information on the next solving step");
+            mitGetBigClue.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    engine.getClue(true);
+                }
+            });
+        }
+        return mitGetBigClue;
+    }
+
     private JMenuItem getMitSolve() {
         if (mitSolve == null) {
             mitSolve = new JMenuItem();
@@ -1672,34 +1895,27 @@ public class SudokuFrame extends JFrame implements Asker {
         return mitSolve;
     }
 
-    private JMenuItem getMitResetPotentials() {
-        if (mitResetPotentials == null) {
-            mitResetPotentials = new JMenuItem();
-            mitResetPotentials.setText("Reset potential values");
-            mitResetPotentials.setToolTipText("Recompute the remaining possible values for the empty cells");
-            mitResetPotentials.setMnemonic(java.awt.event.KeyEvent.VK_R);
-            mitResetPotentials.addActionListener(new java.awt.event.ActionListener() {
+    private JMenuItem getMitAnalyse() {
+        if (mitAnalyse == null) {
+            mitAnalyse = new JMenuItem();
+            mitAnalyse.setText("Analyze");
+            mitAnalyse.setMnemonic(KeyEvent.VK_Y);
+            mitAnalyse.setToolTipText("List the rules required to solve the Sudoku " +
+            "and get its average difficulty");
+            mitAnalyse.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    engine.resetPotentials();
+                    try {
+                        engine.analyse();
+                    } catch (UnsupportedOperationException ex) {
+                        JOptionPane.showMessageDialog(SudokuFrame.this,
+                                "The Sukaku Explainer failed to solve this Sudoku\n" +
+                                "using the solving techniques that are currently enabled.",
+                                "Analysis", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             });
         }
-        return mitResetPotentials;
-    }
-
-    private JMenuItem getMitClearHints() {
-        if (mitClearHints == null) {
-            mitClearHints = new JMenuItem();
-            mitClearHints.setText("Clear hint(s)");
-            mitClearHints.setMnemonic(KeyEvent.VK_C);
-            mitClearHints.setToolTipText("Clear the hint list");
-            mitClearHints.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    engine.clearHints();
-                }
-            });
-        }
-        return mitClearHints;
+        return mitAnalyse;
     }
 
     private JMenu getOptionsMenu() {
@@ -1739,178 +1955,6 @@ public class SudokuFrame extends JFrame implements Asker {
             });
         }
         return mitFilter;
-    }
-
-    private JRadioButtonMenuItem getMitMathMode() {
-        if (mitMathMode == null) {
-            mitMathMode = new JRadioButtonMenuItem();
-            mitMathMode.setText("R1C1 - R9C9 cell notation");
-            mitMathMode.setMnemonic(KeyEvent.VK_R);
-            mitMathMode.setSelected(Settings.getInstance().isRCNotation());
-            mitMathMode.addItemListener(new java.awt.event.ItemListener() {
-                public void itemStateChanged(java.awt.event.ItemEvent e) {
-                    if (mitMathMode.isSelected()) {
-                        Settings.getInstance().setRCNotation(true);
-                        repaint();
-                    }
-                }
-            });
-        }
-        return mitMathMode;
-    }
-
-    private JRadioButtonMenuItem getMitChessMode() {
-        if (mitChessMode == null) {
-            mitChessMode = new JRadioButtonMenuItem();
-            mitChessMode.setText("A1 - I9 cell notation");
-            mitChessMode.setMnemonic(KeyEvent.VK_A);
-            mitChessMode.setSelected(!Settings.getInstance().isRCNotation());
-            mitChessMode.addItemListener(new java.awt.event.ItemListener() {
-                public void itemStateChanged(java.awt.event.ItemEvent e) {
-                    if (mitChessMode.isSelected()) {
-                        Settings.getInstance().setRCNotation(false);
-                        repaint();
-                    }
-                }
-            });
-        }
-        return mitChessMode;
-    }
-
-    private JCheckBoxMenuItem getMitAntiAliasing() {
-        if (mitAntiAliasing == null) {
-            mitAntiAliasing = new JCheckBoxMenuItem();
-            mitAntiAliasing.setText("High quality rendering");
-            mitAntiAliasing.setSelected(Settings.getInstance().isAntialiasing());
-            mitAntiAliasing.setMnemonic(KeyEvent.VK_H);
-            mitAntiAliasing.setToolTipText("Use high quality (but slow) rendering");
-            mitAntiAliasing.addItemListener(new java.awt.event.ItemListener() {
-                public void itemStateChanged(java.awt.event.ItemEvent e) {
-                    Settings.getInstance().setAntialiasing(mitAntiAliasing.isSelected());
-                    repaint();
-                }
-            });
-        }
-        return mitAntiAliasing;
-    }
-
-    private JMenu getHelpMenu() {
-        if (helpMenu == null) {
-            helpMenu = new JMenu();
-            helpMenu.setText("Help");
-            helpMenu.setMnemonic(java.awt.event.KeyEvent.VK_H);
-            helpMenu.add(getMitShowWelcome());
-            getMitShowWelcome().setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
-            helpMenu.addSeparator();
-            helpMenu.add(getMitAbout());
-        }
-        return helpMenu;
-    }
-
-    private JMenuItem getMitAbout() {
-        if (mitAbout == null) {
-            mitAbout = new JMenuItem();
-            mitAbout.setText("About");
-            mitAbout.setToolTipText("Get information about the Sukaku Explainer application");
-            mitAbout.setMnemonic(java.awt.event.KeyEvent.VK_A);
-            mitAbout.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    if (dummyFrameKnife == null) {
-                        dummyFrameKnife = new JFrame();
-                        ImageIcon icon = createImageIcon("Knife.gif");
-                        dummyFrameKnife.setIconImage(icon.getImage());
-                    }
-                    AboutDialog dlg = new AboutDialog(dummyFrameKnife);
-                    centerDialog(dlg);
-                    dlg.setVisible(true);
-                }
-            });
-        }
-        return mitAbout;
-    }
-
-    private JMenuItem getMitGetSmallClue() {
-        if (mitGetSmallClue == null) {
-            mitGetSmallClue = new JMenuItem();
-            mitGetSmallClue.setText("Get a small clue");
-            mitGetSmallClue.setMnemonic(KeyEvent.VK_M);
-            mitGetSmallClue.setToolTipText("Get some information on the next solving step");
-            mitGetSmallClue.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    engine.getClue(false);
-                }
-            });
-        }
-        return mitGetSmallClue;
-    }
-
-    private JMenuItem getMitGetBigClue() {
-        if (mitGetBigClue == null) {
-            mitGetBigClue = new JMenuItem();
-            mitGetBigClue.setText("Get a big clue");
-            mitGetBigClue.setMnemonic(KeyEvent.VK_B);
-            mitGetBigClue.setToolTipText("Get more information on the next solving step");
-            mitGetBigClue.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    engine.getClue(true);
-                }
-            });
-        }
-        return mitGetBigClue;
-    }
-
-    private JMenu getMitLookAndFeel() {
-        if (mitLookAndFeel == null) {
-            mitLookAndFeel = new JMenu();
-            mitLookAndFeel.setText("Look & Feel");
-            mitLookAndFeel.setMnemonic(KeyEvent.VK_L);
-            mitLookAndFeel.setToolTipText("Change the appearance of the application by choosing one of the available schemes");
-        }
-        return mitLookAndFeel;
-    }
-
-    private JMenuItem getMitShowWelcome() {
-        if (mitShowWelcome == null) {
-            mitShowWelcome = new JMenuItem();
-            mitShowWelcome.setMnemonic(java.awt.event.KeyEvent.VK_W);
-            mitShowWelcome.setToolTipText("Show the explanation text displayed when the application is started");
-            mitShowWelcome.setText("Show welcome message");
-            mitShowWelcome.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    showWelcomeText();
-                }
-            });
-        }
-        return mitShowWelcome;
-    }
-
-    private JMenuItem getMitGenerate() {
-        if (mitGenerate == null) {
-            mitGenerate = new JMenuItem();
-            mitGenerate.setText("Generate...");
-            mitGenerate.setMnemonic(KeyEvent.VK_G);
-            mitGenerate.setToolTipText("Open a dialog to generate a random Sudoku puzzle");
-            mitGenerate.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    if (generateDialog == null || !generateDialog.isVisible()) {
-                        generateDialog = new GenerateDialog(SudokuFrame.this, engine);
-                        generateDialog.pack();
-                        centerDialog(generateDialog);
-                    }
-                    generateDialog.setVisible(true);
-                }
-            });
-        }
-        return mitGenerate;
-    }
-
-    private void centerDialog(JDialog dlg) {
-        Point frameLocation = SudokuFrame.this.getLocation();
-        Dimension frameSize = SudokuFrame.this.getSize();
-        Dimension windowSize = dlg.getSize();
-        dlg.setLocation(
-                frameLocation.x + (frameSize.width - windowSize.width) / 2,
-                frameLocation.y + (frameSize.height - windowSize.height) / 3);
     }
 
     private JCheckBoxMenuItem getMitShowCandidates() {
@@ -1995,6 +2039,433 @@ public class SudokuFrame extends JFrame implements Asker {
             pnlEnabledTechniques.setVisible(false);
         }
         return pnlEnabledTechniques;
+    }
+
+    private JRadioButtonMenuItem getMitChessMode() {
+        if (mitChessMode == null) {
+            mitChessMode = new JRadioButtonMenuItem();
+            mitChessMode.setText("A1 - I9 cell notation");
+            mitChessMode.setMnemonic(KeyEvent.VK_A);
+            mitChessMode.setSelected(!Settings.getInstance().isRCNotation());
+            mitChessMode.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                    if (mitChessMode.isSelected()) {
+                        Settings.getInstance().setRCNotation(false);
+                        repaint();
+                    }
+                }
+            });
+        }
+        return mitChessMode;
+    }
+
+    private JRadioButtonMenuItem getMitMathMode() {
+        if (mitMathMode == null) {
+            mitMathMode = new JRadioButtonMenuItem();
+            mitMathMode.setText("R1C1 - R9C9 cell notation");
+            mitMathMode.setMnemonic(KeyEvent.VK_R);
+            mitMathMode.setSelected(Settings.getInstance().isRCNotation());
+            mitMathMode.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                    if (mitMathMode.isSelected()) {
+                        Settings.getInstance().setRCNotation(true);
+                        repaint();
+                    }
+                }
+            });
+        }
+        return mitMathMode;
+    }
+
+    private JMenu getMitLookAndFeel() {
+        if (mitLookAndFeel == null) {
+            mitLookAndFeel = new JMenu();
+            mitLookAndFeel.setText("Look & Feel");
+            mitLookAndFeel.setMnemonic(KeyEvent.VK_L);
+            mitLookAndFeel.setToolTipText("Change the appearance of the application by choosing one of the available schemes");
+        }
+        return mitLookAndFeel;
+    }
+
+    private JCheckBoxMenuItem getMitAntiAliasing() {
+        if (mitAntiAliasing == null) {
+            mitAntiAliasing = new JCheckBoxMenuItem();
+            mitAntiAliasing.setText("High quality rendering");
+            mitAntiAliasing.setSelected(Settings.getInstance().isAntialiasing());
+            mitAntiAliasing.setMnemonic(KeyEvent.VK_H);
+            mitAntiAliasing.setToolTipText("Use high quality (but slow) rendering");
+            mitAntiAliasing.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                    Settings.getInstance().setAntialiasing(mitAntiAliasing.isSelected());
+                    repaint();
+                }
+            });
+        }
+        return mitAntiAliasing;
+    }
+
+    private JMenu getHelpMenu() {
+        if (helpMenu == null) {
+            helpMenu = new JMenu();
+            helpMenu.setText("Help");
+            helpMenu.setMnemonic(java.awt.event.KeyEvent.VK_H);
+            helpMenu.add(getMitShowWelcome());
+            getMitShowWelcome().setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
+            helpMenu.addSeparator();
+            helpMenu.add(getMitAbout());
+        }
+        return helpMenu;
+    }
+
+    private JMenuItem getMitShowWelcome() {
+        if (mitShowWelcome == null) {
+            mitShowWelcome = new JMenuItem();
+            mitShowWelcome.setMnemonic(java.awt.event.KeyEvent.VK_W);
+            mitShowWelcome.setToolTipText("Show the explanation text displayed when the application is started");
+            mitShowWelcome.setText("Show welcome message");
+            mitShowWelcome.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    showWelcomeText();
+                }
+            });
+        }
+        return mitShowWelcome;
+    }
+
+    private JMenuItem getMitAbout() {
+        if (mitAbout == null) {
+            mitAbout = new JMenuItem();
+            mitAbout.setText("About");
+            mitAbout.setToolTipText("Get information about the Sukaku Explainer application");
+            mitAbout.setMnemonic(java.awt.event.KeyEvent.VK_A);
+            mitAbout.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    if (dummyFrameKnife == null) {
+                        dummyFrameKnife = new JFrame();
+                        ImageIcon icon = createImageIcon("Knife.gif");
+                        dummyFrameKnife.setIconImage(icon.getImage());
+                    }
+                    AboutDialog dlg = new AboutDialog(dummyFrameKnife);
+                    centerDialog(dlg);
+                    dlg.setVisible(true);
+                }
+            });
+        }
+        return mitAbout;
+    }
+
+    private JMenu getVariantsMenu() {
+        if (VariantsMenu == null) {
+            VariantsMenu = new JMenu();
+            VariantsMenu.setText("Variants");
+            VariantsMenu.add(getMitLatinSquare());
+            VariantsMenu.addSeparator();
+            VariantsMenu.add(getMitDiagonals());
+            VariantsMenu.add(getMitDisjointGroups());
+            VariantsMenu.add(getMitWindoku());
+            VariantsMenu.add(getMitClover());
+            VariantsMenu.addSeparator();
+            VariantsMenu.add(getMitAsterisk());
+            VariantsMenu.add(getMitCenterDot());
+            VariantsMenu.add(getMitGirandola());
+            VariantsMenu.addSeparator();
+            VariantsMenu.add(getMitHalloween());
+            VariantsMenu.add(getMitPerCent());
+        }
+        return VariantsMenu;
+    }
+
+    private JCheckBoxMenuItem getMitLatinSquare() {
+        if (mitLatinSquare == null) {
+            mitLatinSquare = new JCheckBoxMenuItem();
+            mitLatinSquare.setText("Latin Square");
+            mitLatinSquare.setToolTipText("Sets the puzzle type to Latin Square");
+            mitLatinSquare.setSelected(Settings.getInstance().isLatinSquare());
+            mitLatinSquare.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                // if ( mitLatinSquare.isSelected() ) {
+                //  if ( Settings.getInstance().isHalloween() ) { mitHalloween.setSelected(false); }
+                //  if ( Settings.getInstance().isPerCent() )   { mitPerCent.setSelected(false); }
+                // }
+                    Settings.getInstance().setLatinSquare(mitLatinSquare.isSelected());
+                    Settings.getInstance().saveChanged();
+                    sudokuPanel.getSudokuGrid().updateLatinSquare();
+                    engine.rebuildSolver();
+                    engine.resetPotentials();
+                    repaint();
+                }
+            });
+        }
+        return mitLatinSquare;
+    }
+
+    private JCheckBoxMenuItem getMitDiagonals() {
+        if (mitDiagonals == null) {
+            mitDiagonals = new JCheckBoxMenuItem();
+            mitDiagonals.setText("Diagonals (X)");
+            mitDiagonals.setToolTipText("Sets the puzzle type to Diagonals (X)");
+            mitDiagonals.setSelected(Settings.getInstance().isDiagonals());
+            mitDiagonals.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                   if ( mitDiagonals.isSelected() ) {
+                    if ( Settings.getInstance().isHalloween() ) { mitHalloween.setSelected(false); }
+                    if ( Settings.getInstance().isPerCent() )   { mitPerCent.setSelected(false); }
+                   }
+                    Settings.getInstance().setDiagonals(mitDiagonals.isSelected());
+                    Settings.getInstance().saveChanged();
+                    sudokuPanel.getSudokuGrid().updateDiagonals();
+                    engine.rebuildSolver();
+                    engine.resetPotentials();
+                    repaint();
+                }
+            });
+        }
+        return mitDiagonals;
+    }
+
+    private JCheckBoxMenuItem getMitDisjointGroups() {
+        if (mitDisjointGroups == null) {
+            mitDisjointGroups = new JCheckBoxMenuItem();
+            mitDisjointGroups.setText("Disjoint Groups");
+            mitDisjointGroups.setToolTipText("Sets the puzzle type to Disjoint Groups");
+            mitDisjointGroups.setSelected(Settings.getInstance().isDisjointGroups());
+            mitDisjointGroups.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                   if ( mitDisjointGroups.isSelected() ) {
+                    if ( Settings.getInstance().isHalloween() ) { mitHalloween.setSelected(false); }
+                    if ( Settings.getInstance().isPerCent() )   { mitPerCent.setSelected(false); }
+                   }
+                    Settings.getInstance().setDisjointGroups(mitDisjointGroups.isSelected());
+                    Settings.getInstance().saveChanged();
+                    sudokuPanel.getSudokuGrid().updateDisjointGroups();
+                    engine.rebuildSolver();
+                    engine.resetPotentials();
+                    repaint();
+                }
+            });
+        }
+        return mitDisjointGroups;
+    }
+
+    private JCheckBoxMenuItem getMitWindoku() {
+        if (mitWindoku == null) {
+            mitWindoku = new JCheckBoxMenuItem();
+            mitWindoku.setText("Windoku");
+            mitWindoku.setToolTipText("Sets the puzzle type to Windoku");
+            mitWindoku.setSelected(Settings.getInstance().isWindoku());
+            mitWindoku.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                    if ( mitWindoku.isSelected() != Settings.getInstance().isWindoku() ) {
+                        Settings.getInstance().setWindoku(mitWindoku.isSelected());
+                        if ( Settings.getInstance().isWindoku() && Settings.getInstance().isAsterisk() ) {
+                            if ( !Settings.getInstance().isClover() ) {
+                                Settings.getInstance().setClover(true);
+                                mitClover.setSelected(true);
+                            }
+                        }
+                        else {
+                            if ( Settings.getInstance().isClover() ) {
+                                Settings.getInstance().setClover(false);
+                                mitClover.setSelected(false);
+                            }
+                        }
+                    }
+                   if ( mitWindoku.isSelected() ) {
+                    if ( Settings.getInstance().isHalloween() ) { mitHalloween.setSelected(false); }
+                    if ( Settings.getInstance().isPerCent() )   { mitPerCent.setSelected(false); }
+                   }
+                    Settings.getInstance().setWindoku(mitWindoku.isSelected());
+                    Settings.getInstance().saveChanged();
+                    sudokuPanel.getSudokuGrid().updateWindoku();
+                    engine.rebuildSolver();
+                    engine.resetPotentials();
+                    repaint();
+                }
+            });
+        }
+        return mitWindoku;
+    }
+
+    private JCheckBoxMenuItem getMitClover() {
+        if (mitClover == null) {
+            mitClover = new JCheckBoxMenuItem();
+            mitClover.setText("Clover (W+A)");
+            mitClover.setToolTipText("Sets the puzzle type to Clover (W+A)");
+            mitClover.setSelected(Settings.getInstance().isClover());
+            mitClover.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                    if ( mitClover.isSelected() != Settings.getInstance().isClover() ) {
+                        Settings.getInstance().setClover(mitClover.isSelected());
+                        Settings.getInstance().setWindoku(mitClover.isSelected());
+                        Settings.getInstance().setAsterisk(mitClover.isSelected());
+                        mitWindoku.setSelected(Settings.getInstance().isWindoku());
+                        mitAsterisk.setSelected(Settings.getInstance().isAsterisk());
+                    }
+                   if ( mitClover.isSelected() ) {
+                    if ( Settings.getInstance().isHalloween() ) { mitHalloween.setSelected(false); }
+                    if ( Settings.getInstance().isPerCent() )   { mitPerCent.setSelected(false); }
+                   }
+                    Settings.getInstance().saveChanged();
+                    repaint();
+                }
+            });
+        }
+        return mitClover;
+    }
+
+    private JCheckBoxMenuItem getMitAsterisk() {
+        if (mitAsterisk == null) {
+            mitAsterisk = new JCheckBoxMenuItem();
+            mitAsterisk.setText("Asterisk");
+            mitAsterisk.setToolTipText("Sets the puzzle type to Asterisk");
+            mitAsterisk.setSelected(Settings.getInstance().isAsterisk());
+            mitAsterisk.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                    if ( mitAsterisk.isSelected() != Settings.getInstance().isAsterisk() ) {
+                        Settings.getInstance().setAsterisk(mitAsterisk.isSelected());
+                        if ( Settings.getInstance().isWindoku() && Settings.getInstance().isAsterisk() ) {
+                            if ( !Settings.getInstance().isClover() ) {
+                                Settings.getInstance().setClover(true);
+                                mitClover.setSelected(true);
+                            }
+                        }
+                        else {
+                            if ( Settings.getInstance().isClover() ) {
+                                Settings.getInstance().setClover(false);
+                                mitClover.setSelected(false);
+                            }
+                        }
+                    }
+                   if ( mitAsterisk.isSelected() ) {
+                    if ( Settings.getInstance().isCenterDot() ) { mitCenterDot.setSelected(false); }
+                    if ( Settings.getInstance().isGirandola() ) { mitGirandola.setSelected(false); }
+                    if ( Settings.getInstance().isHalloween() ) { mitHalloween.setSelected(false); }
+                    if ( Settings.getInstance().isPerCent() )   { mitPerCent.setSelected(false); }
+                   }
+                    Settings.getInstance().setAsterisk(mitAsterisk.isSelected());
+                    Settings.getInstance().saveChanged();
+                    sudokuPanel.getSudokuGrid().updateAsterisk();
+                    engine.rebuildSolver();
+                    engine.resetPotentials();
+                    repaint();
+                }
+            });
+        }
+        return mitAsterisk;
+    }
+
+    private JCheckBoxMenuItem getMitCenterDot() {
+        if (mitCenterDot == null) {
+            mitCenterDot = new JCheckBoxMenuItem();
+            mitCenterDot.setText("Center Dot");
+            mitCenterDot.setToolTipText("Sets the puzzle type to Center Dot");
+            mitCenterDot.setSelected(Settings.getInstance().isCenterDot());
+            mitCenterDot.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                   if ( mitCenterDot.isSelected() ) {
+                    if ( Settings.getInstance().isAsterisk() ) { mitAsterisk.setSelected(false); }
+                    if ( Settings.getInstance().isGirandola() ) { mitGirandola.setSelected(false); }
+                    if ( Settings.getInstance().isHalloween() ) { mitHalloween.setSelected(false); }
+                    if ( Settings.getInstance().isPerCent() )   { mitPerCent.setSelected(false); }
+                   }
+                    Settings.getInstance().setCenterDot(mitCenterDot.isSelected());
+                    Settings.getInstance().saveChanged();
+                    sudokuPanel.getSudokuGrid().updateCenterDot();
+                    engine.rebuildSolver();
+                    engine.resetPotentials();
+                    repaint();
+                }
+            });
+        }
+        return mitCenterDot;
+    }
+
+    private JCheckBoxMenuItem getMitGirandola() {
+        if (mitGirandola == null) {
+            mitGirandola = new JCheckBoxMenuItem();
+            mitGirandola.setText("Girandola");
+            mitGirandola.setToolTipText("Sets the puzzle type to Girandola");
+            mitGirandola.setSelected(Settings.getInstance().isGirandola());
+            mitGirandola.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                   if ( mitGirandola.isSelected() ) {
+                    if ( Settings.getInstance().isAsterisk() ) { mitAsterisk.setSelected(false); }
+                    if ( Settings.getInstance().isCenterDot() ) { mitCenterDot.setSelected(false); }
+                    if ( Settings.getInstance().isHalloween() ) { mitHalloween.setSelected(false); }
+                    if ( Settings.getInstance().isPerCent() )   { mitPerCent.setSelected(false); }
+                   }
+                    Settings.getInstance().setGirandola(mitGirandola.isSelected());
+                    Settings.getInstance().saveChanged();
+                    sudokuPanel.getSudokuGrid().updateGirandola();
+                    engine.rebuildSolver();
+                    engine.resetPotentials();
+                    repaint();
+                }
+            });
+        }
+        return mitGirandola;
+    }
+
+    private JCheckBoxMenuItem getMitHalloween() {
+        if (mitHalloween == null) {
+            mitHalloween = new JCheckBoxMenuItem();
+            mitHalloween.setText("Halloween");
+            mitHalloween.setToolTipText("Sets the puzzle type to Halloween");
+            mitHalloween.setSelected(Settings.getInstance().isHalloween());
+            mitHalloween.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                    if ( mitHalloween.isSelected() ) {
+                        if ( Settings.getInstance().isLatinSquare() )    { mitLatinSquare.setSelected(false); }
+                        if ( Settings.getInstance().isDiagonals() )      { mitDiagonals.setSelected(false); }
+                        if ( Settings.getInstance().isDisjointGroups() ) { mitDisjointGroups.setSelected(false); }
+                        if ( Settings.getInstance().isWindoku() )        { mitWindoku.setSelected(false); }
+                        if ( Settings.getInstance().isClover() )         { mitClover.setSelected(false); }
+                        if ( Settings.getInstance().isAsterisk() )       { mitAsterisk.setSelected(false); }
+                        if ( Settings.getInstance().isCenterDot() )      { mitCenterDot.setSelected(false); }
+                        if ( Settings.getInstance().isGirandola() )      { mitGirandola.setSelected(false); }
+                        if ( Settings.getInstance().isPerCent() )        { mitPerCent.setSelected(false); }
+                    }
+                    Settings.getInstance().setHalloween(mitHalloween.isSelected());
+                    Settings.getInstance().saveChanged();
+                    sudokuPanel.getSudokuGrid().updateHalloween();
+                    engine.rebuildSolver();
+                    engine.resetPotentials();
+                    repaint();
+                }
+            });
+        }
+        return mitHalloween;
+    }
+
+    private JCheckBoxMenuItem getMitPerCent() {
+        if (mitPerCent == null) {
+            mitPerCent = new JCheckBoxMenuItem();
+            mitPerCent.setText("Per Cent");
+            mitPerCent.setToolTipText("Sets the puzzle type to Per Cent");
+            mitPerCent.setSelected(Settings.getInstance().isPerCent());
+            mitPerCent.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                    if ( mitPerCent.isSelected() ) {
+                        if ( Settings.getInstance().isLatinSquare() )    { mitLatinSquare.setSelected(false); }
+                        if ( Settings.getInstance().isDiagonals() )      { mitDiagonals.setSelected(false); }
+                        if ( Settings.getInstance().isDisjointGroups() ) { mitDisjointGroups.setSelected(false); }
+                        if ( Settings.getInstance().isWindoku() )        { mitWindoku.setSelected(false); }
+                        if ( Settings.getInstance().isClover() )         { mitClover.setSelected(false); }
+                        if ( Settings.getInstance().isAsterisk() )       { mitAsterisk.setSelected(false); }
+                        if ( Settings.getInstance().isCenterDot() )      { mitCenterDot.setSelected(false); }
+                        if ( Settings.getInstance().isGirandola() )      { mitGirandola.setSelected(false); }
+                        if ( Settings.getInstance().isHalloween() )      { mitHalloween.setSelected(false); }
+                    }
+                    Settings.getInstance().setPerCent(mitPerCent.isSelected());
+                    Settings.getInstance().saveChanged();
+                    sudokuPanel.getSudokuGrid().updatePerCent();
+                    engine.rebuildSolver();
+                    engine.resetPotentials();
+                    repaint();
+                }
+            });
+        }
+        return mitPerCent;
     }
 
     void quit() {

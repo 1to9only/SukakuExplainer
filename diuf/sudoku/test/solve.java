@@ -12,8 +12,8 @@ import java.util.*;
 import diuf.sudoku.*;
 import diuf.sudoku.solver.*;
 
-public class hints {
-    static String FORMAT = "ED=%r/%p/%d";
+public class solve {
+    static String FORMAT = "%s ED=%r/%p/%d";
     static String RELEASE = "2009-01-01";
     static String VERSION = "1.2.1.3";
     /**
@@ -184,7 +184,7 @@ public class hints {
                         }
                     }
                 }
-                    System.out.println(puzzle); System.out.flush();
+                //  System.out.println(puzzle); System.out.flush();
                     Solver solver = new Solver(grid);
                     solver.want = 0;
                 if (puzzle.length() >= 81 && puzzle.length() < 729)
@@ -192,7 +192,7 @@ public class hints {
                     solver.rebuildPotentialValues();
                 }
                     try {
-                        solver.getHintsHint();
+                        solver.getSolution();
                     } catch (UnsupportedOperationException ex) {
                         solver.difficulty = solver.pearl = solver.diamond = 0.0;
                     }
@@ -225,6 +225,12 @@ public class hints {
                                 p = w % 10;
                                 w /= 10;
                                 s += w + "." + p;
+                                break;
+                            case 's':
+                                for (int j = 0; j < 81; j++) {
+                                    int n = grid.getCellValue(j % 9, j / 9);
+                                    s += (n==0)?".":n;
+                                }
                                 break;
                             default:
                                 s += f;

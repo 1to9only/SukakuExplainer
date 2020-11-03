@@ -12,7 +12,7 @@ import diuf.sudoku.*;
 import diuf.sudoku.solver.*;
 
 
-public class BasicsOnly {
+public class basics {
 
     /**
      * Analyze all the Sudokus of a given file, and store the results

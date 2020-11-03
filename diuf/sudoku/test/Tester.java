@@ -27,6 +27,7 @@ public class Tester {
         String logFile = args[1];
         LineNumberReader reader = null;
         PrintWriter writer = null;
+        Settings.getInstance().setNoSaves();
         try {
             Reader reader0 = new FileReader(fileName);
             reader = new LineNumberReader(reader0);

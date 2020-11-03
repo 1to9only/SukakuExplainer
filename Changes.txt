@@ -1,5 +1,8 @@
 Changes:
 
+20201103:
+- add variants, and other improvements
+
 20201026:
 - fix solve+applyhint for solving grid, and other improvements
 

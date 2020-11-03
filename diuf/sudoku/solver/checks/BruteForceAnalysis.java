@@ -24,7 +24,6 @@ public class BruteForceAnalysis implements WarningHintProducer {
     private final Grid grid2 = new Grid();
     private final boolean includeSolution;
 
-
     public BruteForceAnalysis(boolean includeSolution) {
         this.includeSolution = includeSolution;
     }
@@ -303,12 +302,15 @@ public class BruteForceAnalysis implements WarningHintProducer {
     private boolean isFillable(Grid grid) {
         for (Class<? extends Grid.Region> regionType : grid.getRegionTypes()) {
             Grid.Region[] regions = grid.getRegions(regionType);
-            for (int i = 0; i < 9; i++) {
+            int regionmax = grid.getRegionMax(regionType);
+            for (int i = 0; i < regionmax; i++) {
                 Grid.Region region = regions[i];
+              if ( region != null ) {
                 for (int value = 1; value <= 9; value++) {
                     if (!region.contains(value) && region.getPotentialPositions(value).isEmpty())
                         return false; // No room for the value in the region
                 }
+              }
             }
         }
         return true;
@@ -335,15 +337,12 @@ public class BruteForceAnalysis implements WarningHintProducer {
             return false;
         }
         String s = ""; int cnt = 0;
-//    if ( generator.isVerbose() ) {
         for (int i = 0; i < 81; i++) {
             int n = grid.getCellValue(i % 9, i / 9);
             if ( n != 0 ) { cnt++; }
-//          s += (n==0)?".":n;
         }
         if ( cnt < 10 ) { s += " "; }
         s += " " + cnt + " ";
-//    }
         s = s + "got solution grid";
         System.err.println(s);
         System.err.flush();

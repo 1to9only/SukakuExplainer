@@ -114,8 +114,8 @@ public class Solver {
         addIfWorth(SolvingTechnique.Jellyfish, indirectHintProducers, new Fisherman(4));
         addIfWorth(SolvingTechnique.HiddenQuad, indirectHintProducers, new HiddenSet(4, false));
         addIfWorth(SolvingTechnique.BivalueUniversalGrave, indirectHintProducers, new BivalueUniversalGrave());
-        addIfWorth(SolvingTechnique.AlignedPairExclusion, indirectHintProducers, new AlignedPairExclusion());
         chainingHintProducers = new ArrayList<IndirectHintProducer>();
+        addIfWorth(SolvingTechnique.AlignedPairExclusion, chainingHintProducers, new AlignedPairExclusion());
         addIfWorth(SolvingTechnique.ForcingChainCycle, chainingHintProducers, new Chaining(false, false, false, 0, true, 0));
         addIfWorth(SolvingTechnique.AlignedTripletExclusion, chainingHintProducers, new AlignedExclusion(3));
         addIfWorth(SolvingTechnique.NishioForcingChain, chainingHintProducers, new Chaining(false, true, true, 0, true, 0));
@@ -191,9 +191,37 @@ public class Solver {
                     cell.clearPotentialValues();
             }
         }
-        cancelBy(Grid.Block.class);
+        if ( !grid.isLatinSquare() ) {
+            cancelBy(Grid.Block.class);
+        }
         cancelBy(Grid.Row.class);
         cancelBy(Grid.Column.class);
+
+        if ( grid.isDiagonals() ) {
+            cancelBy(Grid.Diagonal.class);
+            cancelBy(Grid.AntiDiagonal.class);
+        }
+        if ( grid.isDisjointGroups() ) {
+            cancelBy(Grid.DisjointGroup.class);
+        }
+        if ( grid.isWindoku() ) {
+            cancelBy(Grid.Windoku.class);
+        }
+        if ( grid.isAsterisk() ) {
+            cancelBy(Grid.Asterisk.class);
+        }
+        if ( grid.isCenterDot() ) {
+            cancelBy(Grid.CenterDot.class);
+        }
+        if ( grid.isGirandola() ) {
+            cancelBy(Grid.Girandola.class);
+        }
+        if ( grid.isHalloween() ) {
+            cancelBy(Grid.Halloween.class);
+        }
+        if ( grid.isPerCent() ) {
+            cancelBy(Grid.PerCent.class);
+        }
     }
 
     /**
@@ -486,6 +514,57 @@ public class Solver {
         }
     }
 
+    /**
+     * Get whether the grid's difficulty is between the two
+     * bounds or not. If yes, return the actual difficulty.
+     * If no, return a value less than <tt>min</tt> if the
+     * grid is less difficult than <tt>min</tt> and a value
+     * greater than <tt>max</tt> if the grid is more
+     * difficult than <tt>max</tt>.
+     * @param min the minimal difficulty (inclusive)
+     * @param max the maximal difficulty (inclusive)
+     * @return The actual difficulty if it is between the
+     * given bounds. An arbitrary out-of-bounds value else.
+     */
+    public double analmaxDifficulty(double min, double max) {
+        int oldPriority = lowerPriority();
+        try {
+            double difficulty = 0.0;
+            while (!isSolved()) {
+                SingleHintAccumulator accu = new SingleHintAccumulator();
+                try {
+                    for (HintProducer producer : directHintProducers)
+                        producer.getHints(grid, accu);
+                    for (IndirectHintProducer producer : indirectHintProducers)
+                        producer.getHints(grid, accu);
+                    for (IndirectHintProducer producer : chainingHintProducers)
+                        producer.getHints(grid, accu);
+                    for (IndirectHintProducer producer : chainingHintProducers2)
+                        producer.getHints(grid, accu);
+                    // Only used for generator. Ignore advanced/experimental techniques
+                    for (IndirectHintProducer producer : advancedHintProducers)
+                        producer.getHints(grid, accu);
+                //  for (IndirectHintProducer producer : experimentalHintProducers)
+                //      producer.getHints(grid, accu);
+                } catch (InterruptedException willHappen) {}
+                Hint hint = accu.getHint();
+                if (hint == null) {
+                //  System.err.println("Failed to solve:\n" + grid.toString());
+                    return 20.0;
+                }
+//a             assert hint instanceof Rule;
+                Rule rule = (Rule)hint;
+                double ruleDiff = rule.getDifficulty();
+                if (ruleDiff > difficulty)
+                    difficulty = ruleDiff;
+                hint.apply(grid);
+            }
+            return difficulty;
+        } finally {
+            normalPriority(oldPriority);
+        }
+    }
+
     public void getDifficulty() {
         Grid backup = new Grid();
         grid.copyTo(backup);
@@ -542,9 +621,9 @@ public class Solver {
     }
 
     public void getHintsHint() {
-        Grid backup = new Grid();
-        grid.copyTo(backup);
-        try {
+    //  Grid backup = new Grid();
+    //  grid.copyTo(backup);
+    //  try {
             difficulty = 0.0;
             pearl = 0.0;
             diamond = 0.0;
@@ -628,15 +707,71 @@ public class Solver {
                     break;
                 }
             }
-        } finally {
-            backup.copyTo(grid);
-        }
+    //  } finally {
+    //      backup.copyTo(grid);
+    //  }
+    }
+
+    public void getSolution() {
+    //  Grid backup = new Grid();
+    //  grid.copyTo(backup);
+    //  try {
+            difficulty = 0.0;
+            pearl = 0.0;
+            diamond = 0.0;
+            while (!isSolved()) {
+                SingleHintAccumulator accu = new SingleHintAccumulator();
+                try {
+                    for (HintProducer producer : directHintProducers)
+                        producer.getHints(grid, accu);
+                    for (IndirectHintProducer producer : indirectHintProducers)
+                        producer.getHints(grid, accu);
+                    for (IndirectHintProducer producer : chainingHintProducers)
+                        producer.getHints(grid, accu);
+                    for (IndirectHintProducer producer : chainingHintProducers2)
+                        producer.getHints(grid, accu);
+                    for (IndirectHintProducer producer : advancedHintProducers)
+                        producer.getHints(grid, accu);
+                    for (IndirectHintProducer producer : experimentalHintProducers)
+                        producer.getHints(grid, accu);
+                } catch (InterruptedException willHappen) {}
+                Hint hint = accu.getHint();
+                if (hint == null) {
+                    difficulty = 20.0;
+                    break;
+                }
+//a             assert hint instanceof Rule;
+                Rule rule = (Rule)hint;
+                double ruleDiff = rule.getDifficulty();
+                if (ruleDiff > difficulty)
+                    difficulty = ruleDiff;
+                hint.apply(grid);
+
+                if (pearl == 0.0) {
+                    if (diamond == 0.0)
+                        diamond = difficulty;
+                    if (hint.getCell() != null) {
+                        if (want == 'd' && difficulty > diamond) {
+                            difficulty = 20.0;
+                            break;
+                        }
+                        pearl = difficulty;
+                    }
+                }
+                else if (want != 0 && difficulty > pearl) {
+                    difficulty = 20.0;
+                    break;
+                }
+            }
+    //  } finally {
+    //      backup.copyTo(grid);
+    //  }
     }
 
     public void getPencilMarks() {
-        Grid backup = new Grid();
-        grid.copyTo(backup);
-        try {
+    //  Grid backup = new Grid();
+    //  grid.copyTo(backup);
+    //  try {
             difficulty = 0.0;
             pearl = 0.0;
             diamond = 0.0;
@@ -784,9 +919,9 @@ public class Solver {
                     break;
                 }
             }
-        } finally {
-            backup.copyTo(grid);
-        }
+    //  } finally {
+    //      backup.copyTo(grid);
+    //  }
     }
 
     public Map<String, Integer> toNamedList(Map<Rule, Integer> rules) {

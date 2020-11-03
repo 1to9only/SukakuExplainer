@@ -466,7 +466,7 @@ public class Chaining implements IndirectHintProducer {
 
     private void doRegionChainings(Grid grid, List<ChainingHint> result, Cell cell,
             int value, LinkedSet<Potential> onToOn, LinkedSet<Potential> onToOff) {
-        for (Class<? extends Grid.Region> regionType : grid.getRegionTypes()) {
+        for (Class<? extends Grid.Region> regionType : grid.getRegionTypes3()) {
             Grid.Region region = grid.getRegionAt(regionType, cell.getX(), cell.getY());
             BitSet potentialPositions = region.getPotentialPositions(value);
 
@@ -551,7 +551,7 @@ public class Chaining implements IndirectHintProducer {
         }
 
         // Second rule: other potential position for this value get off
-        for (Class<? extends Grid.Region> regionType : grid.getRegionTypes()) {
+        for (Class<? extends Grid.Region> regionType : grid.getRegionTypes3()) {
             Grid.Region region = grid.getRegionAt(regionType, p.cell.getX(), p.cell.getY());
             for (int i = 0; i < 9; i++) {
                 Cell cell = region.getCell(i);
@@ -644,7 +644,7 @@ public class Chaining implements IndirectHintProducer {
         //  partTypes.add(Grid.Row.class);
         //  partTypes.add(Grid.Column.class);
         //  for (Class<? extends Grid.Region> partType : partTypes) {
-            for (Class<? extends Grid.Region> partType : grid.getRegionTypes()) {
+            for (Class<? extends Grid.Region> partType : grid.getRegionTypes3()) {
                 Grid.Region region = grid.getRegionAt(partType, p.cell.getX(), p.cell.getY());
                 BitSet potentialPositions = region.getPotentialPositions(p.value);
                 if (potentialPositions.cardinality() == 2) {

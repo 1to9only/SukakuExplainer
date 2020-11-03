@@ -190,6 +190,19 @@ public class SudokuIO {
         }
     }
 
+    private static void saveToWriter81(Grid grid, Writer writer) throws IOException {
+        for (int y = 0; y < 9; y++) {
+            for (int x = 0; x < 9; x++) {
+                int value = grid.getCellValue(x, y);
+                int ch = '.';
+                if (value > 0)
+                    ch = '0' + value;
+                writer.write(ch);
+            }
+        }
+        writer.write("\r\n");
+    }
+
     private static void saveSukakuToWriter(Grid grid, Writer writer) throws IOException {
         for (int y = 0; y < 9; y++) {
             for (int x = 0; x < 9; x++) {
@@ -320,6 +333,17 @@ public class SudokuIO {
         }
     }
 
+    public static void saveToClipboard81(Grid grid) {
+        StringWriter writer = new StringWriter();
+        try {
+            saveToWriter81(grid, writer);
+            StringSelection data = new StringSelection(writer.toString());
+            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(data, data);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public static void saveSukakuToClipboard(Grid grid) {
         StringWriter writer = new StringWriter();
         try {
@@ -375,6 +399,26 @@ public class SudokuIO {
             FileWriter fwriter = new FileWriter(file);
             writer = new BufferedWriter(fwriter);
             saveToWriter(grid, writer);
+            return null;
+        } catch (IOException ex) {
+            return new ErrorMessage("Error while writing file {0}:\n{1}", file, ex);
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static ErrorMessage saveToFile81(Grid grid, File file) {
+        Writer writer = null;
+        try {
+            FileWriter fwriter = new FileWriter(file);
+            writer = new BufferedWriter(fwriter);
+            saveToWriter81(grid, writer);
             return null;
         } catch (IOException ex) {
             return new ErrorMessage("Error while writing file {0}:\n{1}", file, ex);

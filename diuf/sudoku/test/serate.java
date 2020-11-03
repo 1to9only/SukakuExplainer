@@ -13,7 +13,7 @@ import diuf.sudoku.*;
 import diuf.sudoku.solver.*;
 
 public class serate {
-    static String FORMAT = "%r/%p/%d";
+    static String FORMAT = "%g ED=%r/%p/%d";
     static String RELEASE = "2009-01-01";
     static String VERSION = "1.2.1.3";
     static void help(int html) {
@@ -119,6 +119,7 @@ public class serate {
         int             arg;
         long            t;
         char            c;
+        Settings.getInstance().setNoSaves();
         try {
             for (arg = 0; arg < args.length; arg++) {
                 a = s = args[arg];
@@ -159,8 +160,8 @@ public class serate {
                     c = s.charAt(1);
                     if (s.length() > 2)
                         v = s.substring(2);
-                    else if (++arg < args.length)
-                        v = args[arg];
+                    else if ( ( c=='f' || c=='i' || c=='o') && ( (arg+1) < args.length) )
+                        v = args[++arg];
                 }
                 switch (c) {
                 case 'f':
@@ -191,14 +192,46 @@ public class serate {
                     output = v;
                     break;
                 case 'V':
-                    System.out.println(VERSION);
+                    System.err.println(VERSION);
                     System.exit(0);
                     break;
+
+                case 'L':   // LatinSquare
+                    Settings.getInstance().setLatinSquare(true);
+                    break;
+                case 'X':   // Diagonals
+                    Settings.getInstance().setDiagonals(true);
+                    break;
+                case 'D':   // DisjointGroups
+                    Settings.getInstance().setDisjointGroups(true);
+                    break;
+                case 'W':   // Windoku
+                    Settings.getInstance().setWindoku(true);
+                    break;
+
+                case 'A':   // Asterisk
+                    Settings.getInstance().setAsterisk(true);
+                    break;
+                case 'C':   // CenterDot
+                    Settings.getInstance().setCenterDot(true);
+                    break;
+                case 'G':   // Girandola
+                    Settings.getInstance().setGirandola(true);
+                    break;
+
+                case 'H':   // Halloween
+                    Settings.getInstance().setHalloween(true);
+                    break;
+                case 'P':   // PerCent
+                    Settings.getInstance().setPerCent(true);
+                    break;
+
                 default:
                     usage(a, 0);
                     break;
                 }
             }
+
             if (input != null) {
                 if (input.equals("-")) {
                     InputStreamReader reader0 = new InputStreamReader(System.in);
@@ -301,11 +334,29 @@ public class serate {
                             s += f;
                         else
                             switch (format.charAt(i)) {
+                            case 'g':
+                                s += puzzle;
+                                break;
+                            case 'r':
+                                w = (int)((solver.difficulty + 0.05) * 10);
+                                p = w % 10;
+                                w /= 10;
+                                s += w + "." + p;
+                                break;
+                            case 'p':
+                                w = (int)((solver.pearl + 0.05) * 10);
+                                p = w % 10;
+                                w /= 10;
+                                s += w + "." + p;
+                                break;
                             case 'd':
                                 w = (int)((solver.diamond + 0.05) * 10);
                                 p = w % 10;
                                 w /= 10;
                                 s += w + "." + p;
+                                break;
+                            case 'n':
+                                s += ordinal;
                                 break;
                             case 'e':
                                 t /= 10;
@@ -338,24 +389,6 @@ public class serate {
                                         s += "0";
                                     s += u + "h";
                                 }
-                                break;
-                            case 'g':
-                                s += puzzle;
-                                break;
-                            case 'n':
-                                s += ordinal;
-                                break;
-                            case 'p':
-                                w = (int)((solver.pearl + 0.05) * 10);
-                                p = w % 10;
-                                w /= 10;
-                                s += w + "." + p;
-                                break;
-                            case 'r':
-                                w = (int)((solver.difficulty + 0.05) * 10);
-                                p = w % 10;
-                                w /= 10;
-                                s += w + "." + p;
                                 break;
                             default:
                                 s += f;

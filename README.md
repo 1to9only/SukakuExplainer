@@ -6,25 +6,57 @@ There is discussion about sukaku here: http://forum.enjoysudoku.com/pencilmark-o
 
 This version of SukakuExplainer was first released here: http://forum.enjoysudoku.com/post280335.html (5 Aug 2019).
 
-There is an improved (faster) version of SukakuExplainer here: https://github.com/SudokuMonster/SukakuExplainer
+There is an improved version (has more solving techniques) of SukakuExplainer here: https://github.com/SudokuMonster/SukakuExplainer
 
 ## Usage - GUI
-
-  java.exe -jar SukakuExplainer.jar
-
+```
+java.exe -jar SukakuExplainer.jar
+```
 ## Usage - serate
-
- java.exe -Xrs -Xmx500m -cp SukakuExplainer.jar diuf.sudoku.test.serate --format="%g ED=%r/%p/%d" --input=puzzles.txt --output=puzzles.rated.txt
-
+```
+java.exe -Xrs -Xmx500m -cp SukakuExplainer.jar diuf.sudoku.test.serate --input=puzzles.txt --output=puzzles.rated.txt [options]
+```
+The --format="%g ED=%r/%p/%d" option is not needed, as this is the default.
 ## Usage - hints
-
-  java.exe -Xrs -Xmx500m -cp SukakuExplainer.jar diuf.sudoku.test.hints --input=puzzle.txt
-
+```
+java.exe -Xrs -Xmx500m -cp SukakuExplainer.jar diuf.sudoku.test.hints --input=puzzle.txt [options]
+```
 ## Usage - pencilmarks
-
-  java.exe -Xrs -Xmx500m -cp SukakuExplainer.jar diuf.sudoku.test.pencilmarks --input=puzzle.txt
-
+```
+java.exe -Xrs -Xmx500m -cp SukakuExplainer.jar diuf.sudoku.test.pencilmarks --input=puzzle.txt [options]
+```
+## Usage - solve
+```
+java.exe -Xrs -Xmx500m -cp SukakuExplainer.jar diuf.sudoku.test.solve --input=puzzle.txt [options]
+```
 ## Usage - Tester (Analyzer)
-
-  java.exe -Xrs -Xmx500m -cp SukakuExplainer.jar diuf.sudoku.test.Tester puzzles.txt puzzles.log
+```
+java.exe -Xrs -Xmx500m -cp SukakuExplainer.jar diuf.sudoku.test.Tester puzzles.txt puzzles.log
+```
+## Usage - basics
+```
+java.exe -Xrs -Xmx500m -cp SukakuExplainer.jar diuf.sudoku.test.basics puzzles.txt puzzles.log
+```
+## Options
+None, one or more of the following:
+```
+-L      Latin Square
+-X      Diagonals (X)
+-D      Disjoint Groups
+-W      Windoku
+```
+None or one of the following (can be combined with above options):
+```
+-A      Asterisk
+-C      Center Dots
+-G      Girandola
+```
+None or one of the following (cannot be combined with above options):
+```
+-H      Halloween
+-P      Per Cent
+```
+##### The options entered are not validated by the program, i.e. enter rubbish options, expect rubbish output!
+##### If no options are specified, it is a Vanilla sudoku.
+&nbsp;
 

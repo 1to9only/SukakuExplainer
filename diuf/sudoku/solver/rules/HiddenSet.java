@@ -31,9 +31,37 @@ public class HiddenSet implements IndirectHintProducer {
     }
 
     public void getHints(Grid grid, HintsAccumulator accu) throws InterruptedException {
-        getHints(grid, Grid.Block.class, accu);
+        if ( !grid.isLatinSquare() ) {
+            getHints(grid, Grid.Block.class, accu);
+        }
         getHints(grid, Grid.Column.class, accu);
         getHints(grid, Grid.Row.class, accu);
+
+        if ( grid.isDiagonals() ) {
+            getHints(grid, Grid.Diagonal.class, accu);
+            getHints(grid, Grid.AntiDiagonal.class, accu);
+        }
+        if ( grid.isDisjointGroups() ) {
+            getHints(grid, Grid.DisjointGroup.class, accu);
+        }
+        if ( grid.isWindoku() ) {
+            getHints(grid, Grid.Windoku.class, accu);
+        }
+        if ( grid.isAsterisk() ) {
+            getHints(grid, Grid.Asterisk.class, accu);
+        }
+        if ( grid.isCenterDot() ) {
+            getHints(grid, Grid.CenterDot.class, accu);
+        }
+        if ( grid.isGirandola() ) {
+            getHints(grid, Grid.Girandola.class, accu);
+        }
+        if ( grid.isHalloween() ) {
+            getHints(grid, Grid.Halloween.class, accu);
+        }
+        if ( grid.isPerCent() ) {
+            getHints(grid, Grid.PerCent.class, accu);
+        }
     }
 
     /**

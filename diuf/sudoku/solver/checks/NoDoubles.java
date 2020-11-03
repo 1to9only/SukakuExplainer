@@ -23,10 +23,11 @@ public class NoDoubles implements WarningHintProducer {
         // Iterate on region types
         for (Class<? extends Grid.Region> regionType : grid.getRegionTypes()) {
             Grid.Region[] regions = grid.getRegions(regionType);
-
+            int regionmax = grid.getRegionMax(regionType);
             // Iterate on occurances of a region
-            for (int i = 0; i < 9; i++) {
+            for (int i = 0; i < regionmax; i++) {
                 final Grid.Region region = regions[i];
+              if ( region != null ) {
                 BitSet values = new BitSet(10);
 
                 // Iterate on cells of a region
@@ -62,6 +63,7 @@ public class NoDoubles implements WarningHintProducer {
                             values.set(value);
                     }
                 }
+              }
             }
         }
     }
@@ -70,10 +72,11 @@ public class NoDoubles implements WarningHintProducer {
         // Iterate on region types
         for (Class<? extends Grid.Region> regionType : grid.getRegionTypes()) {
             Grid.Region[] regions = grid.getRegions(regionType);
-
+            int regionmax = grid.getRegionMax(regionType);
             // Iterate on occurances of a region
-            for (int i = 0; i < 9; i++) {
+            for (int i = 0; i < regionmax; i++) {
                 final Grid.Region region = regions[i];
+              if ( region != null ) {
                 BitSet values = new BitSet(10);
 
                 // Iterate on cells of a region
@@ -87,6 +90,7 @@ public class NoDoubles implements WarningHintProducer {
                             values.set(value);
                     }
                 }
+              }
             }
         }
         return true;

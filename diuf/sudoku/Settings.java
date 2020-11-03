@@ -55,8 +55,8 @@ public class Settings {
 
     private boolean isEasy = false;
     private boolean isMedium = false;
-    private boolean isHard = true;
-    private boolean isFiendish = false;
+    private boolean isHard = false;
+    private boolean isFiendish = true;
     private boolean isDiabolical = false;
 
     private boolean isExact = false;

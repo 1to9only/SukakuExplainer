@@ -18,20 +18,59 @@ public class HiddenSingle implements DirectHintProducer {
 
     public void getHints(Grid grid, HintsAccumulator accu) throws InterruptedException {
         // First alone cells (last empty cell in a region)
-        getHints(grid, Grid.Block.class, accu, true);
+        if ( !grid.isLatinSquare() ) {
+            getHints(grid, Grid.Block.class, accu, true);
+        }
         getHints(grid, Grid.Column.class, accu, true);
         getHints(grid, Grid.Row.class, accu, true);
         // Then hidden cells
-        getHints(grid, Grid.Block.class, accu, false);
+        if ( !grid.isLatinSquare() ) {
+            getHints(grid, Grid.Block.class, accu, false);
+        }
         getHints(grid, Grid.Column.class, accu, false);
         getHints(grid, Grid.Row.class, accu, false);
+
+        if ( grid.isDiagonals() ) {
+            getHints(grid, Grid.Diagonal.class, accu, true);
+            getHints(grid, Grid.AntiDiagonal.class, accu, true);
+            getHints(grid, Grid.Diagonal.class, accu, false);
+            getHints(grid, Grid.AntiDiagonal.class, accu, false);
+        }
+        if ( grid.isDisjointGroups() ) {
+            getHints(grid, Grid.DisjointGroup.class, accu, true);
+            getHints(grid, Grid.DisjointGroup.class, accu, false);
+        }
+        if ( grid.isWindoku() ) {
+            getHints(grid, Grid.Windoku.class, accu, true);
+            getHints(grid, Grid.Windoku.class, accu, false);
+        }
+        if ( grid.isAsterisk() ) {
+            getHints(grid, Grid.Asterisk.class, accu, true);
+            getHints(grid, Grid.Asterisk.class, accu, false);
+        }
+        if ( grid.isCenterDot() ) {
+            getHints(grid, Grid.CenterDot.class, accu, true);
+            getHints(grid, Grid.CenterDot.class, accu, false);
+        }
+        if ( grid.isGirandola() ) {
+            getHints(grid, Grid.Girandola.class, accu, true);
+            getHints(grid, Grid.Girandola.class, accu, false);
+        }
+        if ( grid.isHalloween() ) {
+            getHints(grid, Grid.Halloween.class, accu, true);
+            getHints(grid, Grid.Halloween.class, accu, false);
+        }
+        if ( grid.isPerCent() ) {
+            getHints(grid, Grid.PerCent.class, accu, true);
+            getHints(grid, Grid.PerCent.class, accu, false);
+        }
     }
 
     /**
      * For each parts of the given type, check if a value has only one
      * possible potential position.
      * @param regionType the type of the parts to check
-     */  
+     */
     private <T extends Grid.Region> void getHints(Grid grid, Class<T> regionType,
             HintsAccumulator accu, boolean aloneOnly) throws InterruptedException {
         Grid.Region[] regions = grid.getRegions(regionType);
