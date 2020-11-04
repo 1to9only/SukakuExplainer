@@ -1,5 +1,8 @@
 Changes:
 
+20201104:
+- add use solution, to generate random sudoku
+
 20201103:
 - add variants, and other improvements
 

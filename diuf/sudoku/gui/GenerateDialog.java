@@ -467,6 +467,7 @@ public class GenerateDialog extends JDialog {
 
     private void close() {
         stop();
+        Settings.getInstance().unuseSolution();
         super.setVisible(false);
         super.dispose();
     }

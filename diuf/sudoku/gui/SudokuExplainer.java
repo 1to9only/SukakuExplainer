@@ -374,6 +374,28 @@ public class SudokuExplainer {
         frame.showWelcomeText();
     }
 
+    public void useSolution() {
+        if ( solver.isSolved() ) {
+            if ( JOptionPane.showConfirmDialog(frame,
+                    "Solution grid will be used to generate a random Sudoku puzzle?\nThe solution grid will be used in the next Generate dialog only!",
+                    "Use Solution", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION ) {
+                Settings.getInstance().useSolution( grid);
+            }
+        }
+        else
+        if ( this.gridStack.isEmpty() ) {
+            if ( this.pathStack.isEmpty() ) {
+                JOptionPane.showMessageDialog(frame, "Cannot use, no puzzle!", "Use Solution", JOptionPane.WARNING_MESSAGE);
+            }
+            else {
+                JOptionPane.showMessageDialog(frame, "Cannot use, not started!", "Use Solution", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+        else {
+            JOptionPane.showConfirmDialog(frame, "Cannot use, not solved!", "Use Solution", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
     public void restartGrid() {
         if ( this.gridStack.isEmpty() ) {
             if ( this.pathStack.isEmpty() ) {

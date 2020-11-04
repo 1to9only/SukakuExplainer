@@ -146,7 +146,22 @@ public class Generator {
 
         // Build the solution
         Grid grid = new Grid();
-        boolean result = analyser.solveRandom(this, grid, rnd);
+        if ( !Settings.getInstance().haveSolution() ) {
+            boolean result = analyser.solveRandom(this, grid, rnd);
+        }
+        else {
+            Settings.getInstance().getSolution( grid);
+            String s = ""; int cnt = 0;
+            for (int i = 0; i < 81; i++) {
+                int n = grid.getCellValue(i % 9, i / 9);
+                if ( n != 0 ) { cnt++; }
+            }
+            if ( cnt < 10 ) { s += " "; }
+            s += " " + cnt + " ";
+            s = s + "got saved solution grid";
+            System.err.println(s);
+            System.err.flush();
+        }
         if (isInterrupted) {
             return null;
         }

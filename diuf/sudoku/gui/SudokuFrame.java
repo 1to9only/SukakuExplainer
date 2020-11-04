@@ -113,6 +113,7 @@ public class SudokuFrame extends JFrame implements Asker {
     private JMenuItem mitGetBigClue = null;
     private JMenu mitLookAndFeel = null;
     private JMenuItem mitShowWelcome = null;
+    private JMenuItem mitUseSolution = null;
     private JMenuItem mitGenerate = null;
     private JCheckBoxMenuItem mitShowCandidates = null;
     private JCheckBoxMenuItem mitShowCandidateMasks = null;
@@ -878,6 +879,7 @@ public class SudokuFrame extends JFrame implements Asker {
             fileMenu.setMnemonic(java.awt.event.KeyEvent.VK_F);
             fileMenu.add(getMitNew());
             setCommand(getMitNew(), 'N');
+            fileMenu.add(getMitUseSolution());
             fileMenu.add(getMitGenerate());
             setCommand(getMitGenerate(), 'G');
             fileMenu.add(getMitRestart());
@@ -917,6 +919,20 @@ public class SudokuFrame extends JFrame implements Asker {
             });
         }
         return mitNew;
+    }
+
+    private JMenuItem getMitUseSolution() {
+        if (mitUseSolution == null) {
+            mitUseSolution = new JMenuItem();
+            mitUseSolution.setText("Use Solution");
+            mitUseSolution.setToolTipText("Use solution to generate a random Sudoku puzzle");
+            mitUseSolution.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    engine.useSolution();
+                }
+            });
+        }
+        return mitUseSolution;
     }
 
     private JMenuItem getMitGenerate() {

@@ -544,8 +544,10 @@ public class Solver {
                     // Only used for generator. Ignore advanced/experimental techniques
                     for (IndirectHintProducer producer : advancedHintProducers)
                         producer.getHints(grid, accu);
-                //  for (IndirectHintProducer producer : experimentalHintProducers)
-                //      producer.getHints(grid, accu);
+                  if ( Settings.getInstance().getZedFactor() ) {
+                    for (IndirectHintProducer producer : experimentalHintProducers)
+                        producer.getHints(grid, accu);
+                  }
                 } catch (InterruptedException willHappen) {}
                 Hint hint = accu.getHint();
                 if (hint == null) {

@@ -20,6 +20,10 @@ import org.json.simple.parser.ParseException;
 
 import javax.swing.UIManager;
 
+import diuf.sudoku.*;
+//port diuf.sudoku.Cell.*;
+//port diuf.sudoku.Grid.*;
+
 /**
  * Global settings of the application.
  * Implemented using the singleton pattern.
@@ -78,6 +82,10 @@ public class Settings {
 
     private boolean noSaves = false;    // =true no saves done, is set from command line utils
 
+    private Grid solution;              // solution grid
+    private boolean useSolution = false;
+    private boolean zedFactor = false;
+
     private Settings() {
         init();
         load();
@@ -101,6 +109,27 @@ public class Settings {
         isGirandola = false;
         isHalloween = false;
         isPerCent = false;
+    }
+
+    public void useSolution( Grid grid) {
+        solution = new Grid();
+        grid.copyTo( solution);
+        useSolution = true;
+    }
+    public void unuseSolution() {
+        useSolution = false;
+    }
+    public boolean haveSolution() {
+        return useSolution;
+    }
+    public void getSolution( Grid grid) {
+        solution.copyTo( grid);
+    }
+    public void setZedFactor() {
+        zedFactor = true;
+    }
+    public boolean getZedFactor() {
+        return zedFactor;
     }
 
     public void setRCNotation(boolean isRCNotation) {
