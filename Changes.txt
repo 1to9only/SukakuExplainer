@@ -1,5 +1,8 @@
 Changes:
 
+20201110:
+- fix apply singles, save techniques, and other changes
+
 20201104:
 - add use solution, to generate random sudoku
 

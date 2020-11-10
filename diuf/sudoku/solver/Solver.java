@@ -378,6 +378,49 @@ public class Solver {
         return result;
     }
 
+    public List<Hint> getAllMoreHints(Asker asker) {
+        int oldPriority = lowerPriority();
+        List<Hint> result = new ArrayList<Hint>();
+        HintsAccumulator accu = new DefaultHintsAccumulator(result);
+        try {
+            for (HintProducer producer : directHintProducers)
+                producer.getHints(grid, accu);
+            for (IndirectHintProducer producer : indirectHintProducers)
+                producer.getHints(grid, accu);
+            for (WarningHintProducer producer : validatorHintProducers)
+                producer.getHints(grid, accu);
+        //  if (result.isEmpty()) {
+                for (WarningHintProducer producer : warningHintProducers)
+                    producer.getHints(grid, accu);
+        //  }
+        //  if (result.isEmpty()) {
+                for (IndirectHintProducer producer : chainingHintProducers)
+                    producer.getHints(grid, accu);
+        //  }
+        //  if (result.isEmpty()) {
+                for (IndirectHintProducer producer : chainingHintProducers2)
+                    producer.getHints(grid, accu);
+        //  }
+            if (result.isEmpty()) {
+        //      &&  !(advancedHintProducers.isEmpty() && experimentalHintProducers.isEmpty()) &&
+        //          (isUsingAdvanced || asker.ask(ADVANCED_WARNING2))) {
+        //      isUsingAdvanced = true;
+                for (IndirectHintProducer producer : advancedHintProducers) {
+        //          if (result.isEmpty())
+                        producer.getHints(grid, accu);
+                }
+            }
+            if (result.isEmpty()) {
+                for (IndirectHintProducer producer : experimentalHintProducers) {
+        //          if (result.isEmpty() && Settings.getInstance().isUsingAllTechniques())
+                        producer.getHints(grid, accu);
+                }
+            }
+        } catch (InterruptedException cannotHappen) {}
+        normalPriority(oldPriority);
+        return result;
+    }
+
     public boolean isSolved() {
         for (int y = 0; y < 9; y++) {
             for (int x = 0; x < 9; x++) {

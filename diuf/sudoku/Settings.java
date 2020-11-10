@@ -21,8 +21,6 @@ import org.json.simple.parser.ParseException;
 import javax.swing.UIManager;
 
 import diuf.sudoku.*;
-//port diuf.sudoku.Cell.*;
-//port diuf.sudoku.Grid.*;
 
 /**
  * Global settings of the application.
@@ -82,6 +80,8 @@ public class Settings {
 
     private boolean noSaves = false;    // =true no saves done, is set from command line utils
 
+    private String methods = null;      // techniques, 1=enabled, 0=disabled
+
     private Grid solution;              // solution grid
     private boolean useSolution = false;
     private boolean zedFactor = false;
@@ -99,6 +99,7 @@ public class Settings {
 
     public void setNoSaves() {      // call from command line utils, no saves done
         noSaves = true;
+        init();                     // enable all solving techniques
         isLatinSquare = false;      // reset variants, i.e. set to vanilla sudoku
         isDiagonals = false;
         isDisjointGroups = false;
@@ -183,6 +184,7 @@ public class Settings {
 
     public void setTechniques(EnumSet<SolvingTechnique> techniques) {
         this.techniques = techniques;
+        packmethods();
     }
 
     public boolean isUsingAllTechniques() {
@@ -213,6 +215,35 @@ public class Settings {
                 return false;
         }
         return true;
+    }
+
+    private void packmethods() {
+        methods = "";
+        for (SolvingTechnique st : EnumSet.allOf(SolvingTechnique.class)) {
+            if (this.techniques.contains(st)) {
+                methods += "1";
+            } else {
+                methods += "0";
+            }
+        }
+        save();
+    }
+
+    public void unpackmethods() {
+      if ( methods != null ) {
+        if (EnumSet.allOf(SolvingTechnique.class).size() == methods.length()) {
+            int index = 0;
+            for (SolvingTechnique st : EnumSet.allOf(SolvingTechnique.class)) {
+                char c = methods.charAt(index++);
+                if (c == '1' && !this.techniques.contains(st)) {
+                    techniques.add(st);
+                }
+                if (c == '0' && this.techniques.contains(st)) {
+                    techniques.remove(st);
+                }
+            }
+        }
+      }
     }
 
     // generate dialog
@@ -615,6 +646,12 @@ public class Settings {
                     isPerCent = s.equals("true")?true:false;
                 }
                 catch (NullPointerException e) { LoadError = 1; }
+
+                try {
+                    methods = (String)stgDetails.get("techniques");
+                    unpackmethods();
+                }
+                catch (NullPointerException e) { ; }
             });
             if ( LoadError == 1 ) {
                 save();
@@ -678,6 +715,10 @@ public class Settings {
         stgDetails.put("isGirandola", isGirandola?"true":"false");
         stgDetails.put("isHalloween", isHalloween?"true":"false");
         stgDetails.put("isPerCent", isPerCent?"true":"false");
+
+        if ( methods != null ) {
+            stgDetails.put("techniques", methods);
+        }
 
         JSONObject stgObject = new JSONObject();
         stgObject.put("Settings", stgDetails);

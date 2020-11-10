@@ -374,6 +374,16 @@ public class SudokuExplainer {
         frame.showWelcomeText();
     }
 
+    private boolean isGridEmpty() {
+        for (int y = 0; y < 6; y++) {
+            for (int x = 0; x < 6; x++) {
+                if (grid.getCellValue(x, y) != 0)
+                    return false;
+            }
+        }
+        return true;
+    }
+
     public void useSolution() {
         if ( solver.isSolved() ) {
             if ( JOptionPane.showConfirmDialog(frame,
@@ -384,7 +394,7 @@ public class SudokuExplainer {
         }
         else
         if ( this.gridStack.isEmpty() ) {
-            if ( this.pathStack.isEmpty() ) {
+            if ( isGridEmpty() ) {
                 JOptionPane.showMessageDialog(frame, "Cannot use, no puzzle!", "Use Solution", JOptionPane.WARNING_MESSAGE);
             }
             else {
@@ -398,7 +408,7 @@ public class SudokuExplainer {
 
     public void restartGrid() {
         if ( this.gridStack.isEmpty() ) {
-            if ( this.pathStack.isEmpty() ) {
+            if ( isGridEmpty() ) {
                 JOptionPane.showMessageDialog(frame, "Cannot restart, no puzzle!", "Restart", JOptionPane.WARNING_MESSAGE);
             }
             else {
@@ -576,32 +586,42 @@ public class SudokuExplainer {
     }
 
     public void ApplySingles() {
-     if ( this.pathStack.isEmpty() ) {
+     if ( isGridEmpty() ) {
         JOptionPane.showMessageDialog(frame, "Cannot apply singles, no puzzle!", "Apply Singles", JOptionPane.WARNING_MESSAGE);
         return;
      }
-     int basics = 1;
      boolean solved = solver.isSolved();
+     if ( solved ) {
+        frame.setExplanations("<html><body><h2>The Sudoku has been solved !</h2></body></html>");
+        return;
+     }
+     int basics = 1;
      while ( basics == 1 ) {
+      clearHintsOnly();
       if ( !solved ) {
+       getNextHint();
        if ( selectedHints.size() >= 1 ) {
         for (Hint hint : selectedHints) {
+          try {
             Rule rule = (Rule)hint;
             String rulename = rule.getName();
             if ( rulename.equals("Hidden Single") || rulename.equals("Naked Single") ) {
-                pushGrid();
-                pushStep( grid);
-                hint.apply(grid);
-                pushHint( hint);
+                pushGrid(); pushStep( grid); hint.apply(grid); pushHint( hint);
             }
             else { basics = 0; }
+          } catch (Exception e) {
+            JOptionPane.showMessageDialog(frame, hint.toString(), "Apply Singles", JOptionPane.WARNING_MESSAGE);
+            basics = 2;
+          }
         }
+       if ( basics != 2 ) {
         clearHints();
         repaintAll();
+       }
         solved = solver.isSolved();
         if ( basics == 1 && solved ) { basics = 0; }
        }
-       if ( basics == 1 && !solved ) { Thread.yield(); getNextHint(); }
+       if ( basics == 1 && !solved ) { Thread.yield(); }
       }
      }
      if ( solved ) {
@@ -614,6 +634,26 @@ public class SudokuExplainer {
       if ( !solver.isSolved() ) {
         try {
             unfilteredHints = solver.getAllHints(frame);
+            selectedHints.clear();
+            resetFilterCache();
+            filterHints();
+            if (!filteredHints.isEmpty())
+                selectedHints.add(filteredHints.get(0));
+            repaintAll();
+        } catch (Throwable ex) {
+            displayError(ex);
+        }
+      }
+      else {
+        frame.setExplanations("<html><body><h2>The Sudoku has been solved !</h2></body></html>");
+      }
+    }
+
+    public void getAllMoreHints() {
+        clearHintsOnly();
+      if ( !solver.isSolved() ) {
+        try {
+            unfilteredHints = solver.getAllMoreHints(frame);
             selectedHints.clear();
             resetFilterCache();
             filterHints();
@@ -646,8 +686,10 @@ public class SudokuExplainer {
     }
 
     public void UndoStep() {
+      if ( this.pathStack.size() > 1 ) {
         popStep();
         popGrid();
+      }
     }
 
     public void applySelectedHints() {

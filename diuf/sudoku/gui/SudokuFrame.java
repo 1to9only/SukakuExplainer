@@ -593,9 +593,9 @@ public class SudokuFrame extends JFrame implements Asker {
     private JButton getBtnCheckValidity() {
         if (btnCheckValidity == null) {
             btnCheckValidity = new JButton();
-            btnCheckValidity.setText("Check validity");
+            btnCheckValidity.setText("|F2| Check validity");
             btnCheckValidity.setToolTipText("Verify the validity of the entered Sudoku");
-            btnCheckValidity.setMnemonic(java.awt.event.KeyEvent.VK_V);
+            btnCheckValidity.setMnemonic(java.awt.event.KeyEvent.VK_F2);
             btnCheckValidity.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     if (engine.checkValidity())
@@ -604,6 +604,39 @@ public class SudokuFrame extends JFrame implements Asker {
             });
         }
         return btnCheckValidity;
+    }
+
+    JButton getBtnApplyHintAndGet() {
+        if (btnApplyHintAndGet == null) {
+            btnApplyHintAndGet = new JButton();
+            btnApplyHintAndGet.setText("|F3| Solve step");
+            btnApplyHintAndGet.setMnemonic(java.awt.event.KeyEvent.VK_F3);
+            btnApplyHintAndGet.setToolTipText("Apply the current hint (if any is shown), and get an hint for the next step");
+            btnApplyHintAndGet.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12));
+            btnApplyHintAndGet.addActionListener(new java.awt.event.ActionListener() {
+
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    engine.applySelectedHintsAndContinue();
+                }
+            });
+        }
+        return btnApplyHintAndGet;
+    }
+
+    private JButton getBtnGetNextHint() {
+        if (btnGetNextHint == null) {
+            btnGetNextHint = new JButton();
+            btnGetNextHint.setText("|F4| Get next hint");
+            btnGetNextHint.setToolTipText("Get another, different hint");
+            btnGetNextHint.setMnemonic(java.awt.event.KeyEvent.VK_F4);
+            btnGetNextHint.addActionListener(new java.awt.event.ActionListener() {
+
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    engine.getNextHint();
+                }
+            });
+        }
+        return btnGetNextHint;
     }
 
     private JButton getBtnApplySingles() {
@@ -620,45 +653,12 @@ public class SudokuFrame extends JFrame implements Asker {
         return btnApplySingles;
     }
 
-    JButton getBtnApplyHintAndGet() {
-        if (btnApplyHintAndGet == null) {
-            btnApplyHintAndGet = new JButton();
-            btnApplyHintAndGet.setText("Solve step");
-            btnApplyHintAndGet.setMnemonic(java.awt.event.KeyEvent.VK_S);
-            btnApplyHintAndGet.setToolTipText("Apply the current hint (if any is shown), and get an hint for the next step");
-            btnApplyHintAndGet.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12));
-            btnApplyHintAndGet.addActionListener(new java.awt.event.ActionListener() {
-
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    engine.applySelectedHintsAndContinue();
-                }
-            });
-        }
-        return btnApplyHintAndGet;
-    }
-
-    private JButton getBtnGetNextHint() {
-        if (btnGetNextHint == null) {
-            btnGetNextHint = new JButton();
-            btnGetNextHint.setText("Get next hint");
-            btnGetNextHint.setToolTipText("Get another, different hint");
-            btnGetNextHint.setMnemonic(java.awt.event.KeyEvent.VK_N);
-            btnGetNextHint.addActionListener(new java.awt.event.ActionListener() {
-
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    engine.getNextHint();
-                }
-            });
-        }
-        return btnGetNextHint;
-    }
-
     private JButton getBtnApplyHint() {
         if (btnApplyHint == null) {
             btnApplyHint = new JButton();
-            btnApplyHint.setText("Apply hint");
-            btnApplyHint.setMnemonic(KeyEvent.VK_P);
+            btnApplyHint.setText("|F5| Apply hint");
             btnApplyHint.setToolTipText("Apply the selected hint(s)");
+            btnApplyHint.setMnemonic(KeyEvent.VK_F5);
             btnApplyHint.setEnabled(false);
             btnApplyHint.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -672,13 +672,19 @@ public class SudokuFrame extends JFrame implements Asker {
     private JButton getBtnGetAllHints() {
         if (btnGetAllHints == null) {
             btnGetAllHints = new JButton();
-            btnGetAllHints.setText("Get all hints");
+            btnGetAllHints.setText("|F6| Get all hints");
             btnGetAllHints.setToolTipText("Get all hints applicable on the current situation");
-            btnGetAllHints.setMnemonic(KeyEvent.VK_A);
+            btnGetAllHints.setMnemonic(KeyEvent.VK_F6);
             btnGetAllHints.addActionListener(new java.awt.event.ActionListener() {
 
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    engine.getAllHints();
+                    if ( (e.getModifiers() & ActionEvent.SHIFT_MASK) != 0
+                      || (e.getModifiers() & ActionEvent.CTRL_MASK) != 0 ) {
+                        engine.getAllMoreHints();
+                    }
+                    else {
+                        engine.getAllHints();
+                    }
                 }
             });
         }
@@ -688,9 +694,9 @@ public class SudokuFrame extends JFrame implements Asker {
     private JButton getBtnUndoStep() {
         if (btnUndoStep == null) {
             btnUndoStep = new JButton();
-            btnUndoStep.setText("Undo step");
+            btnUndoStep.setText("|Ctrl-Z| Undo step");
             btnUndoStep.setToolTipText("Undo previous solve step or value selection");
-            btnUndoStep.setMnemonic(KeyEvent.VK_N);
+            btnUndoStep.setMnemonic(KeyEvent.VK_Z);
             btnUndoStep.addActionListener(new java.awt.event.ActionListener() {
 
                 public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -704,7 +710,7 @@ public class SudokuFrame extends JFrame implements Asker {
     private JButton getBtnQuit() {
         if (btnQuit == null) {
             btnQuit = new JButton();
-            btnQuit.setText("Quit");
+            btnQuit.setText("|Ctrl-Q| Quit");
             btnQuit.setToolTipText("Quit the application");
             btnQuit.setMnemonic(java.awt.event.KeyEvent.VK_Q);
             btnQuit.addActionListener(new java.awt.event.ActionListener() {
@@ -1677,7 +1683,7 @@ public class SudokuFrame extends JFrame implements Asker {
         if (mitPaste == null) {
             mitPaste = new JMenuItem();
             mitPaste.setText("Paste grid");
-            mitPaste.setMnemonic(KeyEvent.VK_P);
+            mitPaste.setMnemonic(KeyEvent.VK_V);
             mitPaste.setToolTipText("Replace the grid with the content of the clipboard");
             mitPaste.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -1718,23 +1724,22 @@ public class SudokuFrame extends JFrame implements Asker {
             setCommand(getMitClearHints(), 'D');
             toolMenu.addSeparator();
             toolMenu.add(getMitCheckValidity());
-            getMitCheckValidity().setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
+            getMitCheckValidity().setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
             toolMenu.add(getMitSolveStep());
-            getMitSolveStep().setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
+            getMitSolveStep().setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0));
             toolMenu.add(getMitGetNextHint());
-            getMitGetNextHint().setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0));
+            getMitGetNextHint().setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0));
             toolMenu.add(getMitApplyHint());
-            getMitApplyHint().setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0));
+            getMitApplyHint().setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
             toolMenu.add(getMitGetAllHints());
-            getMitGetAllHints().setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
+            getMitGetAllHints().setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F6, 0));
             toolMenu.add(getMitUndoStep());
             setCommand(getMitUndoStep(), 'Z');
             toolMenu.addSeparator();
             toolMenu.add(getMitGetSmallClue());
-            getMitGetSmallClue().setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F6, 0));
+            getMitGetSmallClue().setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
             toolMenu.add(getMitGetBigClue());
-            getMitGetBigClue().setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F6,
-                    InputEvent.SHIFT_MASK));
+            getMitGetBigClue().setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, InputEvent.SHIFT_MASK));
             toolMenu.addSeparator();
             toolMenu.add(getMitSolve());
             getMitSolve().setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F8, 0));
@@ -1763,7 +1768,7 @@ public class SudokuFrame extends JFrame implements Asker {
         if (mitClearHints == null) {
             mitClearHints = new JMenuItem();
             mitClearHints.setText("Clear hint(s)");
-            mitClearHints.setMnemonic(KeyEvent.VK_C);
+            mitClearHints.setMnemonic(KeyEvent.VK_D);
             mitClearHints.setToolTipText("Clear the hint list");
             mitClearHints.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -1778,7 +1783,7 @@ public class SudokuFrame extends JFrame implements Asker {
         if (mitCheckValidity == null) {
             mitCheckValidity = new JMenuItem();
             mitCheckValidity.setText("Check validity");
-            mitCheckValidity.setMnemonic(KeyEvent.VK_V);
+            mitCheckValidity.setMnemonic(KeyEvent.VK_F2);
             mitCheckValidity.setToolTipText("Check if the Sudoku has exactly one solution");
             mitCheckValidity.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -1794,7 +1799,7 @@ public class SudokuFrame extends JFrame implements Asker {
         if (mitSolveStep == null) {
             mitSolveStep = new JMenuItem();
             mitSolveStep.setText("Solve step");
-            mitSolveStep.setMnemonic(KeyEvent.VK_S);
+            mitSolveStep.setMnemonic(KeyEvent.VK_F3);
             mitSolveStep.setToolTipText(getBtnApplyHintAndGet().getToolTipText());
             mitSolveStep.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -1809,7 +1814,7 @@ public class SudokuFrame extends JFrame implements Asker {
         if (mitGetNextHint == null) {
             mitGetNextHint = new JMenuItem();
             mitGetNextHint.setText("Get next hint");
-            mitGetNextHint.setMnemonic(KeyEvent.VK_N);
+            mitGetNextHint.setMnemonic(KeyEvent.VK_F4);
             mitGetNextHint.setToolTipText(getBtnGetNextHint().getToolTipText());
             mitGetNextHint.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -1825,7 +1830,7 @@ public class SudokuFrame extends JFrame implements Asker {
             mitApplyHint = new JMenuItem();
             mitApplyHint.setText("Apply hint");
             mitApplyHint.setEnabled(false);
-            mitApplyHint.setMnemonic(KeyEvent.VK_A);
+            mitApplyHint.setMnemonic(KeyEvent.VK_F5);
             mitApplyHint.setToolTipText(getBtnApplyHint().getToolTipText());
             mitApplyHint.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -1840,7 +1845,7 @@ public class SudokuFrame extends JFrame implements Asker {
         if (mitGetAllHints == null) {
             mitGetAllHints = new JMenuItem();
             mitGetAllHints.setText("Get all hints");
-            mitGetAllHints.setMnemonic(KeyEvent.VK_H);
+            mitGetAllHints.setMnemonic(KeyEvent.VK_F6);
             mitGetAllHints.setToolTipText(getBtnGetAllHints().getToolTipText());
             mitGetAllHints.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -1900,7 +1905,7 @@ public class SudokuFrame extends JFrame implements Asker {
         if (mitSolve == null) {
             mitSolve = new JMenuItem();
             mitSolve.setText("Solve");
-            mitSolve.setMnemonic(KeyEvent.VK_O);
+            mitSolve.setMnemonic(KeyEvent.VK_F8);
             mitSolve.setToolTipText("Highlight the solution");
             mitSolve.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -1915,7 +1920,7 @@ public class SudokuFrame extends JFrame implements Asker {
         if (mitAnalyse == null) {
             mitAnalyse = new JMenuItem();
             mitAnalyse.setText("Analyze");
-            mitAnalyse.setMnemonic(KeyEvent.VK_Y);
+            mitAnalyse.setMnemonic(KeyEvent.VK_F9);
             mitAnalyse.setToolTipText("List the rules required to solve the Sudoku " +
             "and get its average difficulty");
             mitAnalyse.addActionListener(new java.awt.event.ActionListener() {
@@ -2174,6 +2179,7 @@ public class SudokuFrame extends JFrame implements Asker {
         if (VariantsMenu == null) {
             VariantsMenu = new JMenu();
             VariantsMenu.setText("Variants");
+            VariantsMenu.setMnemonic(java.awt.event.KeyEvent.VK_V);
             VariantsMenu.add(getMitLatinSquare());
             VariantsMenu.addSeparator();
             VariantsMenu.add(getMitDiagonals());

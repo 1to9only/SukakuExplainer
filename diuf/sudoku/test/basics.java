@@ -25,9 +25,10 @@ public class basics {
             throw new IllegalArgumentException("Expected arguments: filename logfilename");
         String fileName = args[0];
         String logFile = args[1];
-        Settings.getInstance().NoDirectTechniques();
         LineNumberReader reader = null;
         PrintWriter writer = null;
+        Settings.getInstance().setNoSaves();
+        Settings.getInstance().NoDirectTechniques();
         try {
             Reader reader0 = new FileReader(fileName);
             reader = new LineNumberReader(reader0);

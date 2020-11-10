@@ -102,6 +102,10 @@ public class pencilmarks {
                     Settings.getInstance().setPerCent(true);
                     break;
 
+                case 'T':   // used saved techniques
+                    Settings.getInstance().unpackmethods();
+                    break;
+
                 default:
                     break;
                 }
