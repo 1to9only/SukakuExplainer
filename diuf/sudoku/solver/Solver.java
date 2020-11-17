@@ -740,16 +740,8 @@ public class Solver {
                     if (diamond == 0.0)
                         diamond = difficulty;
                     if (hint.getCell() != null) {
-                        if (want == 'd' && difficulty > diamond) {
-                            difficulty = 20.0;
-                            break;
-                        }
                         pearl = difficulty;
                     }
-                }
-                else if (want != 0 && difficulty > pearl) {
-                    difficulty = 20.0;
-                    break;
                 }
             }
     //  } finally {
@@ -796,16 +788,8 @@ public class Solver {
                     if (diamond == 0.0)
                         diamond = difficulty;
                     if (hint.getCell() != null) {
-                        if (want == 'd' && difficulty > diamond) {
-                            difficulty = 20.0;
-                            break;
-                        }
                         pearl = difficulty;
                     }
-                }
-                else if (want != 0 && difficulty > pearl) {
-                    difficulty = 20.0;
-                    break;
                 }
             }
     //  } finally {
@@ -967,6 +951,73 @@ public class Solver {
     //  } finally {
     //      backup.copyTo(grid);
     //  }
+    }
+
+    public void dumpPencilMarks() {
+                String s = "";
+
+                int crd = 1;
+                for (int i = 0; i < 81; i++) {
+                    int n = grid.getCell(i % 9, i / 9).getPotentialValues().cardinality();
+                    if ( n > crd ) { crd = n; }
+                }
+//              if ( crd > 1 )
+//              {
+                    for (int i=0; i<3; i++ ) {
+                        s = "+";
+                        for (int j=0; j<3; j++ ) {
+                            for (int k=0; k<3; k++ ) { s += "-";
+                                for (int l=0; l<crd; l++ ) { s += "-";
+                                }
+                            }
+                            s += "-+";
+                        }
+                        System.out.println(s);
+                        System.out.flush();
+
+                        for (int j=0; j<3; j++ ) {
+                            s = "|";
+                            for (int k=0; k<3; k++ ) {
+                                for (int l=0; l<3; l++ ) {
+                                    s += " ";
+                                    int cnt = 0;
+                                    int c = ((((i*3)+j)*3)+k)*3+l;
+                                    Cell cell = grid.getCell(c % 9, c / 9);
+                                    int n = cell.getValue();
+                                    if ( n != 0 ) {
+                                        s += n;
+                                        cnt += 1;
+                                    }
+                                    if ( n == 0 ) {
+                                        for (int pv=1; pv<=9; pv++ ) {
+                                            if ( cell.hasPotentialValue( pv) ) {
+                                                s += pv;
+                                                cnt += 1;
+                                            }
+                                        }
+                                    }
+                                    for (int pad=cnt; pad<crd; pad++ ) { s += " ";
+                                    }
+                                }
+                                s += " |";
+                            }
+                            System.out.println(s);
+                            System.out.flush();
+                        }
+                    }
+
+                    s = "+";
+                    for (int j=0; j<3; j++ ) {
+                        for (int k=0; k<3; k++ ) { s += "-";
+                            for (int l=0; l<crd; l++ ) { s += "-";
+                            }
+                        }
+                        s += "-+";
+                    }
+                    System.out.println(s);
+                    System.out.flush();
+//              }
+
     }
 
     public Map<String, Integer> toNamedList(Map<Rule, Integer> rules) {

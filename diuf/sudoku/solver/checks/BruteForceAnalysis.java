@@ -327,6 +327,36 @@ public class BruteForceAnalysis implements WarningHintProducer {
      * @return <tt>true</tt> if a solution has been found; <tt>false</tt> if
      * the grid has no solution.
      */
+    public boolean solveRandom(Grid grid, Random rnd) {
+        DirectHintProducer hiddenSingle = new HiddenSingle();
+        DirectHintProducer nakedSingle = new NakedSingle();
+    //  new Solver(grid).rebuildPotentialValues();
+        boolean result = false;
+        result = analyse(grid, false, rnd, hiddenSingle, nakedSingle);
+        String s = ""; int cnt = 0;
+        for (int i = 0; i < 81; i++) {
+            int n = grid.getCellValue(i % 9, i / 9);
+            if ( n != 0 ) { cnt++; }
+        }
+        if ( cnt < 10 ) { s += " "; }
+        s += " " + cnt + " ";
+        s = s + "got solution grid";
+        System.err.println(s);
+        System.err.flush();
+        return result;
+    }
+
+    /**
+     * Solve the given grid randomly. If the grid has multiple solutions,
+     * this will solve it using a random solution. If the grid has only
+     * one solution, this solution will be found.
+     * <p>
+     * Randomly solving an empty grid generates the solution of a random grid.
+     * @param grid the grid to solve
+     * @param rnd the random number generator
+     * @return <tt>true</tt> if a solution has been found; <tt>false</tt> if
+     * the grid has no solution.
+     */
     public boolean solveRandom(Generator generator, Grid grid, Random rnd) {
         DirectHintProducer hiddenSingle = new HiddenSingle();
         DirectHintProducer nakedSingle = new NakedSingle();

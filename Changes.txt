@@ -1,5 +1,8 @@
 Changes:
 
+20201117:
+- add isBigCell, isVerbose - via Settings
+
 20201110:
 - fix apply singles, save techniques, and other changes
 

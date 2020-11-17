@@ -116,6 +116,14 @@ public class SudokuPanel extends JPanel {
     public SudokuPanel(SudokuFrame parent) {
         super();
         this.parent = parent;
+      if ( !Settings.getInstance().isBigCell() ) {
+        CELL_OUTER_SIZE = 45;
+        CELL_INNER_SIZE = 39;
+        CELL_PAD = (CELL_OUTER_SIZE - CELL_INNER_SIZE) / 2;
+        GRID_SIZE = CELL_OUTER_SIZE * 9;
+        FONT_SIZE_SMALL = 12;
+        FONT_SIZE_BIG = 36;
+      }
         if (getToolkit().getScreenSize().height < 750)
             rescale();
         initialize();

@@ -41,6 +41,8 @@ public class Settings {
     private boolean isShowingCandidates = true;
     private boolean isShowingCandidateMasks = false;
     private String  lookAndFeelClassName = null;
+    private boolean isVerbose = false;
+    private boolean isBigCell = true;
 
     private EnumSet<SolvingTechnique> techniques;
 
@@ -176,6 +178,14 @@ public class Settings {
     public void setLookAndFeelClassName(String lookAndFeelClassName) {
         this.lookAndFeelClassName = lookAndFeelClassName;
         save();
+    }
+
+    public boolean isVerbose() {
+        return this.isVerbose;
+    }
+
+    public boolean isBigCell() {
+        return this.isBigCell;
     }
 
     public EnumSet<SolvingTechnique> getTechniques() {
@@ -650,6 +660,20 @@ public class Settings {
                 try {
                     methods = (String)stgDetails.get("techniques");
                     unpackmethods();
+                }
+                catch (NullPointerException e) { ; }
+
+                // read if availl, not saved!
+
+                try {
+                    s  = (String)stgDetails.get("isVerbose");
+                    isVerbose = s.equals("true")?true:false;
+                }
+                catch (NullPointerException e) { ; }
+
+                try {
+                    s  = (String)stgDetails.get("isBigCell");
+                    isBigCell = s.equals("true")?true:false;
                 }
                 catch (NullPointerException e) { ; }
             });
