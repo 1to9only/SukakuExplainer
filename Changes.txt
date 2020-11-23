@@ -1,5 +1,8 @@
 Changes:
 
+20201123:
+- isBigCell - now in Options
+
 20201117:
 - add isBigCell, isVerbose - via Settings
 
