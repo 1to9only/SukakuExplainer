@@ -1,5 +1,11 @@
 Changes:
 
+20210113
+- add rotate, and other improvements
+
+20201124:
+- add Classic Sudoku option - this unselects all variants
+
 20201123:
 - isBigCell - now in Options
 

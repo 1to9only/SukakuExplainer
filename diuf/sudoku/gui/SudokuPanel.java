@@ -110,8 +110,8 @@ public class SudokuPanel extends JPanel {
     private Color DG9 =  new Color(210, 240, 202);
     private Color[] DG_Colors = {DG1, DG2, DG3, DG4, DG5, DG6, DG7, DG8, DG9};
     private Color starColor = new Color(219, 121, 219);
-    private Color halloweenColor = new Color(255, 187, 59);
-    private Color percentColor = new Color(122, 255, 178);
+    private Color halloweenColor = new Color(255, 187, 59); // h:26 s:240 l:148
+    private Color percentColor = new Color(122, 255, 178);  // h:97 s:240 l:177
 
     public SudokuPanel(SudokuFrame parent) {
         super();
@@ -770,7 +770,7 @@ public class SudokuPanel extends JPanel {
 
     private void paintGrid(Graphics g) {
         for (int i = 0; i <= 9; i++) {
-            int lineWidth;
+            int lineWidth, offset;
             if (i % 9 == 0 || (i % 3 == 0  && !grid.isLatinSquare())) {
                 lineWidth = 4;
                 g.setColor(borderColor);
@@ -778,7 +778,7 @@ public class SudokuPanel extends JPanel {
                 lineWidth = 2;
                 g.setColor(borderColor);
             }
-            int offset = lineWidth / 2;
+            offset = lineWidth / 2;
             g.fillRect(i * CELL_OUTER_SIZE - offset, 0 - offset, lineWidth, GRID_SIZE + lineWidth);
             g.fillRect(0 - offset, i * CELL_OUTER_SIZE - offset, GRID_SIZE + lineWidth, lineWidth);
         }
@@ -802,7 +802,7 @@ public class SudokuPanel extends JPanel {
 
     private void paint2Grid(Graphics g, int adj) {
         for (int i = 0; i <= 9; i++) {
-            int lineWidth;
+            int lineWidth, offset;
             if (i % 9 == 0 || (i % 3 == 0  && !grid.isLatinSquare())) {
                 lineWidth = 4;
                 g.setColor(borderColor);
@@ -810,7 +810,7 @@ public class SudokuPanel extends JPanel {
                 lineWidth = 2;
                 g.setColor(borderColor);
             }
-            int offset = lineWidth / 2;
+            offset = lineWidth / 2;
             g.fillRect(i * CELL_OUTER_SIZE - offset+adj, 0 - offset+adj, lineWidth, GRID_SIZE + lineWidth);
             g.fillRect(0 - offset+adj, i * CELL_OUTER_SIZE - offset+adj, GRID_SIZE + lineWidth, lineWidth);
         }
@@ -844,15 +844,15 @@ public class SudokuPanel extends JPanel {
                         if (region instanceof Grid.Row || region instanceof Grid.Column || region instanceof Grid.Block) {
                             if (region instanceof Grid.Row) {
                                 Grid.Row row = (Grid.Row)region;
-                                y = row.getRowNum();
-                                h = 1;
                                 x = 0;
+                                y = row.getRowNum();
                                 w = 9;
+                                h = 1;
                             } else if (region instanceof Grid.Column) {
                                 Grid.Column column = (Grid.Column)region;
                                 x = column.getColumnNum();
-                                w = 1;
                                 y = 0;
+                                w = 1;
                                 h = 9;
                             } else {
                                 Grid.Block square = (Grid.Block)region;
@@ -1004,15 +1004,15 @@ public class SudokuPanel extends JPanel {
                         if (region instanceof Grid.Row || region instanceof Grid.Column || region instanceof Grid.Block) {
                             if (region instanceof Grid.Row) {
                                 Grid.Row row = (Grid.Row)region;
-                                y = row.getRowNum();
-                                h = 1;
                                 x = 0;
+                                y = row.getRowNum();
                                 w = 9;
+                                h = 1;
                             } else if (region instanceof Grid.Column) {
                                 Grid.Column column = (Grid.Column)region;
                                 x = column.getColumnNum();
-                                w = 1;
                                 y = 0;
+                                w = 1;
                                 h = 9;
                             } else {
                                 Grid.Block square = (Grid.Block)region;

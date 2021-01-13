@@ -70,9 +70,10 @@ public class Generator {
             int p = w % 10; w /= 10;
             System.err.println("ED=" + w + "." + p);
             System.err.flush();
-            if (difficulty >= minDifficulty && difficulty <= maxDifficulty)
+            if (difficulty >= minDifficulty && difficulty <= maxDifficulty) {
+                grid.fixGivens();
                 return grid;
-
+            }
             if (isInterrupted) {
                 System.err.println("Stopped.");
                 System.err.flush();
@@ -171,28 +172,29 @@ public class Generator {
 
         // Build running indexes
         int[] indexes = new int[81];
-        for (int i = 0; i < indexes.length; i++)
-            indexes[i] = i;
-        // Shuffle
-        for (int i = 0; i < 81; i++) {
-            int p1 = rnd.nextInt(81);
-            int p2 = rnd.nextInt(81);
-            int temp = indexes[p1];
-            indexes[p1] = indexes[p2];
-            indexes[p2] = temp;
-        }
 
-        int attempts = 0;
-        int successes = 0;
-
+//      int attempts = 0;
+//      int successes = 0;
+        String s = ""; int cnt = 0;
         // Randomly remove clues
         boolean isSuccess = true;
         while (isSuccess) {
+          for (int i = 0; i < indexes.length; i++)
+              indexes[i] = i;
+          // Shuffle
+          for (int i = 0; i < 81; i++) {
+              int p1 = rnd.nextInt(81);
+              int p2 = rnd.nextInt(81);
+              int temp = indexes[p1];
+              indexes[p1] = indexes[p2];
+              indexes[p2] = temp;
+          }
             // Choose a random cell to clear
             int index = rnd.nextInt(81);
             int countDown = 81; // Number of cells
             isSuccess = false;
             do {
+              if ( indexes[ index] != -1 ) {
                 // Build symmetric points list
                 int y = indexes[index] / 9;
                 int x = indexes[index] % 9;
@@ -209,20 +211,23 @@ public class Generator {
                 }
                 if (cellRemoved) {
                     // Test if the Sudoku still has an unique solution
-                    int state = analyser.getCountSolutions(grid);
+                    int state = analyser.getCountSolutions(solution, grid);
                     if (state == 1) {
                         // Cells successfully removed: still a unique solution
                         isSuccess = true;
-                        successes += 1;
-                    } else if (state == 0) {
+//                      successes += 1;
+//                  } else if (state == 0) {
 //a                     assert false : "Invalid grid";
                     } else {
                         // Failed. Put the cells back and try with next cell
-                        for (Point p : points)
+                        for (Point p : points) {
                             grid.setCellValue(p.x, p.y, solution.getCellValue(p.x, p.y));
-                        attempts += 1;
+                            indexes[ p.y*9 + p.x] = -1;
+                        }
+//                      attempts += 1;
                     }
                 }
+              }
                 index = (index + 1) % 81; // Next index (indexing scrambled array of indexes)
                 countDown--;
                 if (isInterrupted) {
@@ -230,12 +235,10 @@ public class Generator {
                 }
             } while (!isSuccess && countDown > 0);
         }
-        String s = ""; int cnt = 0;
+               s = "";     cnt = 0;
         for (int i = 0; i < 81; i++) {
             int n = grid.getCellValue(i % 9, i / 9);
             if ( n != 0 ) { cnt++; }
-            if (isInterrupted) {
-            }
         }
         if ( cnt < 10 ) { s += " "; }
         s += " " + cnt + " ";

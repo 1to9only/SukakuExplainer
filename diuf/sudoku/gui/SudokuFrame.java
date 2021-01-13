@@ -9,6 +9,7 @@ import java.security.*;
 import java.text.*;
 import java.util.*;
 import java.awt.*;
+import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.io.*;
 
@@ -79,6 +80,8 @@ public class SudokuFrame extends JFrame implements Asker {
     private JMenuItem mitSaveSukaku = null;
     private JMenuItem mitSavePencilMarks = null;
     private JMenuItem mitSaveAsImage = null;
+    private JMenuItem mitAddNote = null;
+    private JMenuItem mitShowPath = null;
     private JMenuItem mitSavePath = null;
     private JCheckBoxMenuItem mitIncludePencils = null;
     private JMenu editMenu = null;
@@ -99,6 +102,12 @@ public class SudokuFrame extends JFrame implements Asker {
     private JMenuItem mitSolve = null;
     private JMenuItem mitResetPotentials = null;
     private JMenuItem mitClearHints = null;
+    private JMenuItem mitRotateClockwise = null;
+    private JMenuItem mitRotateAntiClockwise = null;
+    private JMenuItem mitRotateHorizontal = null;
+    private JMenuItem mitRotateVertical = null;
+    private JMenuItem mitRotateDiagonal = null;
+    private JMenuItem mitRotateAntiDiagonal = null;
     private File defaultDirectory = new File("").getAbsoluteFile();
     private JRadioButton rdbView1 = null;
     private JRadioButton rdbView2 = null;
@@ -116,6 +125,7 @@ public class SudokuFrame extends JFrame implements Asker {
     private JMenuItem mitShowWelcome = null;
     private JMenuItem mitUseSolution = null;
     private JMenuItem mitGenerate = null;
+    private JMenuItem mitGenerateSolution = null;
     private JCheckBoxMenuItem mitShowCandidates = null;
     private JCheckBoxMenuItem mitShowCandidateMasks = null;
     private JMenuItem mitSelectTechniques = null;
@@ -136,6 +146,7 @@ public class SudokuFrame extends JFrame implements Asker {
     private JMenuItem mitClearList = null;
 
     private JMenu VariantsMenu = null;
+    private JMenuItem mitVanilla = null;
     private JCheckBoxMenuItem mitLatinSquare = null;
     private JCheckBoxMenuItem mitDiagonals = null;
     private JCheckBoxMenuItem mitDisjointGroups = null;
@@ -598,7 +609,7 @@ public class SudokuFrame extends JFrame implements Asker {
     private JButton getBtnCheckValidity() {
         if (btnCheckValidity == null) {
             btnCheckValidity = new JButton();
-            btnCheckValidity.setText("|F2| Check validity");
+            btnCheckValidity.setText("F2| Check validity");
             btnCheckValidity.setToolTipText("Verify the validity of the entered Sudoku");
             btnCheckValidity.setMnemonic(java.awt.event.KeyEvent.VK_F2);
             btnCheckValidity.addActionListener(new java.awt.event.ActionListener() {
@@ -614,7 +625,7 @@ public class SudokuFrame extends JFrame implements Asker {
     JButton getBtnApplyHintAndGet() {
         if (btnApplyHintAndGet == null) {
             btnApplyHintAndGet = new JButton();
-            btnApplyHintAndGet.setText("|F3| Solve step");
+            btnApplyHintAndGet.setText("F3| Solve step");
             btnApplyHintAndGet.setMnemonic(java.awt.event.KeyEvent.VK_F3);
             btnApplyHintAndGet.setToolTipText("Apply the current hint (if any is shown), and get an hint for the next step");
             btnApplyHintAndGet.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12));
@@ -631,7 +642,7 @@ public class SudokuFrame extends JFrame implements Asker {
     private JButton getBtnGetNextHint() {
         if (btnGetNextHint == null) {
             btnGetNextHint = new JButton();
-            btnGetNextHint.setText("|F4| Get next hint");
+            btnGetNextHint.setText("F4| Get next hint");
             btnGetNextHint.setToolTipText("Get another, different hint");
             btnGetNextHint.setMnemonic(java.awt.event.KeyEvent.VK_F4);
             btnGetNextHint.addActionListener(new java.awt.event.ActionListener() {
@@ -661,7 +672,7 @@ public class SudokuFrame extends JFrame implements Asker {
     private JButton getBtnApplyHint() {
         if (btnApplyHint == null) {
             btnApplyHint = new JButton();
-            btnApplyHint.setText("|F5| Apply hint");
+            btnApplyHint.setText("F5| Apply hint");
             btnApplyHint.setToolTipText("Apply the selected hint(s)");
             btnApplyHint.setMnemonic(KeyEvent.VK_F5);
             btnApplyHint.setEnabled(false);
@@ -677,7 +688,7 @@ public class SudokuFrame extends JFrame implements Asker {
     private JButton getBtnGetAllHints() {
         if (btnGetAllHints == null) {
             btnGetAllHints = new JButton();
-            btnGetAllHints.setText("|F6| Get all hints");
+            btnGetAllHints.setText("F6| Get all hints");
             btnGetAllHints.setToolTipText("Get all hints applicable on the current situation");
             btnGetAllHints.setMnemonic(KeyEvent.VK_F6);
             btnGetAllHints.addActionListener(new java.awt.event.ActionListener() {
@@ -699,7 +710,7 @@ public class SudokuFrame extends JFrame implements Asker {
     private JButton getBtnUndoStep() {
         if (btnUndoStep == null) {
             btnUndoStep = new JButton();
-            btnUndoStep.setText("|Ctrl-Z| Undo step");
+            btnUndoStep.setText("Ctrl-Z| Undo step");
             btnUndoStep.setToolTipText("Undo previous solve step or value selection");
             btnUndoStep.setMnemonic(KeyEvent.VK_Z);
             btnUndoStep.addActionListener(new java.awt.event.ActionListener() {
@@ -715,7 +726,7 @@ public class SudokuFrame extends JFrame implements Asker {
     private JButton getBtnQuit() {
         if (btnQuit == null) {
             btnQuit = new JButton();
-            btnQuit.setText("|Ctrl-Q| Quit");
+            btnQuit.setText("Ctrl-Q| Quit");
             btnQuit.setToolTipText("Quit the application");
             btnQuit.setMnemonic(java.awt.event.KeyEvent.VK_Q);
             btnQuit.addActionListener(new java.awt.event.ActionListener() {
@@ -892,6 +903,7 @@ public class SudokuFrame extends JFrame implements Asker {
             setCommand(getMitNew(), 'N');
             fileMenu.add(getMitUseSolution());
             fileMenu.add(getMitGenerate());
+            fileMenu.add(getMitGenerateSolution());
             setCommand(getMitGenerate(), 'G');
             fileMenu.add(getMitRestart());
             fileMenu.addSeparator();
@@ -907,6 +919,8 @@ public class SudokuFrame extends JFrame implements Asker {
             setCommand(getMitSavePencilMarks(), 'P');
             fileMenu.add(getMitSaveAsImage());
             fileMenu.addSeparator();
+            fileMenu.add(getMitAddNote());
+            fileMenu.add(getMitShowPath());
             fileMenu.add(getMitSavePath());
             fileMenu.add(getMitIncludePencils());
             fileMenu.addSeparator();
@@ -957,13 +971,41 @@ public class SudokuFrame extends JFrame implements Asker {
                     if (generateDialog == null || !generateDialog.isVisible()) {
                         generateDialog = new GenerateDialog(SudokuFrame.this, engine);
                         generateDialog.pack();
-                        centerDialog(generateDialog);
+                        offsetDialog(generateDialog);
                     }
                     generateDialog.setVisible(true);
                 }
             });
         }
         return mitGenerate;
+    }
+
+    private JMenuItem getMitGenerateSolution() {
+        if (mitGenerateSolution == null) {
+            mitGenerateSolution = new JMenuItem();
+            mitGenerateSolution.setText("Generate Solution");
+            mitGenerateSolution.setToolTipText("Use partial grid to generate a random Sudoku puzzle");
+            mitGenerateSolution.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    if ( engine.generateSolution() ) {
+                        Random random = new Random();
+                        BruteForceAnalysis analyser = new BruteForceAnalysis(true);
+                        boolean result = analyser.solveRandom(sudokuPanel.getSudokuGrid(), random);
+                        repaint();
+                    }
+                }
+            });
+        }
+        return mitGenerateSolution;
+    }
+
+    private void offsetDialog(JDialog dlg) {
+        Point frameLocation = SudokuFrame.this.getLocation();
+        Dimension frameSize = SudokuFrame.this.getSize();
+        Dimension windowSize = dlg.getSize();
+        dlg.setLocation(
+                frameLocation.x + (frameSize.width * 3) / 5,
+                frameLocation.y + (frameSize.height - windowSize.height) / 3);
     }
 
     private void centerDialog(JDialog dlg) {
@@ -1517,6 +1559,39 @@ public class SudokuFrame extends JFrame implements Asker {
         }
     }
 
+    private JMenuItem getMitAddNote() {
+        if (mitAddNote == null) {
+            mitAddNote = new JMenuItem();
+            mitAddNote.setText("Add a Note...");
+            mitAddNote.setToolTipText("Add a note to the solution path (at current position)");
+            mitAddNote.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    String inputtext = (String)JOptionPane.showInputDialog(
+                        SudokuFrame.this, "Add a note (freeform text) to the solution path, it is lost if you use Undo.",
+                        "Add a Note", JOptionPane.PLAIN_MESSAGE, null, null, "");
+                    if ( inputtext != null && inputtext.length() > 0 ) {
+                        engine.addNote( inputtext);
+                    }
+                }
+            });
+        }
+        return mitAddNote;
+    }
+
+    private JMenuItem getMitShowPath() {
+        if (mitShowPath == null) {
+            mitShowPath = new JMenuItem();
+            mitShowPath.setText("Show Solution Path (hints only)");
+            mitShowPath.setToolTipText("Show the sudoku (partial/complete) solution path so far (hints only)");
+            mitShowPath.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    engine.showPath();
+                }
+            });
+        }
+        return mitShowPath;
+    }
+
     private JMenuItem getMitSavePath() {
         if (mitSavePath == null) {
             mitSavePath = new JMenuItem();
@@ -1960,6 +2035,12 @@ public class SudokuFrame extends JFrame implements Asker {
             optionsMenu.add(getMitLookAndFeel());
             optionsMenu.add(getMitAntiAliasing());
             optionsMenu.add(getMitBig());
+            optionsMenu.add(getMitRotateClockwise());
+            optionsMenu.add(getMitRotateAntiClockwise());
+            optionsMenu.add(getMitRotateHorizontal());
+            optionsMenu.add(getMitRotateVertical());
+            optionsMenu.add(getMitRotateDiagonal());
+            optionsMenu.add(getMitRotateAntiDiagonal());
             ButtonGroup group = new ButtonGroup();
             group.add(getMitChessMode());
             group.add(getMitMathMode());
@@ -2146,6 +2227,108 @@ public class SudokuFrame extends JFrame implements Asker {
         return mitBig;
     }
 
+    private JMenuItem getMitRotateClockwise() {
+        if (mitRotateClockwise == null) {
+            mitRotateClockwise = new JMenuItem();
+            mitRotateClockwise.setText("Rotate sudoku \u21bb Clockwise 90\u00b0");
+            mitRotateClockwise.setToolTipText("Rotates the sudoku Clockwise 90 degrees");
+            mitRotateClockwise.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    sudokuPanel.getSudokuGrid().rotateClockwise();
+                    engine.rebuildSolver();
+                    engine.resetPotentials();
+                    repaint();
+                }
+            });
+        }
+        return mitRotateClockwise;
+    }
+
+    private JMenuItem getMitRotateAntiClockwise() {
+        if (mitRotateAntiClockwise == null) {
+            mitRotateAntiClockwise = new JMenuItem();
+            mitRotateAntiClockwise.setText("Rotate sudoku \u21ba Anti-Clockwise 90\u00b0");
+            mitRotateAntiClockwise.setToolTipText("Rotates the sudoku Anti-Clockwise 90 degrees");
+            mitRotateAntiClockwise.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    sudokuPanel.getSudokuGrid().rotateAntiClockwise();
+                    engine.rebuildSolver();
+                    engine.resetPotentials();
+                    repaint();
+                }
+            });
+        }
+        return mitRotateAntiClockwise;
+    }
+
+    private JMenuItem getMitRotateHorizontal() {
+        if (mitRotateHorizontal == null) {
+            mitRotateHorizontal = new JMenuItem();
+            mitRotateHorizontal.setText("Rotate sudoku \u2015 Horizontally");
+            mitRotateHorizontal.setToolTipText("Rotates the sudoku Horizontally");
+            mitRotateHorizontal.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    sudokuPanel.getSudokuGrid().rotateHorizontal();
+                    engine.rebuildSolver();
+                    engine.resetPotentials();
+                    repaint();
+                }
+            });
+        }
+        return mitRotateHorizontal;
+    }
+
+    private JMenuItem getMitRotateVertical() {
+        if (mitRotateVertical == null) {
+            mitRotateVertical = new JMenuItem();
+            mitRotateVertical.setText("Rotate sudoku \ufe31 Vertically");
+            mitRotateVertical.setToolTipText("Rotates the sudoku Vertically");
+            mitRotateVertical.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    sudokuPanel.getSudokuGrid().rotateVertical();
+                    engine.rebuildSolver();
+                    engine.resetPotentials();
+                    repaint();
+                }
+            });
+        }
+        return mitRotateVertical;
+    }
+
+    private JMenuItem getMitRotateDiagonal() {
+        if (mitRotateDiagonal == null) {
+            mitRotateDiagonal = new JMenuItem();
+            mitRotateDiagonal.setText("Rotate sudoku \u2571 Diagonally");
+            mitRotateDiagonal.setToolTipText("Rotates the sudoku Diagonally");
+            mitRotateDiagonal.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    sudokuPanel.getSudokuGrid().rotateDiagonal();
+                    engine.rebuildSolver();
+                    engine.resetPotentials();
+                    repaint();
+                }
+            });
+        }
+        return mitRotateDiagonal;
+    }
+
+    private JMenuItem getMitRotateAntiDiagonal() {
+        if (mitRotateAntiDiagonal == null) {
+            mitRotateAntiDiagonal = new JMenuItem();
+            mitRotateAntiDiagonal.setText("Rotate sudoku \u2572 Anti-Diagonally");
+            mitRotateAntiDiagonal.setToolTipText("Rotates the sudoku Anti-Diagonally");
+            mitRotateAntiDiagonal.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    sudokuPanel.getSudokuGrid().rotateAntiDiagonal();
+                    engine.rebuildSolver();
+                    engine.resetPotentials();
+                    repaint();
+                }
+            });
+        }
+        return mitRotateAntiDiagonal;
+    }
+
     private JMenu getHelpMenu() {
         if (helpMenu == null) {
             helpMenu = new JMenu();
@@ -2201,6 +2384,7 @@ public class SudokuFrame extends JFrame implements Asker {
             VariantsMenu = new JMenu();
             VariantsMenu.setText("Variants");
             VariantsMenu.setMnemonic(java.awt.event.KeyEvent.VK_V);
+            VariantsMenu.add(getMitVanilla());
             VariantsMenu.add(getMitLatinSquare());
             VariantsMenu.addSeparator();
             VariantsMenu.add(getMitDiagonals());
@@ -2240,6 +2424,35 @@ public class SudokuFrame extends JFrame implements Asker {
             });
         }
         return mitLatinSquare;
+    }
+
+    private JMenuItem getMitVanilla() {
+        if (mitVanilla == null) {
+            mitVanilla = new JMenuItem();
+            mitVanilla.setText("Classic Sudoku");
+            mitVanilla.setToolTipText("Sets the puzzle type to Vanilla Sudoku (unselects all variants)");
+            mitVanilla.setSelected(false);
+            mitVanilla.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    if ( Settings.getInstance().isLatinSquare() )    { mitLatinSquare.setSelected(false); }
+                    if ( Settings.getInstance().isDiagonals() )      { mitDiagonals.setSelected(false); }
+                    if ( Settings.getInstance().isDisjointGroups() ) { mitDisjointGroups.setSelected(false); }
+                    if ( Settings.getInstance().isWindoku() )        { mitWindoku.setSelected(false); }
+                    if ( Settings.getInstance().isClover() )         { mitClover.setSelected(false); }
+                    if ( Settings.getInstance().isAsterisk() )       { mitAsterisk.setSelected(false); }
+                    if ( Settings.getInstance().isCenterDot() )      { mitCenterDot.setSelected(false); }
+                    if ( Settings.getInstance().isGirandola() )      { mitGirandola.setSelected(false); }
+                    if ( Settings.getInstance().isHalloween() )      { mitHalloween.setSelected(false); }
+                    if ( Settings.getInstance().isPerCent() )        { mitPerCent.setSelected(false); }
+                    Settings.getInstance().saveChanged();
+                    sudokuPanel.getSudokuGrid().updateVanilla();
+                    engine.rebuildSolver();
+                    engine.resetPotentials();
+                    repaint();
+                }
+            });
+        }
+        return mitVanilla;
     }
 
     private JCheckBoxMenuItem getMitDiagonals() {

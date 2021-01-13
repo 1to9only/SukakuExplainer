@@ -42,7 +42,7 @@ public class Grid {
     private Halloween[] halloween = new Halloween[3];
     private PerCent[] percent = new PerCent[3];
 
-    private boolean isVanilla = true;   // =false if solving gattai
+    private boolean isVanilla = true;   // =false if solving gattai, unused!!!
 
     private boolean isLatinSquare = false;
     private boolean isDiagonals = false;
@@ -190,6 +190,19 @@ public class Grid {
     public void updateGirandola() { this.isGirandola = Settings.getInstance().isGirandola(); reset_regionTypes(); }
     public void updateHalloween() { this.isHalloween = Settings.getInstance().isHalloween(); reset_regionTypes(); }
     public void updatePerCent() { this.isPerCent = Settings.getInstance().isPerCent(); reset_regionTypes(); }
+
+    public void updateVanilla() { reset_regionTypes(); }
+
+    public void fixGivens() {
+        for (int i = 0; i < 81; i++) {
+            if ( getCellValue(i%9,i/9) != 0 ) {
+                getCell(i%9,i/9).setGiven();
+            }
+            else {
+                getCell(i%9,i/9).resetGiven();
+            }
+        }
+    }
 
     /**
      * Get the cell at the given coordinates
@@ -1419,6 +1432,162 @@ public class Grid {
             return toString() + " " + (percentNum + 1);
         }
 
+    }
+
+    /**
+     * rotates the sudoku clockwise 90 degrees
+     */
+    public void rotateClockwise() {
+        int[][] copy = new int[9][9];
+        boolean[][] clue = new boolean[9][9];
+        for (int y = 0; y < 9; y++) {           // rotate
+            for (int x = 0; x < 9; x++) {
+                Cell cell = getCell( x, y);
+                copy[y][x] = cell.getValue();
+                clue[y][x] = cell.isGiven();
+            }
+        }
+        for (int y = 0; y < 9; y++) {           // set givens
+            for (int x = 0; x < 9; x++) {
+                Cell cell = getCell( x, y);
+                cell.setValue(copy[8-x][y]);
+                if ( clue[8-x][y] ) {
+                    cell.setGiven();
+                } else {
+                    cell.resetGiven();
+                }
+            }
+        }
+    }
+
+    /**
+     * rotates the sudoku anti-clockwise 90 degrees
+     */
+    public void rotateAntiClockwise() {
+        int[][] copy = new int[9][9];
+        boolean[][] clue = new boolean[9][9];
+        for (int y = 0; y < 9; y++) {           // rotate
+            for (int x = 0; x < 9; x++) {
+                Cell cell = getCell( x, y);
+                copy[y][x] = cell.getValue();
+                clue[y][x] = cell.isGiven();
+            }
+        }
+        for (int y = 0; y < 9; y++) {           // set givens
+            for (int x = 0; x < 9; x++) {
+                Cell cell = getCell( x, y);
+                cell.setValue(copy[x][8-y]);
+                if ( clue[x][8-y] ) {
+                    cell.setGiven();
+                } else {
+                    cell.resetGiven();
+                }
+            }
+        }
+    }
+
+    /**
+     * rotates the sudoku along horizontal axis
+     */
+    public void rotateHorizontal() {
+        int[][] copy = new int[9][9];
+        boolean[][] clue = new boolean[9][9];
+        for (int y = 0; y < 9; y++) {
+            for (int x = 0; x < 9; x++) {
+                Cell cell = getCell( x, y);
+                copy[y][x] = cell.getValue();
+                clue[y][x] = cell.isGiven();
+            }
+        }
+        for (int y = 0; y < 9; y++) {
+            for (int x = 0; x < 9; x++) {
+                Cell cell = getCell( x, y);
+                cell.setValue(copy[8-y][x]);
+                if ( clue[8-y][x] ) {
+                    cell.setGiven();
+                } else {
+                    cell.resetGiven();
+                }
+            }
+        }
+    }
+
+    /**
+     * rotates the sudoku along vertical axis
+     */
+    public void rotateVertical() {
+        int[][] copy = new int[9][9];
+        boolean[][] clue = new boolean[9][9];
+        for (int y = 0; y < 9; y++) {
+            for (int x = 0; x < 9; x++) {
+                Cell cell = getCell( x, y);
+                copy[y][x] = cell.getValue();
+                clue[y][x] = cell.isGiven();
+            }
+        }
+        for (int y = 0; y < 9; y++) {
+            for (int x = 0; x < 9; x++) {
+                Cell cell = getCell( x, y);
+                cell.setValue(copy[y][8-x]);
+                if ( clue[y][8-x] ) {
+                    cell.setGiven();
+                } else {
+                    cell.resetGiven();
+                }
+            }
+        }
+    }
+
+    /**
+     * rotates the sudoku along diagonal (/) axis
+     */
+    public void rotateDiagonal() {
+        int[][] copy = new int[9][9];
+        boolean[][] clue = new boolean[9][9];
+        for (int y = 0; y < 9; y++) {
+            for (int x = 0; x < 9; x++) {
+                Cell cell = getCell( x, y);
+                copy[y][x] = cell.getValue();
+                clue[y][x] = cell.isGiven();
+            }
+        }
+        for (int y = 0; y < 9; y++) {
+            for (int x = 0; x < 9; x++) {
+                Cell cell = getCell( x, y);
+                cell.setValue(copy[8-x][8-y]);
+                if ( clue[8-x][8-y] ) {
+                    cell.setGiven();
+                } else {
+                    cell.resetGiven();
+                }
+            }
+        }
+    }
+
+    /**
+     * rotates the sudoku along anti-diagonal (\) axis
+     */
+    public void rotateAntiDiagonal() {
+        int[][] copy = new int[9][9];
+        boolean[][] clue = new boolean[9][9];
+        for (int y = 0; y < 9; y++) {
+            for (int x = 0; x < 9; x++) {
+                Cell cell = getCell( x, y);
+                copy[y][x] = cell.getValue();
+                clue[y][x] = cell.isGiven();
+            }
+        }
+        for (int y = 0; y < 9; y++) {
+            for (int x = 0; x < 9; x++) {
+                Cell cell = getCell( x, y);
+                cell.setValue(copy[x][y]);
+                if ( clue[x][y] ) {
+                    cell.setGiven();
+                } else {
+                    cell.resetGiven();
+                }
+            }
+        }
     }
 
     /**

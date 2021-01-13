@@ -406,6 +406,26 @@ public class SudokuExplainer {
         }
     }
 
+    public boolean generateSolution() {
+        if ( solver.isSolved() ) {
+            JOptionPane.showConfirmDialog(frame, "Cannot use, already solved!", "Generate Solution", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        else
+        if ( this.gridStack.isEmpty() ) {
+            if ( isGridEmpty() ) {
+                JOptionPane.showMessageDialog(frame, "Cannot use, no puzzle!", "Generate Solution", JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
+        }
+        Hint hint = solver.quickValidity();
+        if ( hint != null ) {
+            JOptionPane.showMessageDialog(frame, hint.toString(), "Generate Solution", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+
     public void restartGrid() {
         if ( this.gridStack.isEmpty() ) {
             if ( isGridEmpty() ) {
@@ -417,7 +437,7 @@ public class SudokuExplainer {
         }
         else {
             if ( solver.isSolved() ||
-                 JOptionPane.showConfirmDialog(frame, "Restart, Are you sure?", "Restart", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION ) {
+                JOptionPane.showConfirmDialog(frame, "Restart, Are you sure?", "Restart", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION ) {
                 savedgrid.copyTo(grid);
                 gridStack = new Stack<Grid>();
                 pathStack = new Stack<String>(); // Stack for solution path
@@ -838,6 +858,37 @@ public class SudokuExplainer {
                     JOptionPane.ERROR_MESSAGE);
     }
 
+    public void showPath() {
+      if ( !this.pathStack.isEmpty() ) {
+        int hintscount = 0;
+        String solutionpath = "";
+        Stack<String> tempStack = new Stack<String>();
+        while ( !pathStack.isEmpty() ) {
+            tempStack.push( pathStack.pop());
+        }
+        while ( !tempStack.isEmpty() ) {
+            String z = tempStack.pop();
+            String x = z.substring( 0, 2);
+            pathStack.push(z);
+            z = z.substring( 2);
+            if ( x.charAt( 0)=='H' || x.charAt( 0)=='K' || x.charAt( 0)=='M' || x.charAt( 0)=='N' ) {
+                hintscount += 1;
+                solutionpath += "" + hintscount + ": " + z + "<br>\r\n";
+            }
+        }
+        if ( solutionpath.length() == 0 ) {
+            solutionpath += "&lt;empty&gt;<br>\r\n";
+        }
+        String htmlText = HtmlLoader.loadHtml(this, "SolutionPath.html");
+        htmlText = htmlText.replace("{0}", solutionpath);
+        frame.setExplanations(htmlText);
+      }
+      else
+      {
+        JOptionPane.showMessageDialog(frame, "Solution Path is empty.", "Not Shown", JOptionPane.ERROR_MESSAGE);
+      }
+    }
+
     public void savePath(File file, boolean inclpm) {
       if ( !this.pathStack.isEmpty() ) {
         ErrorMessage message = SudokuIO.savePathToFile( pathStack, inclpm, file);
@@ -960,6 +1011,10 @@ public class SudokuExplainer {
             }
         }
         this.pathStack.push("H:"+hint.toString()+s);    // cell solved by hint
+    }
+
+    public void addNote(String inputtext) {
+        this.pathStack.push("N:"+inputtext);
     }
 
     private void popStep() {

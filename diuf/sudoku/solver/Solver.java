@@ -270,6 +270,27 @@ public class Solver {
         return accu.getHint();
     }
 
+    /**
+     * Get the first available validity warning hint.
+     * This can be used to check the validity of a
+     * Sudoku grid. If the sudoku is valid, <code>null</code>
+     * is returned; else, a warning hint.
+     * @return a warning hint if the sudoku is invalid, <code>null</code>
+     * if the sudoku is valid.
+     */
+    public Hint quickValidity() {
+        int oldPriority = lowerPriority();
+        SingleHintAccumulator accu = new SingleHintAccumulator();
+        try {
+            for (WarningHintProducer producer : validatorHintProducers)
+                producer.getHints(grid, accu);
+        //  for (WarningHintProducer producer : warningHintProducers)
+        //      producer.getHints(grid, accu);
+        } catch (InterruptedException willProbablyHappen) {}
+        normalPriority(oldPriority);
+        return accu.getHint();
+    }
+
     private void gatherProducer(List<Hint> previousHints, List<Hint> curHints,
             HintsAccumulator accu, HintProducer producer) throws InterruptedException {
         // Get last hint producer. Because the last producer may not have produced
@@ -545,7 +566,7 @@ public class Solver {
                 double ruleDiff = rule.getDifficulty();
                 if (ruleDiff > difficulty)
                     difficulty = ruleDiff;
-                if (difficulty >= min && max >  11.0)
+                if (difficulty >= min && max >= 12.0)
                     break;
                 if (difficulty > max)
                     break;

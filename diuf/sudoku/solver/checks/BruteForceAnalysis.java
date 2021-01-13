@@ -60,7 +60,7 @@ public class BruteForceAnalysis implements WarningHintProducer {
                     message = new WarningMessage(this, "The Sudoku has no solution",
                     "NoSolution.html");
                 else
-                    message = new WarningMessage(this, "The Sudoku has no solution",
+                    message = new WarningMessage(this, "The Sudoku is not valid",
                     "MissingCandidates.html");
             }
             accu.add(message);
@@ -93,11 +93,13 @@ public class BruteForceAnalysis implements WarningHintProducer {
      * @param grid the sudoku grid
      * @return information about the number of solutions
      */
-    public int getCountSolutions(Grid grid) {
+    public int getCountSolutions(Grid solution, Grid grid) {
         new Solver(grid).rebuildPotentialValues();
         grid.copyTo(grid1);
         if (!analyse(grid1, false))
             return 0; // no solution
+        if (!(grid1.equals(solution)))
+            return 0; // not the solution
         grid.copyTo(grid2);
         analyse(grid2, true);
         if (grid1.equals(grid2))
