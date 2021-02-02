@@ -36,9 +36,12 @@ public class NoDoubles implements WarningHintProducer {
                     int value = cell.getValue();
                     if (value != 0) {
                         if (values.get(value)) {
+                            String aan = "a ";
+                            if ( regionType == Custom.class ) { aan = "an "; }
+                            if ( regionmax == 1 ) { aan = ""; }
                             // Value appear twice in this region
                             WarningMessage message = new WarningMessage(this,
-                                    "More than one \"" + value + "\" in a " + region.toString(),
+                                    "More than one \"" + value + "\" in " + aan + region.toString(),
                                     "DoubleValue.html", Integer.toString(value), region.toString()) {
 
                                 @Override

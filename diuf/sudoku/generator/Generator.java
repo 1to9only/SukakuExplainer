@@ -47,6 +47,9 @@ public class Generator {
             Symmetry symmetry = symmetries.get(symmetryIndex);
             symmetryIndex = (symmetryIndex + 1) % symmetries.size();
             Grid grid = generate(random, symmetry);
+            if ( grid == null ) {
+                return null;
+            }
 
             if (isInterrupted) {
                 System.err.println("Stopped.");
@@ -103,6 +106,9 @@ public class Generator {
             Symmetry symmetry = symmetries.get(symmetryIndex);
             symmetryIndex = (symmetryIndex + 1) % symmetries.size();
             Grid grid = generate(random, symmetry);
+            if ( grid == null ) {
+                return null;
+            }
 
             if (isInterrupted) {
                 System.err.println("Stopped.");
@@ -149,6 +155,9 @@ public class Generator {
         Grid grid = new Grid();
         if ( !Settings.getInstance().haveSolution() ) {
             boolean result = analyser.solveRandom(this, grid, rnd);
+            if ( !result ) {
+                return null;
+            }
         }
         else {
             Settings.getInstance().getSolution( grid);
@@ -166,7 +175,6 @@ public class Generator {
         if (isInterrupted) {
             return null;
         }
-//a     assert result;
         Grid solution = new Grid();
         grid.copyTo(solution);
 
@@ -245,11 +253,8 @@ public class Generator {
       if (!isInterrupted) {
         s = s + "got new sudoku";
       }
-      if ( s.length() != 0 ) {
         System.err.println(s);
         System.err.flush();
-      }
-
         return grid;
     }
 

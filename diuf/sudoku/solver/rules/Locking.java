@@ -143,12 +143,23 @@ public class Locking implements IndirectHintProducer {
         getHints(grid, Grid.PerCent.class, Grid.Row.class, accu);
       }
 
+      if ( grid.isCustom() ) {
+       if ( !grid.isLatinSquare() ) {
+        getHints(grid, Grid.Block.class, Grid.Custom.class, accu); }
+        getHints(grid, Grid.Column.class, Grid.Custom.class, accu);
+        getHints(grid, Grid.Row.class, Grid.Custom.class, accu);
+       if ( !grid.isLatinSquare() ) {
+        getHints(grid, Grid.Custom.class, Grid.Block.class, accu); }
+        getHints(grid, Grid.Custom.class, Grid.Column.class, accu);
+        getHints(grid, Grid.Custom.class, Grid.Row.class, accu);
+      }
+
         // generalized intersection
 
       if ( !isDirectMode && !grid.isLatinSquare() ) {
        if ( grid.isDiagonals() || grid.isDisjointGroups() || grid.isWindoku()
          || grid.isAsterisk() || grid.isCenterDot() || grid.isGirandola()
-         || grid.isHalloween() || grid.isPerCent() ) {
+         || grid.isHalloween() || grid.isPerCent() || grid.isCustom() ) {
         getHintsG(grid, Grid.Block.class, accu);
         getHintsG(grid, Grid.Column.class, accu);
         getHintsG(grid, Grid.Row.class, accu);
@@ -180,6 +191,9 @@ public class Locking implements IndirectHintProducer {
        }
        if ( grid.isPerCent() ) {
         getHintsG(grid, Grid.PerCent.class, accu);
+       }
+       if ( grid.isCustom() ) {
+        getHintsG(grid, Grid.Custom.class, accu);
        }
       }
     }

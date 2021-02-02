@@ -24,6 +24,8 @@ public class BruteForceAnalysis implements WarningHintProducer {
     private final Grid grid2 = new Grid();
     private final boolean includeSolution;
 
+    private int iterations = 0;     // 1to9only: used when generating a random grid solution
+
     public BruteForceAnalysis(boolean includeSolution) {
         this.includeSolution = includeSolution;
     }
@@ -149,6 +151,9 @@ public class BruteForceAnalysis implements WarningHintProducer {
          * This is not necessary in theory, but in practice, some invalid sudoku
          * may require a too huge number of iterations without this check
          */
+        iterations++;
+        if ( iterations >= 10000 )  // 1to9only: drop out after this many attempts
+            return false;
         if (!isFillable(grid))
             return false;
 
@@ -223,6 +228,9 @@ public class BruteForceAnalysis implements WarningHintProducer {
          * This is not necessary in theory, but in practice, some invalid sudoku
          * may require a too huge number of iterations without this check
          */
+        iterations++;
+        if ( iterations >= 10000 )  // 1to9only: drop out after this many attempts
+            return false;
         if (!isFillable(grid))
             return false;
 
@@ -332,9 +340,12 @@ public class BruteForceAnalysis implements WarningHintProducer {
     public boolean solveRandom(Grid grid, Random rnd) {
         DirectHintProducer hiddenSingle = new HiddenSingle();
         DirectHintProducer nakedSingle = new NakedSingle();
-    //  new Solver(grid).rebuildPotentialValues();
         boolean result = false;
+        iterations = 0;
         result = analyse(grid, false, rnd, hiddenSingle, nakedSingle);
+        if (!result) {
+            return false;
+        }
         String s = ""; int cnt = 0;
         for (int i = 0; i < 81; i++) {
             int n = grid.getCellValue(i % 9, i / 9);
@@ -359,13 +370,20 @@ public class BruteForceAnalysis implements WarningHintProducer {
      * @return <tt>true</tt> if a solution has been found; <tt>false</tt> if
      * the grid has no solution.
      */
+
+    // 1to9only: added code to retry generating a random grid solution
+
     public boolean solveRandom(Generator generator, Grid grid, Random rnd) {
         DirectHintProducer hiddenSingle = new HiddenSingle();
         DirectHintProducer nakedSingle = new NakedSingle();
         new Solver(grid).rebuildPotentialValues();
         boolean result = false;
+        iterations = 0;
         result = analyse(generator, grid, false, rnd, hiddenSingle, nakedSingle);
         if ( generator.isButtonStopped() ) {
+            return false;
+        }
+        if (!result) {
             return false;
         }
         String s = ""; int cnt = 0;

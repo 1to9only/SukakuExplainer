@@ -76,6 +76,10 @@ public class Settings {
     private boolean isHalloween = false;
     private boolean isPerCent = false;
 
+    private boolean isCustom = false;
+    private String custom = null;       // custom variant regions
+    private int count = 9;              // custom regions
+
     private int isChanged = 0;          // =1 if a variant setting changed
 
     private int LoadError = 0;          // =1 if settings load error, a save is done
@@ -86,7 +90,7 @@ public class Settings {
 
     private Grid solution;              // solution grid
     private boolean useSolution = false;
-    private boolean zedFactor = false;
+    private boolean Factor = false;
 
     private Settings() {
         init();
@@ -112,6 +116,7 @@ public class Settings {
         isGirandola = false;
         isHalloween = false;
         isPerCent = false;
+        isCustom = false;
     }
 
     public void useSolution( Grid grid) {
@@ -128,11 +133,11 @@ public class Settings {
     public void getSolution( Grid grid) {
         solution.copyTo( grid);
     }
-    public void setZedFactor() {
-        zedFactor = true;
+    public void setFactor() {
+        Factor = true;
     }
-    public boolean getZedFactor() {
-        return zedFactor;
+    public boolean getFactor() {
+        return Factor;
     }
 
     public void setRCNotation(boolean isRCNotation) {
@@ -537,6 +542,41 @@ public class Settings {
         return isPerCent;
     }
 
+    public void setCustom(boolean isCustom) {
+      if ( this.isCustom != isCustom ) {
+        this.isCustom = isCustom;
+        save();
+      }
+    }
+    public boolean isCustom() {
+        return isCustom;
+    }
+
+    public void setCustom(String custom) {
+      if ( this.custom == null || !(this.custom.equals(custom)) ) {
+        this.custom = custom;
+       if ( this.isCustom != true ) {
+        this.isCustom = true;
+       }
+        save();
+      }
+    }
+
+    public String getCustom() {
+        return custom;
+    }
+
+    public void setCount(int count) {
+      if ( this.count != count ) {
+        this.count = count;
+        save();
+      }
+    }
+
+    public int getCount() {
+        return count;
+    }
+
 //  Load / Save
 
     private void init() {
@@ -725,6 +765,20 @@ public class Settings {
                     isPerCent = s.equals("true")?true:false;
                 }
                 catch (NullPointerException e) { LoadError = 1; }
+                try {
+                    s = (String)stgDetails.get("isCustom");
+                    isCustom = s.equals("true")?true:false;
+                }
+                catch (NullPointerException e) { LoadError = 1; }
+                try {
+                    custom = (String)stgDetails.get("custom");
+                }
+                catch (NullPointerException e) { ; }
+                try {
+                    s = (String)stgDetails.get("count");
+                    count = s.charAt(0) - '0';
+                }
+                catch (NullPointerException e) { LoadError = 1; }
 
                 try {
                     methods = (String)stgDetails.get("techniques");
@@ -808,6 +862,12 @@ public class Settings {
         stgDetails.put("isGirandola", isGirandola?"true":"false");
         stgDetails.put("isHalloween", isHalloween?"true":"false");
         stgDetails.put("isPerCent", isPerCent?"true":"false");
+        stgDetails.put("isCustom", isCustom?"true":"false");
+
+        if ( custom != null ) {
+            stgDetails.put("custom", custom);
+        }
+        stgDetails.put("count", ""+count);
 
         if ( methods != null ) {
             stgDetails.put("techniques", methods);

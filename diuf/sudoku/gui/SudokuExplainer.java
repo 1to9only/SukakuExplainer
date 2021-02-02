@@ -375,8 +375,8 @@ public class SudokuExplainer {
     }
 
     private boolean isGridEmpty() {
-        for (int y = 0; y < 6; y++) {
-            for (int x = 0; x < 6; x++) {
+        for (int y = 0; y < 9; y++) {
+            for (int x = 0; x < 9; x++) {
                 if (grid.getCellValue(x, y) != 0)
                     return false;
             }
@@ -410,13 +410,6 @@ public class SudokuExplainer {
         if ( solver.isSolved() ) {
             JOptionPane.showConfirmDialog(frame, "Cannot use, already solved!", "Generate Solution", JOptionPane.WARNING_MESSAGE);
             return false;
-        }
-        else
-        if ( this.gridStack.isEmpty() ) {
-            if ( isGridEmpty() ) {
-                JOptionPane.showMessageDialog(frame, "Cannot use, no puzzle!", "Generate Solution", JOptionPane.WARNING_MESSAGE);
-                return false;
-            }
         }
         Hint hint = solver.quickValidity();
         if ( hint != null ) {
@@ -900,6 +893,18 @@ public class SudokuExplainer {
       {
         JOptionPane.showMessageDialog(frame, "Solution Path is empty.", "Not Saved", JOptionPane.ERROR_MESSAGE);
       }
+    }
+
+    public int loadCustom(File file) {
+        int rc = 0;
+        ErrorMessage message = SudokuIO.loadCustomFromFile( grid, file);
+        if (message == null || !message.isFatal()) {
+            rc = 1; // success
+        }
+        if (message != null)
+            JOptionPane.showMessageDialog(frame, message.toString(), "Load Custom Variant",
+                    (message.isFatal() ? JOptionPane.ERROR_MESSAGE : JOptionPane.WARNING_MESSAGE));
+        return rc;
     }
 
     public void pushSudoku(Grid g) {

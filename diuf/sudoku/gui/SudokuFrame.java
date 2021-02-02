@@ -157,6 +157,16 @@ public class SudokuFrame extends JFrame implements Asker {
     private JCheckBoxMenuItem mitGirandola = null;
     private JCheckBoxMenuItem mitHalloween = null;
     private JCheckBoxMenuItem mitPerCent = null;
+    private JMenuItem mitExtraRegions = null;
+    private JMenuItem mitCustomText = null;
+    private JMenuItem mitCustomFile = null;
+    private JMenuItem mitCustomCopy = null;
+    private JMenuItem mitCustomClockwise = null;
+    private JMenuItem mitCustomAntiClockwise = null;
+    private JMenuItem mitCustomHorizontal = null;
+    private JMenuItem mitCustomVertical = null;
+    private JMenuItem mitCustomDiagonal = null;
+    private JMenuItem mitCustomAntiDiagonal = null;
 
     public SudokuFrame() {
         super();
@@ -991,6 +1001,9 @@ public class SudokuFrame extends JFrame implements Asker {
                         Random random = new Random();
                         BruteForceAnalysis analyser = new BruteForceAnalysis(true);
                         boolean result = analyser.solveRandom(sudokuPanel.getSudokuGrid(), random);
+                        if ( !result ) {
+                            JOptionPane.showMessageDialog(SudokuFrame.this, "Failed to generate a solution! Multiple failures are bad!!", "Generate Solution", JOptionPane.ERROR_MESSAGE);
+                        }
                         repaint();
                     }
                 }
@@ -2398,6 +2411,17 @@ public class SudokuFrame extends JFrame implements Asker {
             VariantsMenu.addSeparator();
             VariantsMenu.add(getMitHalloween());
             VariantsMenu.add(getMitPerCent());
+            VariantsMenu.add(getMitExtraRegions());
+            VariantsMenu.add(getMitCustomText());
+        //  VariantsMenu.add(getMitCustomFile());
+        //  VariantsMenu.add(getMitCustomCopy());
+            VariantsMenu.addSeparator();
+            VariantsMenu.add(getMitCustomClockwise());
+            VariantsMenu.add(getMitCustomAntiClockwise());
+            VariantsMenu.add(getMitCustomHorizontal());
+            VariantsMenu.add(getMitCustomVertical());
+            VariantsMenu.add(getMitCustomDiagonal());
+            VariantsMenu.add(getMitCustomAntiDiagonal());
         }
         return VariantsMenu;
     }
@@ -2414,9 +2438,18 @@ public class SudokuFrame extends JFrame implements Asker {
                 //  if ( Settings.getInstance().isHalloween() ) { mitHalloween.setSelected(false); }
                 //  if ( Settings.getInstance().isPerCent() )   { mitPerCent.setSelected(false); }
                 // }
+                    Settings.getInstance().setCustom(false);
                     Settings.getInstance().setLatinSquare(mitLatinSquare.isSelected());
                     Settings.getInstance().saveChanged();
                     sudokuPanel.getSudokuGrid().updateLatinSquare();
+                    sudokuPanel.getSudokuGrid().updateCustom();
+        //          mitCustomCopy.setVisible(false);
+                    mitCustomClockwise.setVisible(false);
+                    mitCustomAntiClockwise.setVisible(false);
+                    mitCustomHorizontal.setVisible(false);
+                    mitCustomVertical.setVisible(false);
+                    mitCustomDiagonal.setVisible(false);
+                    mitCustomAntiDiagonal.setVisible(false);
                     engine.rebuildSolver();
                     engine.resetPotentials();
                     repaint();
@@ -2444,8 +2477,17 @@ public class SudokuFrame extends JFrame implements Asker {
                     if ( Settings.getInstance().isGirandola() )      { mitGirandola.setSelected(false); }
                     if ( Settings.getInstance().isHalloween() )      { mitHalloween.setSelected(false); }
                     if ( Settings.getInstance().isPerCent() )        { mitPerCent.setSelected(false); }
+                    Settings.getInstance().setCustom(false);
                     Settings.getInstance().saveChanged();
                     sudokuPanel.getSudokuGrid().updateVanilla();
+                    sudokuPanel.getSudokuGrid().updateCustom();
+        //          mitCustomCopy.setVisible(false);
+                    mitCustomClockwise.setVisible(false);
+                    mitCustomAntiClockwise.setVisible(false);
+                    mitCustomHorizontal.setVisible(false);
+                    mitCustomVertical.setVisible(false);
+                    mitCustomDiagonal.setVisible(false);
+                    mitCustomAntiDiagonal.setVisible(false);
                     engine.rebuildSolver();
                     engine.resetPotentials();
                     repaint();
@@ -2492,8 +2534,17 @@ public class SudokuFrame extends JFrame implements Asker {
                     if ( Settings.getInstance().isPerCent() )   { mitPerCent.setSelected(false); }
                    }
                     Settings.getInstance().setDisjointGroups(mitDisjointGroups.isSelected());
+                    Settings.getInstance().setCustom(false);
                     Settings.getInstance().saveChanged();
                     sudokuPanel.getSudokuGrid().updateDisjointGroups();
+                    sudokuPanel.getSudokuGrid().updateCustom();
+        //          mitCustomCopy.setVisible(false);
+                    mitCustomClockwise.setVisible(false);
+                    mitCustomAntiClockwise.setVisible(false);
+                    mitCustomHorizontal.setVisible(false);
+                    mitCustomVertical.setVisible(false);
+                    mitCustomDiagonal.setVisible(false);
+                    mitCustomAntiDiagonal.setVisible(false);
                     engine.rebuildSolver();
                     engine.resetPotentials();
                     repaint();
@@ -2531,8 +2582,17 @@ public class SudokuFrame extends JFrame implements Asker {
                     if ( Settings.getInstance().isPerCent() )   { mitPerCent.setSelected(false); }
                    }
                     Settings.getInstance().setWindoku(mitWindoku.isSelected());
+                    Settings.getInstance().setCustom(false);
                     Settings.getInstance().saveChanged();
                     sudokuPanel.getSudokuGrid().updateWindoku();
+                    sudokuPanel.getSudokuGrid().updateCustom();
+        //          mitCustomCopy.setVisible(false);
+                    mitCustomClockwise.setVisible(false);
+                    mitCustomAntiClockwise.setVisible(false);
+                    mitCustomHorizontal.setVisible(false);
+                    mitCustomVertical.setVisible(false);
+                    mitCustomDiagonal.setVisible(false);
+                    mitCustomAntiDiagonal.setVisible(false);
                     engine.rebuildSolver();
                     engine.resetPotentials();
                     repaint();
@@ -2561,7 +2621,16 @@ public class SudokuFrame extends JFrame implements Asker {
                     if ( Settings.getInstance().isHalloween() ) { mitHalloween.setSelected(false); }
                     if ( Settings.getInstance().isPerCent() )   { mitPerCent.setSelected(false); }
                    }
+                    Settings.getInstance().setCustom(false);
                     Settings.getInstance().saveChanged();
+                    sudokuPanel.getSudokuGrid().updateCustom();
+        //          mitCustomCopy.setVisible(false);
+                    mitCustomClockwise.setVisible(false);
+                    mitCustomAntiClockwise.setVisible(false);
+                    mitCustomHorizontal.setVisible(false);
+                    mitCustomVertical.setVisible(false);
+                    mitCustomDiagonal.setVisible(false);
+                    mitCustomAntiDiagonal.setVisible(false);
                     repaint();
                 }
             });
@@ -2599,8 +2668,17 @@ public class SudokuFrame extends JFrame implements Asker {
                     if ( Settings.getInstance().isPerCent() )   { mitPerCent.setSelected(false); }
                    }
                     Settings.getInstance().setAsterisk(mitAsterisk.isSelected());
+                    Settings.getInstance().setCustom(false);
                     Settings.getInstance().saveChanged();
                     sudokuPanel.getSudokuGrid().updateAsterisk();
+                    sudokuPanel.getSudokuGrid().updateCustom();
+        //          mitCustomCopy.setVisible(false);
+                    mitCustomClockwise.setVisible(false);
+                    mitCustomAntiClockwise.setVisible(false);
+                    mitCustomHorizontal.setVisible(false);
+                    mitCustomVertical.setVisible(false);
+                    mitCustomDiagonal.setVisible(false);
+                    mitCustomAntiDiagonal.setVisible(false);
                     engine.rebuildSolver();
                     engine.resetPotentials();
                     repaint();
@@ -2625,8 +2703,17 @@ public class SudokuFrame extends JFrame implements Asker {
                     if ( Settings.getInstance().isPerCent() )   { mitPerCent.setSelected(false); }
                    }
                     Settings.getInstance().setCenterDot(mitCenterDot.isSelected());
+                    Settings.getInstance().setCustom(false);
                     Settings.getInstance().saveChanged();
                     sudokuPanel.getSudokuGrid().updateCenterDot();
+                    sudokuPanel.getSudokuGrid().updateCustom();
+        //          mitCustomCopy.setVisible(false);
+                    mitCustomClockwise.setVisible(false);
+                    mitCustomAntiClockwise.setVisible(false);
+                    mitCustomHorizontal.setVisible(false);
+                    mitCustomVertical.setVisible(false);
+                    mitCustomDiagonal.setVisible(false);
+                    mitCustomAntiDiagonal.setVisible(false);
                     engine.rebuildSolver();
                     engine.resetPotentials();
                     repaint();
@@ -2651,8 +2738,17 @@ public class SudokuFrame extends JFrame implements Asker {
                     if ( Settings.getInstance().isPerCent() )   { mitPerCent.setSelected(false); }
                    }
                     Settings.getInstance().setGirandola(mitGirandola.isSelected());
+                    Settings.getInstance().setCustom(false);
                     Settings.getInstance().saveChanged();
                     sudokuPanel.getSudokuGrid().updateGirandola();
+                    sudokuPanel.getSudokuGrid().updateCustom();
+        //          mitCustomCopy.setVisible(false);
+                    mitCustomClockwise.setVisible(false);
+                    mitCustomAntiClockwise.setVisible(false);
+                    mitCustomHorizontal.setVisible(false);
+                    mitCustomVertical.setVisible(false);
+                    mitCustomDiagonal.setVisible(false);
+                    mitCustomAntiDiagonal.setVisible(false);
                     engine.rebuildSolver();
                     engine.resetPotentials();
                     repaint();
@@ -2682,8 +2778,17 @@ public class SudokuFrame extends JFrame implements Asker {
                         if ( Settings.getInstance().isPerCent() )        { mitPerCent.setSelected(false); }
                     }
                     Settings.getInstance().setHalloween(mitHalloween.isSelected());
+                    Settings.getInstance().setCustom(false);
                     Settings.getInstance().saveChanged();
                     sudokuPanel.getSudokuGrid().updateHalloween();
+                    sudokuPanel.getSudokuGrid().updateCustom();
+        //          mitCustomCopy.setVisible(false);
+                    mitCustomClockwise.setVisible(false);
+                    mitCustomAntiClockwise.setVisible(false);
+                    mitCustomHorizontal.setVisible(false);
+                    mitCustomVertical.setVisible(false);
+                    mitCustomDiagonal.setVisible(false);
+                    mitCustomAntiDiagonal.setVisible(false);
                     engine.rebuildSolver();
                     engine.resetPotentials();
                     repaint();
@@ -2713,8 +2818,17 @@ public class SudokuFrame extends JFrame implements Asker {
                         if ( Settings.getInstance().isHalloween() )      { mitHalloween.setSelected(false); }
                     }
                     Settings.getInstance().setPerCent(mitPerCent.isSelected());
+                    Settings.getInstance().setCustom(false);
                     Settings.getInstance().saveChanged();
                     sudokuPanel.getSudokuGrid().updatePerCent();
+                    sudokuPanel.getSudokuGrid().updateCustom();
+        //          mitCustomCopy.setVisible(false);
+                    mitCustomClockwise.setVisible(false);
+                    mitCustomAntiClockwise.setVisible(false);
+                    mitCustomHorizontal.setVisible(false);
+                    mitCustomVertical.setVisible(false);
+                    mitCustomDiagonal.setVisible(false);
+                    mitCustomAntiDiagonal.setVisible(false);
                     engine.rebuildSolver();
                     engine.resetPotentials();
                     repaint();
@@ -2722,6 +2836,392 @@ public class SudokuFrame extends JFrame implements Asker {
             });
         }
         return mitPerCent;
+    }
+
+    private JMenuItem getMitExtraRegions() {
+        if (mitExtraRegions == null) {
+            mitExtraRegions = new JMenuItem();
+            mitExtraRegions.setText("Extra Regions (of 48)");
+            mitExtraRegions.setToolTipText("Load a Random Extra Regions variant layout");
+            mitExtraRegions.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    Random random = new Random();
+                    int index = random.nextInt(48) + 1;
+                    String line = null;
+                    if ( index ==  1 ) line = new String( "..........11........1..22....1..2.2...1...22...1....2..111...2.......2...........  1 19");
+                    if ( index ==  2 ) line = new String( ".....1........11.......111......11.....2.1.....22......222.......22........2.....  2 2FLAGS1");
+                    if ( index ==  3 ) line = new String( ".............111.......111.....111.............222.....222.......222.............  3 2FLAGS2");
+                    if ( index ==  4 ) line = new String( ".1111.....1...1....1..1.....1............2.2.......2.........2........2.....2222.  4 2XR1");
+                    if ( index ==  5 ) line = new String( "..........111......1.11.....11........1...2........22.....22.2......222..........  5 2XR2");
+                    if ( index ==  6 ) line = new String( "...........111.....111......11.......1.....2.......22......222.....222...........  6 2XR3");
+                    if ( index ==  7 ) line = new String( "............1.2.....1...2....1...2.....1.2.....1...2...11...22.11.....22.........  7 2XRABBIT1");
+                    if ( index ==  8 ) line = new String( "............1...22..1...22...1...2.....1.2.....1...2...11...2..11...2............  8 2XRABBIT2");
+                    if ( index ==  9 ) line = new String( "....1...1...1.1111.2....1.12..33....2....3...222.33.....2.3.....22..3.........33.  9 3XR1");
+                    if ( index == 10 ) line = new String( ".111........1.22.2.1.1.2..2.111.2222.........3333.444.3..3.4.4.3.33.4........444. 10 4XRG");
+                    if ( index == 11 ) line = new String( "..11.22....11.22..111...22211.....22.........33.....44333...444..33.44....33.44.. 11 4XRL");
+                    if ( index == 12 ) line = new String( "...1.2....11...22..111.222.1.11.22.2.........3.33.44.4.333.444..33...44....3.4... 12 4XRLIFE");
+                    if ( index == 13 ) line = new String( ".111......1.1.2222.1.1....2.1.1.2222.........3333.4.4.3....4.4.3333.4.4......444. 13 4XRU");
+                    if ( index == 14 ) line = new String( "11.....221111.2222.11.3.22..1.333.2.....3.....4.333.5..44.3.55.4444.555544.....55 14 5XR1");
+                    if ( index == 15 ) line = new String( "1.......1.1.....1...1...1.....1.1...2...1...2.2.....2...2...2.....2.2.......2.... 15 DOWN");
+                    if ( index == 16 ) line = new String( "..........1.....2...1...2.....1.2....111.222....1.2.....1...2...1.....2.......... 16 EE");
+                    if ( index == 17 ) line = new String( "..........22......2..2.....222...11.2....1...2....1........1.11......11.......... 17 PG");
+                    if ( index == 18 ) line = new String( "111.......1........1.222....1..2....111.2.333....2..3....222.3........3.......333 18 III");
+                    if ( index == 19 ) line = new String( "....1...2...1...2...1...2...1...2...1...2.....1...2.....1...2.....1...2.....1...2 19 LEFT");
+                    if ( index == 20 ) line = new String( "1....333.1.....3..1.....3..1.....3..1....333.1111.........22.22....2.2.2....2...2 20 LIM");
+                    if ( index == 21 ) line = new String( "1.1.......1.1......1.1......1.1........1..........22......2..2.....2..2......22.2 21 NQ1");
+                    if ( index == 22 ) line = new String( ".1.1.....1.1......1.1......1.1........1............22......2..2.....2..2....2.22. 22 NQ2");
+                    if ( index == 23 ) line = new String( "...1.2.....1...2...1.....2.1.......2.1.....2.1.......2.1.....2...1...2.....1.2... 23 O");
+                    if ( index == 24 ) line = new String( "........2.11111.2..1....2...1...2.3..1..2..3..1.2...3...2....3..2.33333.2........ 24 PC1");
+                    if ( index == 25 ) line = new String( "11111...21......2.1.....2..1....2...1...2...3...2....3..2.....3.2......32...33333 25 PC2");
+                    if ( index == 26 ) line = new String( "..11111.....1.1...22.1.1.332.......3222...3332.......322.4.4.33...4.4.....44444.. 26 PI");
+                    if ( index == 27 ) line = new String( ".2.2.111..2.2.1.1..2.2.111..222.1.............3...444..333.4....3.3.4.4..333.444. 27 UPBG");
+                    if ( index == 28 ) line = new String( ".11111.....111...2...1...223.....22233.....22333.....233...4...3...444.....44444. 28 PYRAMIDS");
+                    if ( index == 29 ) line = new String( "..........111.222..1.1.2.2....1...2...1...2....1...2.............1...2........... 29 QQ");
+                    if ( index == 30 ) line = new String( "1...2.....1...2.....1...2.....1...2.....1...2...1...2...1...2...1...2...1...2.... 30 RIGHT");
+                    if ( index == 31 ) line = new String( "..11111....1......2.1.333332.1.....32.1...4.32.....4.322222.4.3......4....44444.. 31 SPIRALS");
+                    if ( index == 32 ) line = new String( "..............1........111...2.111....2...1....222.1...222........2.............. 32 STAR");
+                    if ( index == 33 ) line = new String( "....1.......1.1.....1...1...1.....1.1...2...1...2.2.....2...2...2.....2.2.......2 33 UP");
+                    if ( index == 34 ) line = new String( "....11111........1........1........12.......12........2........2........22222.... 34 VV1");
+                    if ( index == 35 ) line = new String( "............11111........1..2.....1..2.....1..2.....1..2........22222............ 35 VV2");
+                    if ( index == 36 ) line = new String( "...................2.11111..2.....1..2.....1..2.....1..22222.1................... 36 VV3");
+                    if ( index == 37 ) line = new String( "..........1...1.1.1.1.1.1.1...1...............2.2...2.2.2.2.2.2.....2............ 37 WAVES1");
+                    if ( index == 38 ) line = new String( "..........1...1.1.1.1.1.1.1...1...................2...2.2.2.2.2.2.2...2.......... 38 WAVES2");
+                    if ( index == 39 ) line = new String( "....11........1........1........11112.......12222........2........2........22.... 39 WW1");
+                    if ( index == 40 ) line = new String( "....1........1......111......1......111...222......2......222......2........2.... 40 WW2");
+                    if ( index == 41 ) line = new String( "1.......2.1.....2...1...2.....1.2......1.2......1.2.....1...2...1.....2.1.......2 41 X1");
+                    if ( index == 42 ) line = new String( "1.......2.1.....2...1...2.....1.2.....1...2.....1.2.....1...2...1.....2.1.......2 42 X2");
+                    if ( index == 43 ) line = new String( ".........1...1....11111......1........1...2........2......22222....2...2......... 43 YY1");
+                    if ( index == 44 ) line = new String( "..................1...1....11111.2....1...2....1.22222....2...2.................. 44 YY2");
+                    if ( index == 45 ) line = new String( "................1..1111111..1..............2..2222222..2......................... 45 ZZ1");
+                    if ( index == 46 ) line = new String( "................1..1111111..1.......................2..2222222..2................ 46 ZZ2");
+                    if ( index == 47 ) line = new String( ".......1..1111111..1..............2..2222222..2..............3..3333333..3....... 47 ZZ3");
+                    if ( index == 48 ) line = new String( "...1.2.....11.22...11...22.11.....221...3...2.1..3..2.....3........3......33333.. 48 TR3");
+                    line = line.replace( ".", "0");
+                    Settings settings = Settings.getInstance();
+                    settings.setCustom( line.substring( 0, 81));
+                    sudokuPanel.getSudokuGrid().customInitialize( line.substring( 0, 81));
+
+                    if ( Settings.getInstance().isLatinSquare() )    { mitLatinSquare.setSelected(false); }
+                    if ( Settings.getInstance().isDiagonals() )      { mitDiagonals.setSelected(false); }
+                    if ( Settings.getInstance().isDisjointGroups() ) { mitDisjointGroups.setSelected(false); }
+                    if ( Settings.getInstance().isWindoku() )        { mitWindoku.setSelected(false); }
+                    if ( Settings.getInstance().isClover() )         { mitClover.setSelected(false); }
+                    if ( Settings.getInstance().isAsterisk() )       { mitAsterisk.setSelected(false); }
+                    if ( Settings.getInstance().isCenterDot() )      { mitCenterDot.setSelected(false); }
+                    if ( Settings.getInstance().isGirandola() )      { mitGirandola.setSelected(false); }
+                    if ( Settings.getInstance().isHalloween() )      { mitHalloween.setSelected(false); }
+                    if ( Settings.getInstance().isPerCent() )        { mitPerCent.setSelected(false); }
+                    Settings.getInstance().setCustom(true);
+                    Settings.getInstance().saveChanged();
+                    sudokuPanel.getSudokuGrid().updateCustom();
+        //          mitCustomCopy.setVisible(true);
+                    mitCustomClockwise.setVisible(true);
+                    mitCustomAntiClockwise.setVisible(true);
+                    mitCustomHorizontal.setVisible(true);
+                    mitCustomVertical.setVisible(true);
+                    mitCustomDiagonal.setVisible(true);
+                    mitCustomAntiDiagonal.setVisible(true);
+                    engine.clearGrid();
+                    engine.rebuildSolver();
+                    engine.resetPotentials();
+                    repaint();
+                }
+            });
+        }
+        return mitExtraRegions;
+    }
+
+    private JMenuItem getMitCustomText() {
+        if (mitCustomText == null) {
+            mitCustomText = new JMenuItem();
+            mitCustomText.setText("Custom... (text input)");
+            mitCustomText.setToolTipText("Load a Custom variant layout (text input)");
+            mitCustomText.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                  String inputtext = null;
+                  boolean isValidInput = false;
+                  while ( !isValidInput ) {
+                    inputtext = (String)JOptionPane.showInputDialog(
+                        SudokuFrame.this, "Enter custom variant layout (81-chars), must be valid, 2-4 extra regions best.",
+                        "Load Custom", JOptionPane.PLAIN_MESSAGE, null, null, "");
+                    if ( inputtext != null && inputtext.length() >= 81 ) {
+                        isValidInput = true;
+                        int chcount = 0;
+                        for (int i=0; i<81; i++ ) {
+                            char ch = inputtext.charAt(i);
+                            if ( (ch>='1' && ch<='9') || (ch>='A' && ch<='I') ) { chcount++; }
+                            else
+                            if ( ch!='.' && ch !='0' ) { JOptionPane.showMessageDialog(SudokuFrame.this, "Invalid char: "+ch, "Load Custom", JOptionPane.WARNING_MESSAGE); isValidInput = false; break; }
+                        }
+                      if ( isValidInput ) {
+                        for (int value=1; value<=9; value++ ) {
+                            char ch = (char)('0'+value);
+                            chcount = 0;
+                            for (int i=0; i<81; i++ ) {
+                                if ( ch == inputtext.charAt(i) ) { chcount++; }
+                            }
+                            if ( chcount != 0 ) {
+                                if ( chcount > 9 ) { JOptionPane.showMessageDialog(SudokuFrame.this, "Too many: "+ch, "Load Custom", JOptionPane.WARNING_MESSAGE); isValidInput = false; break; }
+                                if ( chcount < 9 ) { JOptionPane.showMessageDialog(SudokuFrame.this, "Too few: "+ch, "Load Custom", JOptionPane.WARNING_MESSAGE); isValidInput = false; break; }
+                            }
+                        }
+                      }
+                      if ( isValidInput ) {
+                        for (int value=1; value<=9; value++ ) {
+                            char ch = (char)('@'+value);
+                            chcount = 0;
+                            for (int i=0; i<81; i++ ) {
+                                if ( ch == inputtext.charAt(i) ) { chcount++; }
+                            }
+                            if ( chcount != 0 ) {
+                                if ( chcount > 9 ) { JOptionPane.showMessageDialog(SudokuFrame.this, "Too many: "+ch, "Load Custom", JOptionPane.WARNING_MESSAGE); isValidInput = false; break; }
+                                if ( chcount < 9 ) { JOptionPane.showMessageDialog(SudokuFrame.this, "Too few: "+ch, "Load Custom", JOptionPane.WARNING_MESSAGE); isValidInput = false; break; }
+                            }
+                        }
+                      }
+                      if ( isValidInput ) {
+                        int adjoins = 0;
+                        for (int y=0; y<8; y++ ) {
+                          for (int x=0; x<8; x++ ) {
+                            int index = y*9+x;
+                            char ch = inputtext.charAt(index);
+                            if ( ch != '.' && ch != '0' ) {
+                              char cri = inputtext.charAt(index+1);
+                              if ( cri != '.' && cri != '0' && cri != ch ) {
+                                 adjoins += 1;
+                              }
+                              char cbe = inputtext.charAt(index+9);
+                              if ( cbe != '.' && cbe != '0' && cbe != ch ) {
+                                 adjoins += 1;
+                              }
+                            }
+                          }
+                        }
+                        if ( adjoins != 0 ) {
+                          JOptionPane.showMessageDialog(SudokuFrame.this, "Warning: Extra regions in contact, i.e. touching! ("+adjoins+")", "Load Custom", JOptionPane.WARNING_MESSAGE); isValidInput = false; break;
+                        }
+                      }
+                    }
+                    else
+                    if ( inputtext == null ) {      // Cancelled
+                        isValidInput = true;
+                    }
+                  }
+                    if ( inputtext != null && inputtext.length() >= 81 ) {
+                        inputtext = inputtext.replace( "A", "1"); inputtext = inputtext.replace( "B", "2"); inputtext = inputtext.replace( "C", "3"); inputtext = inputtext.replace( "D", "4"); inputtext = inputtext.replace( "E", "5"); inputtext = inputtext.replace( "F", "6"); inputtext = inputtext.replace( "G", "7"); inputtext = inputtext.replace( "H", "8"); inputtext = inputtext.replace( "I", "9");
+                        Settings settings = Settings.getInstance();
+                        settings.setCustom( inputtext.substring( 0, 81));
+                        sudokuPanel.getSudokuGrid().customInitialize( inputtext.substring( 0, 81));
+                        if ( Settings.getInstance().isLatinSquare() )    { mitLatinSquare.setSelected(false); }
+                        if ( Settings.getInstance().isDiagonals() )      { mitDiagonals.setSelected(false); }
+                        if ( Settings.getInstance().isDisjointGroups() ) { mitDisjointGroups.setSelected(false); }
+                        if ( Settings.getInstance().isWindoku() )        { mitWindoku.setSelected(false); }
+                        if ( Settings.getInstance().isClover() )         { mitClover.setSelected(false); }
+                        if ( Settings.getInstance().isAsterisk() )       { mitAsterisk.setSelected(false); }
+                        if ( Settings.getInstance().isCenterDot() )      { mitCenterDot.setSelected(false); }
+                        if ( Settings.getInstance().isGirandola() )      { mitGirandola.setSelected(false); }
+                        if ( Settings.getInstance().isHalloween() )      { mitHalloween.setSelected(false); }
+                        if ( Settings.getInstance().isPerCent() )        { mitPerCent.setSelected(false); }
+                        Settings.getInstance().setCustom(true);
+                        Settings.getInstance().saveChanged();
+                        sudokuPanel.getSudokuGrid().updateCustom();
+        //              mitCustomCopy.setVisible(true);
+                        mitCustomClockwise.setVisible(true);
+                        mitCustomAntiClockwise.setVisible(true);
+                        mitCustomHorizontal.setVisible(true);
+                        mitCustomVertical.setVisible(true);
+                        mitCustomDiagonal.setVisible(true);
+                        mitCustomAntiDiagonal.setVisible(true);
+                        engine.clearGrid();
+                        engine.rebuildSolver();
+                        engine.resetPotentials();
+                        repaint();
+                    }
+                }
+            });
+        }
+        return mitCustomText;
+    }
+
+    private JMenuItem getMitCustomFile() {
+        if (mitCustomFile == null) {
+            mitCustomFile = new JMenuItem();
+            mitCustomFile.setText("Custom... (from file)");
+            mitCustomFile.setToolTipText("Load a Custom variant layout (from file)");
+            mitCustomFile.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    try {
+                        JFileChooser chooser = new JFileChooser();
+                        chooser.setFileFilter(new TextFileFilter());
+                        if (defaultDirectory != null)
+                            chooser.setCurrentDirectory(defaultDirectory);
+                        int result = chooser.showOpenDialog(SudokuFrame.this);
+                        defaultDirectory = chooser.getCurrentDirectory();
+                        if (result == JFileChooser.APPROVE_OPTION) {
+                            File selectedFile = chooser.getSelectedFile();
+                            if ( engine.loadCustom(selectedFile) == 1 ) {
+                                if ( Settings.getInstance().isLatinSquare() )    { mitLatinSquare.setSelected(false); }
+                                if ( Settings.getInstance().isDiagonals() )      { mitDiagonals.setSelected(false); }
+                                if ( Settings.getInstance().isDisjointGroups() ) { mitDisjointGroups.setSelected(false); }
+                                if ( Settings.getInstance().isWindoku() )        { mitWindoku.setSelected(false); }
+                                if ( Settings.getInstance().isClover() )         { mitClover.setSelected(false); }
+                                if ( Settings.getInstance().isAsterisk() )       { mitAsterisk.setSelected(false); }
+                                if ( Settings.getInstance().isCenterDot() )      { mitCenterDot.setSelected(false); }
+                                if ( Settings.getInstance().isGirandola() )      { mitGirandola.setSelected(false); }
+                                if ( Settings.getInstance().isHalloween() )      { mitHalloween.setSelected(false); }
+                                if ( Settings.getInstance().isPerCent() )        { mitPerCent.setSelected(false); }
+                                Settings.getInstance().setCustom(true);
+                                Settings.getInstance().saveChanged();
+                                sudokuPanel.getSudokuGrid().updateCustom();
+        //                      mitCustomCopy.setVisible(true);
+                                mitCustomClockwise.setVisible(true);
+                                mitCustomAntiClockwise.setVisible(true);
+                                mitCustomHorizontal.setVisible(true);
+                                mitCustomVertical.setVisible(true);
+                                mitCustomDiagonal.setVisible(true);
+                                mitCustomAntiDiagonal.setVisible(true);
+                                engine.clearGrid();
+                                engine.rebuildSolver();
+                                engine.resetPotentials();
+                                repaint();
+                            }
+                        }
+                    } catch (AccessControlException ex) {
+                        warnAccessError(ex);
+                    }
+                }
+            });
+        }
+        return mitCustomFile;
+    }
+
+    private JMenuItem getMitCustomCopy() {
+        if (mitCustomCopy == null) {
+            mitCustomCopy = new JMenuItem();
+            mitCustomCopy.setText("Copy Custom");
+            mitCustomCopy.setToolTipText("Copy the Custom variant layout to the clipboard as plain text");
+            mitCustomCopy.setVisible( Settings.getInstance().isCustom());
+            mitCustomCopy.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                  if ( Settings.getInstance().isCustom() ) {
+                    StringSelection data = new StringSelection( Settings.getInstance().getCustom());
+                    Toolkit.getDefaultToolkit().getSystemClipboard().setContents(data, data);
+                  }
+                  else {
+                    JOptionPane.showMessageDialog(SudokuFrame.this, "Oops! NO extra regions here!", "Copy Custom", JOptionPane.WARNING_MESSAGE);
+                  }
+                }
+            });
+        }
+        return mitCustomCopy;
+    }
+
+    private JMenuItem getMitCustomClockwise() {
+        if (mitCustomClockwise == null) {
+            mitCustomClockwise = new JMenuItem();
+            mitCustomClockwise.setText("Rotate custom \u21bb Clockwise 90\u00b0");
+            mitCustomClockwise.setToolTipText("Rotates the custom Clockwise 90 degrees");
+            mitCustomClockwise.setVisible( Settings.getInstance().isCustom());
+            mitCustomClockwise.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    sudokuPanel.getSudokuGrid().rotateCustomClockwise();
+                    engine.rebuildSolver();
+                    engine.resetPotentials();
+                    repaint();
+                }
+            });
+        }
+        return mitCustomClockwise;
+    }
+
+    private JMenuItem getMitCustomAntiClockwise() {
+        if (mitCustomAntiClockwise == null) {
+            mitCustomAntiClockwise = new JMenuItem();
+            mitCustomAntiClockwise.setText("Rotate custom \u21ba Anti-Clockwise 90\u00b0");
+            mitCustomAntiClockwise.setToolTipText("Rotates the custom Anti-Clockwise 90 degrees");
+            mitCustomAntiClockwise.setVisible( Settings.getInstance().isCustom());
+            mitCustomAntiClockwise.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    sudokuPanel.getSudokuGrid().rotateCustomAntiClockwise();
+                    engine.rebuildSolver();
+                    engine.resetPotentials();
+                    repaint();
+                }
+            });
+        }
+        return mitCustomAntiClockwise;
+    }
+
+    private JMenuItem getMitCustomHorizontal() {
+        if (mitCustomHorizontal == null) {
+            mitCustomHorizontal = new JMenuItem();
+            mitCustomHorizontal.setText("Rotate custom \u2015 Horizontally");
+            mitCustomHorizontal.setToolTipText("Rotates the custom Horizontally");
+            mitCustomHorizontal.setVisible( Settings.getInstance().isCustom());
+            mitCustomHorizontal.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    sudokuPanel.getSudokuGrid().rotateCustomHorizontal();
+                    engine.rebuildSolver();
+                    engine.resetPotentials();
+                    repaint();
+                }
+            });
+        }
+        return mitCustomHorizontal;
+    }
+
+    private JMenuItem getMitCustomVertical() {
+        if (mitCustomVertical == null) {
+            mitCustomVertical = new JMenuItem();
+            mitCustomVertical.setText("Rotate custom \ufe31 Vertically");
+            mitCustomVertical.setToolTipText("Rotates the custom Vertically");
+            mitCustomVertical.setVisible( Settings.getInstance().isCustom());
+            mitCustomVertical.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    sudokuPanel.getSudokuGrid().rotateCustomVertical();
+                    engine.rebuildSolver();
+                    engine.resetPotentials();
+                    repaint();
+                }
+            });
+        }
+        return mitCustomVertical;
+    }
+
+    private JMenuItem getMitCustomDiagonal() {
+        if (mitCustomDiagonal == null) {
+            mitCustomDiagonal = new JMenuItem();
+            mitCustomDiagonal.setText("Rotate custom \u2571 Diagonally");
+            mitCustomDiagonal.setToolTipText("Rotates the custom Diagonally");
+            mitCustomDiagonal.setVisible( Settings.getInstance().isCustom());
+            mitCustomDiagonal.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    sudokuPanel.getSudokuGrid().rotateCustomDiagonal();
+                    engine.rebuildSolver();
+                    engine.resetPotentials();
+                    repaint();
+                }
+            });
+        }
+        return mitCustomDiagonal;
+    }
+
+    private JMenuItem getMitCustomAntiDiagonal() {
+        if (mitCustomAntiDiagonal == null) {
+            mitCustomAntiDiagonal = new JMenuItem();
+            mitCustomAntiDiagonal.setText("Rotate custom \u2572 Anti-Diagonally");
+            mitCustomAntiDiagonal.setToolTipText("Rotates the custom Anti-Diagonally");
+            mitCustomAntiDiagonal.setVisible( Settings.getInstance().isCustom());
+            mitCustomAntiDiagonal.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    sudokuPanel.getSudokuGrid().rotateCustomAntiDiagonal();
+                    engine.rebuildSolver();
+                    engine.resetPotentials();
+                    repaint();
+                }
+            });
+        }
+        return mitCustomAntiDiagonal;
     }
 
     void quit() {

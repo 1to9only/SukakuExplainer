@@ -222,6 +222,9 @@ public class Solver {
         if ( grid.isPerCent() ) {
             cancelBy(Grid.PerCent.class);
         }
+        if ( grid.isCustom() ) {
+            cancelBy(Grid.Custom.class);
+        }
     }
 
     /**
@@ -608,7 +611,7 @@ public class Solver {
                     // Only used for generator. Ignore advanced/experimental techniques
                     for (IndirectHintProducer producer : advancedHintProducers)
                         producer.getHints(grid, accu);
-                  if ( Settings.getInstance().getZedFactor() ) {
+                  if ( Settings.getInstance().getFactor() ) {
                     for (IndirectHintProducer producer : experimentalHintProducers)
                         producer.getHints(grid, accu);
                   }

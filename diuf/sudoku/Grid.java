@@ -41,6 +41,7 @@ public class Grid {
     private Girandola[] girandola = new Girandola[1];               // <- one of
     private Halloween[] halloween = new Halloween[3];
     private PerCent[] percent = new PerCent[3];
+    private Custom[] custom = new Custom[Settings.getInstance().getCount()];
 
     private boolean isVanilla = true;   // =false if solving gattai, unused!!!
 
@@ -53,6 +54,8 @@ public class Grid {
     private boolean isGirandola = false;
     private boolean isHalloween = false;
     private boolean isPerCent = false;
+    private boolean isCustom = false;
+    private int CustomNum = Settings.getInstance().getCount();
 
     // Diagonal
     private int[][] DiagonalCells = { { 8,16,24,32,40,48,56,64,72},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1}};
@@ -99,6 +102,11 @@ public class Grid {
     private int[][] PerCentAt = {{-1,-1,-1,-1,-1,-1,-1,-1, 1},{-1, 0, 0, 0,-1,-1,-1, 1,-1},{-1, 0, 0, 0,-1,-1, 1,-1,-1},{-1, 0, 0, 0,-1, 1,-1,-1,-1},{-1,-1,-1,-1, 1,-1,-1,-1,-1},{-1,-1,-1, 1,-1, 2, 2, 2,-1},{-1,-1, 1,-1,-1, 2, 2, 2,-1},{-1, 1,-1,-1,-1, 2, 2, 2,-1},{ 1,-1,-1,-1,-1,-1,-1,-1,-1}};
     private int[][] PerCentIndexOf = {{-1,-1,-1,-1,-1,-1,-1,-1, 0},{-1, 0, 1, 2,-1,-1,-1, 1,-1},{-1, 3, 4, 5,-1,-1, 2,-1,-1},{-1, 6, 7, 8,-1, 3,-1,-1,-1},{-1,-1,-1,-1, 4,-1,-1,-1,-1},{-1,-1,-1, 5,-1, 0, 1, 2,-1},{-1,-1, 6,-1,-1, 3, 4, 5,-1},{-1, 7,-1,-1,-1, 6, 7, 8,-1},{ 8,-1,-1,-1,-1,-1,-1,-1,-1}};
 
+    // Custom
+    private int[][] CustomCells = { {-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1}};
+    private int[][] CustomAt = { {-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1}};
+    private int[][] CustomIndexOf = { {-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1}};
+
     /**
      * Create a new 9x9 Sudoku grid. All cells are set to empty
      */
@@ -125,6 +133,9 @@ public class Grid {
             halloween[i] = new Halloween(i);
             percent[i] = new PerCent(i);
         }
+        for (int i = 0; i < CustomNum; i++) {
+            custom[i] = new Custom(i);
+        }
         isSudoku = 1;
 
         isLatinSquare = Settings.getInstance().isLatinSquare();
@@ -136,6 +147,10 @@ public class Grid {
         isGirandola = Settings.getInstance().isGirandola();
         isHalloween = Settings.getInstance().isHalloween();
         isPerCent = Settings.getInstance().isPerCent();
+        isCustom = Settings.getInstance().isCustom();
+        if ( isCustom && Settings.getInstance().getCustom() != null ) {
+            customInitialize( Settings.getInstance().getCustom());
+        }
     }
 
     public int isSudoku() {
@@ -156,6 +171,7 @@ public class Grid {
     public boolean isGirandola() { return this.isGirandola; }
     public boolean isHalloween() { return this.isHalloween; }
     public boolean isPerCent() { return this.isPerCent; }
+    public boolean isCustom() { return this.isCustom; }
 
     public void setVanilla() { this.isVanilla = true; }
     public void setLatinSquare() { this.isLatinSquare = true; }
@@ -167,6 +183,7 @@ public class Grid {
     public void setGirandola() { this.isGirandola = true; }
     public void setHalloween() { this.isHalloween = true; }
     public void setPerCent() { this.isPerCent = true; }
+    public void setCustom() { this.isCustom = true; }
 
     public void resetVanilla() { this.isVanilla = false; }
 
@@ -180,6 +197,7 @@ public class Grid {
     public void setGirandola(boolean b) { this.isGirandola = b; }
     public void setHalloween(boolean b) { this.isHalloween = b; }
     public void setPerCent(boolean b) { this.isPerCent = b; }
+    public void setCustom(boolean b) { this.isCustom = b; }
 
     public void updateLatinSquare() { this.isLatinSquare = Settings.getInstance().isLatinSquare(); reset_regionTypes(); }
     public void updateDiagonals() { this.isDiagonals = Settings.getInstance().isDiagonals(); reset_regionTypes(); }
@@ -190,6 +208,7 @@ public class Grid {
     public void updateGirandola() { this.isGirandola = Settings.getInstance().isGirandola(); reset_regionTypes(); }
     public void updateHalloween() { this.isHalloween = Settings.getInstance().isHalloween(); reset_regionTypes(); }
     public void updatePerCent() { this.isPerCent = Settings.getInstance().isPerCent(); reset_regionTypes(); }
+    public void updateCustom() { this.isCustom = Settings.getInstance().isCustom(); reset_regionTypes(); }
 
     public void updateVanilla() { reset_regionTypes(); }
 
@@ -245,6 +264,8 @@ public class Grid {
             return this.halloween;
         else if (regionType == PerCent.class)
             return this.percent;
+        else if (regionType == Custom.class)
+            return this.custom;
         else
             return null;
     }
@@ -280,6 +301,8 @@ public class Grid {
             return 3;
         else if (regionType == PerCent.class)
             return 3;
+        else if (regionType == Custom.class)
+            return CustomNum;
         else
             return 0;
     }
@@ -443,6 +466,21 @@ public class Grid {
     public PerCent getPerCent(int num) {
         if ( num < 3 ) {
             return this.percent[num];
+        }
+        else {
+            return null;
+        }
+    }
+
+    /**
+     * Get the custom at the given index.
+     * Customs are numbered from left to right, top to bottom.
+     * @param num the index of the custom to get, between 0 and 8, inclusive
+     * @return the custom at the given index
+     */
+    public Custom getCustom(int num) {
+        if ( CustomNum != 0 && num < CustomNum ) {
+            return this.custom[num];
         }
         else {
             return null;
@@ -644,6 +682,23 @@ public class Grid {
         }
     }
 
+    /**
+     * Get the custom at the given location
+     * @param x the horizontal coordinate
+     * @param y the vertical coordinate
+     * @return the custom at the given coordinates (the coordinates
+     * are coordinates of a cell)
+     */
+    public Custom getCustomAt(int x, int y) {
+        int index = CustomAt[y][x];
+        if ( index != -1 ) {
+            return this.custom[ index];
+        }
+        else {
+            return null;
+        }
+    }
+
     public Grid.Region getRegionAt(Class<? extends Grid.Region> regionType, int x, int y) {
         if (regionType.equals(Grid.Row.class))
             return getRowAt(x, y);
@@ -669,6 +724,8 @@ public class Grid {
             return getHalloweenAt(x, y);
         else if (regionType.equals(Grid.PerCent.class))
             return getPerCentAt(x, y);
+        else if (regionType.equals(Grid.Custom.class))
+            return getCustomAt(x, y);
         else
             return null;
     }
@@ -699,6 +756,7 @@ public class Grid {
             if ( isGirandola ) { count += 1; }
             if ( isHalloween ) { count += 1; }
             if ( isPerCent ) { count += 1; }
+            if ( isCustom ) { count += 1; }
             _regionTypes = new ArrayList<Class<? extends Grid.Region>>(count);
           if ( !isLatinSquare ) {
             _regionTypes.add(Grid.Block.class);
@@ -729,6 +787,9 @@ public class Grid {
             }
             if ( isPerCent ) {
                 _regionTypes.add(Grid.PerCent.class);
+            }
+            if ( isCustom ) {
+                _regionTypes.add(Grid.Custom.class);
             }
             _regionTypes = Collections.unmodifiableList(_regionTypes);
         }
@@ -1435,6 +1496,88 @@ public class Grid {
     }
 
     /**
+     * A Custom constraint of a sudoku grid.
+     */
+    public class Custom extends Region {
+
+        private int customNum;
+
+        private int numRows = 0;
+        private int numColumns = 0;
+
+        public Custom(int customNum) {
+            this.customNum = customNum;
+        }
+
+        public int getCustomNum() {
+            return this.customNum;
+        }
+
+        public void setNumColumns(int numColumns) {
+            this.numColumns = numColumns;
+        }
+        public void setNumRows(int numRows) {
+            this.numRows = numRows;
+        }
+
+        public int getNumColumns() {
+            return this.numColumns;
+        }
+        public int getNumRows() {
+            return this.numRows;
+        }
+
+        @Override
+        public Cell getCell(int index) {
+            int cellIndex = CustomCells[this.customNum][index];
+            return cells[cellIndex / 9][cellIndex % 9];
+        }
+
+        public int At(int x, int y) {
+            return CustomAt[y][x];
+        }
+
+        @Override
+        public int indexOf(Cell cell) {
+            return CustomIndexOf[cell.getY()][cell.getX()];
+        }
+
+        @Override
+        public String toString() {
+            return "extra region";
+        }
+
+        @Override
+        public String toFullString() {
+            return toString() + " " + (customNum + 1);
+        }
+
+    }
+
+    /**
+     * custom regions - region numbered 1-9, ideally 2-4 regions is good.
+     */
+    public void customInitialize(String regions) {
+        CustomNum = 0; regions = regions.replace( ".", "0");
+        for (int y = 0; y < 9; y++) { int x = 0;
+            for (int z = 0; z < 9; z++) { CustomCells[ y][ z] = -1; }
+            for (int c = 0; c < 81; c++) {
+                if ( regions.charAt( c) == '0'+y+1 ) { CustomCells[ y][ x] = c; x++;
+                    if ( CustomNum < y+1 ) { CustomNum = y+1; }
+                }
+            }
+        }
+        Settings.getInstance().setCount( CustomNum);
+        for (int c = 0; c < 81; c++) { CustomAt[ c/9][ c%9] = -1; CustomIndexOf[ c/9][ c%9] = -1;
+            for (int y = 0; y < 9; y++) {
+                for (int x = 0; x < 9; x++) {
+                    if ( CustomCells[ y][ x] == c) { CustomAt[ c/9][ c%9] = y; CustomIndexOf[ c/9][ c%9] = x; }
+                }
+            }
+        }
+    }
+
+    /**
      * rotates the sudoku clockwise 90 degrees
      */
     public void rotateClockwise() {
@@ -1588,6 +1731,198 @@ public class Grid {
                 }
             }
         }
+    }
+
+    /**
+     * rotates the custom clockwise 90 degrees
+     */
+    public void rotateCustomClockwise() {
+      if ( isCustom ) {
+        int[][] copy = new int[9][9];
+        boolean[][] clue = new boolean[9][9];
+        for (int y = 0; y < 9; y++) {
+            for (int x = 0; x < 9; x++) {
+                Cell cell = getCell( x, y);
+                copy[y][x] = cell.getValue();
+                clue[y][x] = cell.isGiven();
+            }
+        }
+        String newlayout = "";
+        for (int y = 0; y < 9; y++) {
+            for (int x = 0; x < 9; x++) {
+                newlayout += "" + (char)( CustomAt[8-x][y] +'1');
+                Cell cell = getCell( x, y);
+                cell.setValue(copy[8-x][y]);
+                if ( clue[8-x][y] ) {
+                    cell.setGiven();
+                } else {
+                    cell.resetGiven();
+                }
+            }
+        }
+        Settings.getInstance().setCustom( newlayout);
+        customInitialize( newlayout);
+      }
+    }
+
+    /**
+     * rotates the custom anti-clockwise 90 degrees
+     */
+    public void rotateCustomAntiClockwise() {
+      if ( isCustom ) {
+        int[][] copy = new int[9][9];
+        boolean[][] clue = new boolean[9][9];
+        for (int y = 0; y < 9; y++) {
+            for (int x = 0; x < 9; x++) {
+                Cell cell = getCell( x, y);
+                copy[y][x] = cell.getValue();
+                clue[y][x] = cell.isGiven();
+            }
+        }
+        String newlayout = "";
+        for (int y = 0; y < 9; y++) {
+            for (int x = 0; x < 9; x++) {
+                newlayout += "" + (char)( CustomAt[x][8-y] +'1');
+                Cell cell = getCell( x, y);
+                cell.setValue(copy[x][8-y]);
+                if ( clue[x][8-y] ) {
+                    cell.setGiven();
+                } else {
+                    cell.resetGiven();
+                }
+            }
+        }
+        Settings.getInstance().setCustom( newlayout);
+        customInitialize( newlayout);
+      }
+    }
+
+    /**
+     * rotates the custom along horizontal axis
+     */
+    public void rotateCustomHorizontal() {
+      if ( isCustom ) {
+        int[][] copy = new int[9][9];
+        boolean[][] clue = new boolean[9][9];
+        for (int y = 0; y < 9; y++) {
+            for (int x = 0; x < 9; x++) {
+                Cell cell = getCell( x, y);
+                copy[y][x] = cell.getValue();
+                clue[y][x] = cell.isGiven();
+            }
+        }
+        String newlayout = "";
+        for (int y = 0; y < 9; y++) {
+            for (int x = 0; x < 9; x++) {
+                newlayout += "" + (char)( CustomAt[8-y][x] +'1');
+                Cell cell = getCell( x, y);
+                cell.setValue(copy[8-y][x]);
+                if ( clue[8-y][x] ) {
+                    cell.setGiven();
+                } else {
+                    cell.resetGiven();
+                }
+            }
+        }
+        Settings.getInstance().setCustom( newlayout);
+        customInitialize( newlayout);
+      }
+    }
+
+    /**
+     * rotates the custom along vertical axis
+     */
+    public void rotateCustomVertical() {
+      if ( isCustom ) {
+        int[][] copy = new int[9][9];
+        boolean[][] clue = new boolean[9][9];
+        for (int y = 0; y < 9; y++) {
+            for (int x = 0; x < 9; x++) {
+                Cell cell = getCell( x, y);
+                copy[y][x] = cell.getValue();
+                clue[y][x] = cell.isGiven();
+            }
+        }
+        String newlayout = "";
+        for (int y = 0; y < 9; y++) {
+            for (int x = 0; x < 9; x++) {
+                newlayout += "" + (char)( CustomAt[y][8-x] +'1');
+                Cell cell = getCell( x, y);
+                cell.setValue(copy[y][8-x]);
+                if ( clue[y][8-x] ) {
+                    cell.setGiven();
+                } else {
+                    cell.resetGiven();
+                }
+            }
+        }
+        Settings.getInstance().setCustom( newlayout);
+        customInitialize( newlayout);
+      }
+    }
+
+    /**
+     * rotates the custom along diagonal (/) axis
+     */
+    public void rotateCustomDiagonal() {
+      if ( isCustom ) {
+        int[][] copy = new int[9][9];
+        boolean[][] clue = new boolean[9][9];
+        for (int y = 0; y < 9; y++) {
+            for (int x = 0; x < 9; x++) {
+                Cell cell = getCell( x, y);
+                copy[y][x] = cell.getValue();
+                clue[y][x] = cell.isGiven();
+            }
+        }
+        String newlayout = "";
+        for (int y = 0; y < 9; y++) {
+            for (int x = 0; x < 9; x++) {
+                newlayout += "" + (char)( CustomAt[8-x][8-y] +'1');
+                Cell cell = getCell( x, y);
+                cell.setValue(copy[8-x][8-y]);
+                if ( clue[8-x][8-y] ) {
+                    cell.setGiven();
+                } else {
+                    cell.resetGiven();
+                }
+            }
+        }
+        Settings.getInstance().setCustom( newlayout);
+        customInitialize( newlayout);
+      }
+    }
+
+    /**
+     * rotates the custom along anti-diagonal (\) axis
+     */
+    public void rotateCustomAntiDiagonal() {
+      if ( isCustom ) {
+        int[][] copy = new int[9][9];
+        boolean[][] clue = new boolean[9][9];
+        for (int y = 0; y < 9; y++) {
+            for (int x = 0; x < 9; x++) {
+                Cell cell = getCell( x, y);
+                copy[y][x] = cell.getValue();
+                clue[y][x] = cell.isGiven();
+            }
+        }
+        String newlayout = "";
+        for (int y = 0; y < 9; y++) {
+            for (int x = 0; x < 9; x++) {
+                newlayout += "" + (char)( CustomAt[x][y] +'1');
+                Cell cell = getCell( x, y);
+                cell.setValue(copy[x][y]);
+                if ( clue[x][y] ) {
+                    cell.setGiven();
+                } else {
+                    cell.resetGiven();
+                }
+            }
+        }
+        Settings.getInstance().setCustom( newlayout);
+        customInitialize( newlayout);
+      }
     }
 
     /**

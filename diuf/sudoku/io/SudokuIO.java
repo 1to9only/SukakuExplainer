@@ -177,6 +177,19 @@ public class SudokuIO {
         return RES_ERROR;
     }
 
+    private static int loadCustomFromReader(Grid grid, Reader reader) throws IOException {
+        LineNumberReader lineReader = new LineNumberReader(reader);
+        String line = lineReader.readLine();
+        if ( line.length() >= 81 ) {
+            line = line.replace( "A", "1"); line = line.replace( "B", "2"); line = line.replace( "C", "3"); line = line.replace( "D", "4"); line = line.replace( "E", "5"); line = line.replace( "F", "6"); line = line.replace( "G", "7"); line = line.replace( "H", "8"); line = line.replace( "I", "9");
+            Settings settings = Settings.getInstance();
+            settings.setCustom( line.substring( 0, 81));
+            grid.customInitialize( line.substring( 0, 81));
+            return RES_OK;
+        }
+        return RES_ERROR;
+    }
+
     private static void saveToWriter(Grid grid, Writer writer) throws IOException {
         for (int y = 0; y < 9; y++) {
             for (int x = 0; x < 9; x++) {
@@ -372,6 +385,33 @@ public class SudokuIO {
             FileReader freader = new FileReader(file);
             reader = new BufferedReader(freader);
             int result = loadFromReader(grid, reader);
+            if (result == RES_OK)
+                return null;
+            else if (result == RES_WARN)
+                return new ErrorMessage(WARNING_MSG, false, (Object[])(new String[0]));
+            else
+                return new ErrorMessage(ERROR_MSG, true, (Object[])(new String[0]));
+        } catch (FileNotFoundException ex) {
+            return new ErrorMessage("File not found: {0}", file);
+        } catch (IOException ex) {
+            return new ErrorMessage("Error while reading file {0}:\n{1}", file, ex);
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static ErrorMessage loadCustomFromFile( Grid grid, File file) {
+        Reader reader = null;
+        try {
+            FileReader freader = new FileReader(file);
+            reader = new BufferedReader(freader);
+            int result = loadCustomFromReader( grid, reader);
             if (result == RES_OK)
                 return null;
             else if (result == RES_WARN)

@@ -64,6 +64,10 @@ public class HiddenSingle implements DirectHintProducer {
             getHints(grid, Grid.PerCent.class, accu, true);
             getHints(grid, Grid.PerCent.class, accu, false);
         }
+        if ( grid.isCustom() ) {
+            getHints(grid, Grid.Custom.class, accu, true);
+            getHints(grid, Grid.Custom.class, accu, false);
+        }
     }
 
     /**

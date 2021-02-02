@@ -62,6 +62,9 @@ public class HiddenSet implements IndirectHintProducer {
         if ( grid.isPerCent() ) {
             getHints(grid, Grid.PerCent.class, accu);
         }
+        if ( grid.isCustom() ) {
+            getHints(grid, Grid.Custom.class, accu);
+        }
     }
 
     /**

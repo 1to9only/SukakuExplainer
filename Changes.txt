@@ -1,5 +1,8 @@
 Changes:
 
+20210202
+- add extra regions
+
 20210113
 - add rotate, and other improvements
 
