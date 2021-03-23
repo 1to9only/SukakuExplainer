@@ -19,6 +19,10 @@ import diuf.sudoku.io.*;
 import diuf.sudoku.solver.*;
 import diuf.sudoku.tools.*;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Clipboard;
+
 /**
  * The main class and controller. All actions performed in the gui
  * are directly redirected to method of this class, which
@@ -618,12 +622,64 @@ public class SudokuExplainer {
           try {
             Rule rule = (Rule)hint;
             String rulename = rule.getName();
-            if ( rulename.equals("Hidden Single") || rulename.equals("Naked Single") ) {
+            if ( rulename.equals("Hidden Single")       // 1.0-1.5
+              || rulename.equals("Naked Single") ) {    // 2.3
                 pushGrid(); pushStep( grid); hint.apply(grid); pushHint( hint);
             }
             else { basics = 0; }
           } catch (Exception e) {
             JOptionPane.showMessageDialog(frame, hint.toString(), "Apply Singles", JOptionPane.WARNING_MESSAGE);
+            basics = 2;
+          }
+        }
+       if ( basics != 2 ) {
+        clearHints();
+        repaintAll();
+       }
+        solved = solver.isSolved();
+        if ( basics == 1 && solved ) { basics = 0; }
+       }
+       if ( basics == 1 && !solved ) { Thread.yield(); }
+      }
+     }
+     if ( solved ) {
+        frame.setExplanations("<html><body><h2>The Sudoku has been solved !</h2></body></html>");
+     }
+    }
+
+    public void ApplyBasics() {
+     if ( isGridEmpty() ) {
+        JOptionPane.showMessageDialog(frame, "Cannot apply basics, no puzzle!", "Apply Basics", JOptionPane.WARNING_MESSAGE);
+        return;
+     }
+     boolean solved = solver.isSolved();
+     if ( solved ) {
+        frame.setExplanations("<html><body><h2>The Sudoku has been solved !</h2></body></html>");
+        return;
+     }
+     int basics = 1;
+     while ( basics == 1 ) {
+      clearHintsOnly();
+      if ( !solved ) {
+       getNextHint();
+       if ( selectedHints.size() >= 1 ) {
+        for (Hint hint : selectedHints) {
+          try {
+            Rule rule = (Rule)hint;
+            String rulename = rule.getName();
+            if ( rulename.equals("Hidden Single")           // 1.0-1.5
+              || rulename.equals("Direct Pointing")         // 1.7
+              || rulename.equals("Direct Claiming")         // 1.9
+              || rulename.equals("Direct Hidden Pair")      // 2.0
+              || rulename.equals("Naked Single")            // 2.3
+              || rulename.equals("Direct Hidden Triplet")   // 2.5
+              || rulename.equals("Pointing")                // 2.6
+              || rulename.equals("Claiming") ) {            // 2.8
+                pushGrid(); pushStep( grid); hint.apply(grid); pushHint( hint);
+            }
+            else { basics = 0; }
+          } catch (Exception e) {
+            JOptionPane.showMessageDialog(frame, hint.toString(), "Apply Basics", JOptionPane.WARNING_MESSAGE);
             basics = 2;
           }
         }
@@ -882,6 +938,36 @@ public class SudokuExplainer {
       }
     }
 
+    public void copyPath() {
+      if ( !this.pathStack.isEmpty() ) {
+        int hintscount = 0;
+        String solutionpath = "Solution Path\r\n";
+        Stack<String> tempStack = new Stack<String>();
+        while ( !pathStack.isEmpty() ) {
+            tempStack.push( pathStack.pop());
+        }
+        while ( !tempStack.isEmpty() ) {
+            String z = tempStack.pop();
+            String x = z.substring( 0, 2);
+            pathStack.push(z);
+            z = z.substring( 2);
+            if ( x.charAt( 0)=='H' || x.charAt( 0)=='K' || x.charAt( 0)=='M' || x.charAt( 0)=='N' ) {
+                hintscount += 1;
+                solutionpath += "" + hintscount + ": " + z + "\r\n";
+            }
+        }
+        if ( solutionpath.length() == 0 ) {
+            solutionpath += "<empty>\r\n";
+        }
+        StringSelection data = new StringSelection(solutionpath);
+        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(data, data);
+      }
+      else
+      {
+        JOptionPane.showMessageDialog(frame, "Solution Path is empty.", "Not Shown", JOptionPane.ERROR_MESSAGE);
+      }
+    }
+
     public void savePath(File file, boolean inclpm) {
       if ( !this.pathStack.isEmpty() ) {
         ErrorMessage message = SudokuIO.savePathToFile( pathStack, inclpm, file);
@@ -992,7 +1078,11 @@ public class SudokuExplainer {
     }
 
     public void pushHint(Hint hint) {
+      try {
         String s = "";
+        Rule rule = (Rule)hint;
+        double ruleDiff = rule.getDifficulty();
+        int w = (int)((ruleDiff + 0.05) * 10); int p = w % 10; w /= 10;
         if (hint instanceof IndirectHint) {
             IndirectHint iHint = (IndirectHint)hint;
             if ( iHint.isWorth() ) {
@@ -1015,7 +1105,8 @@ public class SudokuExplainer {
                 }
             }
         }
-        this.pathStack.push("H:"+hint.toString()+s);    // cell solved by hint
+        this.pathStack.push("H:"+w+"."+p +", "+hint.toString2()+s);    // cell solved by hint
+      } catch(Exception e) { ; } // catch any that cannot be cast to (Rule)
     }
 
     public void addNote(String inputtext) {

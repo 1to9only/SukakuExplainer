@@ -1,6 +1,6 @@
 /*
  * Project: Sudoku Explainer
- * Copyright (C) 2006-2007 Nicolas Juillerat
+ * Copyright (C) 2006-2007 Nicolas Juillerat, (C) 2020-2021 1to9only
  * Available under the terms of the Lesser General Public License (LGPL)
  */
 package diuf.sudoku.solver.rules;
@@ -96,6 +96,18 @@ public class LockingGHint extends IndirectHint implements Rule, HasParentPotenti
 
     @Override
     public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(getName());
+        builder.append(": ");
+        builder.append(Cell.toFullString(this.cells));
+        builder.append(": ");
+        builder.append(value);
+        builder.append(" in ");
+        builder.append(regions[0].toString());
+        return builder.toString();
+    }
+
+    public String toString2() {
         StringBuilder builder = new StringBuilder();
         builder.append(getName());
         builder.append(": ");

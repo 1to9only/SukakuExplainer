@@ -92,6 +92,13 @@ public class UniqueLoopType3HiddenHint extends UniqueLoopHint {
     }
 
     @Override
+    public String getExtraInfo() {
+        final String[] setNames = new String[] {"Pair", "Triplet", "Quad", "Set (5)", "Set (6)", "Set (7)"};
+        String setName = setNames[hiddenValues.cardinality() - 2];
+        return " (w/Hidden " +  setName + ")";
+    }
+
+    @Override
     public String toHtml() {
         String result = HtmlLoader.loadHtml(this, "UniqueLoopType3Hidden.html");
         String type = getTypeName();

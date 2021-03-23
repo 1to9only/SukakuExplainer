@@ -734,6 +734,87 @@ public class Grid {
         return getRegionAt(regionType, cell.getX(), cell.getY());
     }
 
+    public int getRegionNum(Class<? extends Grid.Region> regionType, int x, int y) {
+        if (regionType.equals(Grid.Row.class))
+            return getRowAt(x, y).getRowNum();
+        else if (regionType.equals(Grid.Column.class))
+            return getColumnAt(x, y).getColumnNum();
+        else if (regionType.equals(Grid.Block.class))
+            return getBlockAt(x, y).getBlockNum();
+        else if (regionType.equals(Grid.Diagonal.class))
+            return getDiagonalAt(x, y).getDiagonalNum();
+        else if (regionType.equals(Grid.AntiDiagonal.class))
+            return getAntiDiagonalAt(x, y).getAntiDiagonalNum();
+        else if (regionType.equals(Grid.DisjointGroup.class))
+            return getDisjointGroupAt(x, y).getDisjointGroupNum();
+        else if (regionType.equals(Grid.Windoku.class))
+            return getWindokuAt(x, y).getWindokuNum();
+        else if (regionType.equals(Grid.Asterisk.class))
+            return getAsteriskAt(x, y).getAsteriskNum();
+        else if (regionType.equals(Grid.CenterDot.class))
+            return getCenterDotAt(x, y).getCenterDotNum();
+        else if (regionType.equals(Grid.Girandola.class))
+            return getGirandolaAt(x, y).getGirandolaNum();
+        else if (regionType.equals(Grid.Halloween.class))
+            return getHalloweenAt(x, y).getHalloweenNum();
+        else if (regionType.equals(Grid.PerCent.class))
+            return getPerCentAt(x, y).getPerCentNum();
+        else if (regionType.equals(Grid.Custom.class))
+            return getCustomAt(x, y).getCustomNum();
+        else
+            return -1;
+    }
+
+    public int getRegionNum(Class<? extends Grid.Region> regionType, Cell cell) {
+        return getRegionNum(regionType, cell.getX(), cell.getY());
+    }
+
+    public String getRegionName(Class<? extends Grid.Region> regionType, int x, int y) {
+        if (regionType.equals(Grid.Row.class))
+            return getRowAt(x, y).toString();
+        else if (regionType.equals(Grid.Column.class))
+            return getColumnAt(x, y).toString();
+        else if (regionType.equals(Grid.Block.class))
+            return getBlockAt(x, y).toString();
+        else if (regionType.equals(Grid.Diagonal.class))
+            return getDiagonalAt(x, y).toString();
+        else if (regionType.equals(Grid.AntiDiagonal.class))
+            return getAntiDiagonalAt(x, y).toString();
+        else if (regionType.equals(Grid.DisjointGroup.class))
+            return getDisjointGroupAt(x, y).toString();
+        else if (regionType.equals(Grid.Windoku.class))
+            return getWindokuAt(x, y).toString();
+        else if (regionType.equals(Grid.Asterisk.class))
+            return getAsteriskAt(x, y).toString();
+        else if (regionType.equals(Grid.CenterDot.class))
+            return getCenterDotAt(x, y).toString();
+        else if (regionType.equals(Grid.Girandola.class))
+            return getGirandolaAt(x, y).toString();
+        else if (regionType.equals(Grid.Halloween.class))
+            return getHalloweenAt(x, y).toString();
+        else if (regionType.equals(Grid.PerCent.class))
+            return getPerCentAt(x, y).toString();
+        else if (regionType.equals(Grid.Custom.class))
+            return getCustomAt(x, y).toString();
+        else
+            return null;
+    }
+
+    public String getRegionName(Class<? extends Grid.Region> regionType, Cell cell) {
+        return getRegionName(regionType, cell.getX(), cell.getY());
+    }
+
+    public ArrayList<Grid.Region> getRegionsAt(Cell cell) {
+        ArrayList<Grid.Region> regions = new ArrayList<Grid.Region>();
+        for (Class<? extends Grid.Region> regionType : getRegionTypes()) {
+            Grid.Region region = getRegionAt(regionType, cell.getX(), cell.getY());
+            if ( region != null ) {
+                regions.add(region);
+            }
+        }
+        return regions;
+    }
+
     private List<Class<? extends Grid.Region>> _regionTypes = null;
 
     /**
@@ -745,9 +826,7 @@ public class Grid {
     public List<Class<? extends Grid.Region>> getRegionTypes() {
         if (_regionTypes == null) {
             int count = 3;
-          if (  isLatinSquare ) {
-            count -= 1;
-          }
+          if (  isLatinSquare ) { count -= 1; }
             if ( isDiagonals ) { count += 2; }
             if ( isDisjointGroups ) { count += 1; }
             if ( isWindoku ) { count += 1; }
@@ -796,33 +875,8 @@ public class Grid {
         return _regionTypes;
     }
 
-    private List<Class<? extends Grid.Region>> _regionTypes3 = null;
-
-    /**
-     * Get a list containing the three classes corresponding to the
-     * three region types (row, column and block)
-     * @return a list of the three region types. The resulting list
-     * can not be modified
-     */
-    public List<Class<? extends Grid.Region>> getRegionTypes3() {
-        if (_regionTypes3 == null) {
-          if (  isLatinSquare ) {
-            _regionTypes3 = new ArrayList<Class<? extends Grid.Region>>(2);
-          }
-          if ( !isLatinSquare ) {
-            _regionTypes3 = new ArrayList<Class<? extends Grid.Region>>(3);
-            _regionTypes3.add(Grid.Block.class);
-          }
-            _regionTypes3.add(Grid.Row.class);
-            _regionTypes3.add(Grid.Column.class);
-            _regionTypes3 = Collections.unmodifiableList(_regionTypes3);
-        }
-        return _regionTypes3;
-    }
-
     private void reset_regionTypes() {
         _regionTypes = null;
-        _regionTypes3 = null;
     }
 
     // Grid regions implementation (rows, columns, 3x3 squares)
@@ -1093,6 +1147,10 @@ public class Grid {
 
         public int getHIndex() {
             return this.hNum;
+        }
+
+        public int getBlockNum() {
+            return this.vNum * 3 + this.hNum;
         }
 
         @Override

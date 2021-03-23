@@ -195,6 +195,15 @@ public class Cell {
         return result;
     }
 
+    // can this cell see 'other' cell
+    public boolean isNeighbor(Cell other) {
+        if ( this.x == other.getX() ) { return true; }          // same row
+        if ( this.y == other.getY() ) { return true; }          // same column
+        Collection<Cell> cellHouseCells = getHouseCells();
+        if ( cellHouseCells.contains( other)) { return true; }  // same region
+        return false;
+    }
+
     /**
      * Get a string representation of a cell. The notation that
      * is used is defined by the {@link Settings} class.

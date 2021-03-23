@@ -66,7 +66,7 @@ public class AboutDialog extends JDialog {
     private JPanel getPnlTop() {
         if (pnlTop == null) {
             lblCopyright = new JLabel();
-            lblCopyright.setText("(C) 2005-2007 Nicolas Juillerat, (C) 2019-2020 1to9only");
+            lblCopyright.setText("(C) 2005-2007 Nicolas Juillerat, (C) 2019-2021 1to9only");
             lblCopyright.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
             lblTitle = new JLabel();
             lblTitle.setText("Sukaku Explainer");

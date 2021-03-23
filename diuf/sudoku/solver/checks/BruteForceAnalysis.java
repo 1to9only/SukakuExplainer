@@ -151,9 +151,6 @@ public class BruteForceAnalysis implements WarningHintProducer {
          * This is not necessary in theory, but in practice, some invalid sudoku
          * may require a too huge number of iterations without this check
          */
-        iterations++;
-        if ( iterations >= 10000 )  // 1to9only: drop out after this many attempts
-            return false;
         if (!isFillable(grid))
             return false;
 

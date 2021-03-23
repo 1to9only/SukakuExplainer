@@ -11,6 +11,9 @@ import diuf.sudoku.*;
 import diuf.sudoku.solver.*;
 import diuf.sudoku.solver.checks.*;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Clipboard;
 
 public class Generator {
 
@@ -74,6 +77,9 @@ public class Generator {
             System.err.println("ED=" + w + "." + p);
             System.err.flush();
             if (difficulty >= minDifficulty && difficulty <= maxDifficulty) {
+                String sClip = s + "\r\nED="+w+"."+p + "\r\n";
+                StringSelection data = new StringSelection(sClip);
+                Toolkit.getDefaultToolkit().getSystemClipboard().setContents(data, data);
                 grid.fixGivens();
                 return grid;
             }

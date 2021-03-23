@@ -50,12 +50,12 @@ public class Settings {
     private boolean isHorizontal = false;
     private boolean isDiagonal = false;
     private boolean isAntiDiagonal = false;
-    private boolean isBiDiagonal = false;
-    private boolean isOrthogonal = false;
-    private boolean isRotational180 = false;
-    private boolean isRotational90 = false;
+    private boolean isBiDiagonal = true;
+    private boolean isOrthogonal = true;
+    private boolean isRotational180 = true;
+    private boolean isRotational90 = true;
     private boolean isNone = true;
-    private boolean isFull = false;
+    private boolean isFull = true;
 
     private boolean isEasy = false;
     private boolean isMedium = false;
@@ -79,6 +79,8 @@ public class Settings {
     private boolean isCustom = false;
     private String custom = null;       // custom variant regions
     private int count = 9;              // custom regions
+
+    private int apply = 23;             // apply button: 23= singles, 28= basics
 
     private int isChanged = 0;          // =1 if a variant setting changed
 
@@ -577,6 +579,17 @@ public class Settings {
         return count;
     }
 
+    public void setApply(int apply) {
+      if ( this.apply != apply ) {
+        this.apply = apply;
+        save();
+      }
+    }
+
+    public int getApply() {
+        return apply;
+    }
+
 //  Load / Save
 
     private void init() {
@@ -779,10 +792,25 @@ public class Settings {
                     count = s.charAt(0) - '0';
                 }
                 catch (NullPointerException e) { LoadError = 1; }
+                try {
+                    s = (String)stgDetails.get("apply");
+                  if ( s.length() == 2 ) {
+                    apply = (s.charAt(0)-'0')*10 + s.charAt(1)-'0';
+                  }
+                    if ( apply != 23 && apply != 28 ) {
+                        apply = 23;
+                    }
+                }
+                catch (NullPointerException e) { LoadError = 1; }
 
                 try {
                     methods = (String)stgDetails.get("techniques");
-                    unpackmethods();
+                    if ( methods.length() == techniques.size() ) {
+                        unpackmethods();
+                    } else {
+                        methods = null;     // causes reset!
+                        LoadError = 1;      // forced update!
+                    }
                 }
                 catch (NullPointerException e) { ; }
 
@@ -868,6 +896,7 @@ public class Settings {
             stgDetails.put("custom", custom);
         }
         stgDetails.put("count", ""+count);
+        stgDetails.put("apply", ""+apply);
 
         if ( methods != null ) {
             stgDetails.put("techniques", methods);

@@ -478,8 +478,10 @@ public class SudokuPanel extends JPanel {
                 if (isRed) {
                     col = orangePotentialColor;
                 } else {
+                  if ( !isHighlighted ) {
                     col = greenPotentialColor;
                     isHighlighted = true;
+                  }
                 }
             }
         }
@@ -516,8 +518,10 @@ public class SudokuPanel extends JPanel {
                 if (isRed) {
                     col = orangePotentialColor;
                 } else {
+                  if ( !isHighlighted ) {
                     col = greenPotentialColor;
                     isHighlighted = true;
+                  }
                 }
             }
         }

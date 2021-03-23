@@ -82,6 +82,7 @@ public class SudokuFrame extends JFrame implements Asker {
     private JMenuItem mitSaveAsImage = null;
     private JMenuItem mitAddNote = null;
     private JMenuItem mitShowPath = null;
+    private JMenuItem mitCopyPath = null;
     private JMenuItem mitSavePath = null;
     private JCheckBoxMenuItem mitIncludePencils = null;
     private JMenu editMenu = null;
@@ -115,6 +116,8 @@ public class SudokuFrame extends JFrame implements Asker {
     private JCheckBoxMenuItem mitFilter = null;
     private JRadioButtonMenuItem mitMathMode = null;
     private JRadioButtonMenuItem mitChessMode = null;
+    private JRadioButtonMenuItem mitSinglesMode = null;
+    private JRadioButtonMenuItem mitBasicsMode = null;
     private JCheckBoxMenuItem mitAntiAliasing = null;
     private JCheckBoxMenuItem mitBig = null;
     private JMenu helpMenu = null;
@@ -668,11 +671,22 @@ public class SudokuFrame extends JFrame implements Asker {
     private JButton getBtnApplySingles() {
         if (btnApplySingles == null) {
             btnApplySingles = new JButton();
+          if ( Settings.getInstance().getApply()==23 ) {
             btnApplySingles.setText("Apply Singles");
             btnApplySingles.setToolTipText("Apply all (hidden and naked) singles");
+          }
+          if ( Settings.getInstance().getApply()==28 ) {
+            btnApplySingles.setText("Apply Basics");
+            btnApplySingles.setToolTipText("Apply all (hidden and naked) singles and basics");
+          }
             btnApplySingles.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
+                  if ( Settings.getInstance().getApply()==23 ) {
                     engine.ApplySingles();
+                  }
+                  if ( Settings.getInstance().getApply()==28 ) {
+                    engine.ApplyBasics();
+                  }
                 }
             });
         }
@@ -931,6 +945,7 @@ public class SudokuFrame extends JFrame implements Asker {
             fileMenu.addSeparator();
             fileMenu.add(getMitAddNote());
             fileMenu.add(getMitShowPath());
+            fileMenu.add(getMitCopyPath());
             fileMenu.add(getMitSavePath());
             fileMenu.add(getMitIncludePencils());
             fileMenu.addSeparator();
@@ -1605,6 +1620,20 @@ public class SudokuFrame extends JFrame implements Asker {
         return mitShowPath;
     }
 
+    private JMenuItem getMitCopyPath() {
+        if (mitCopyPath == null) {
+            mitCopyPath = new JMenuItem();
+            mitCopyPath.setText("Copy Solution Path (hints only)");
+            mitCopyPath.setToolTipText("Copy the sudoku (partial/complete) solution path so far (hints only)");
+            mitCopyPath.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    engine.copyPath();
+                }
+            });
+        }
+        return mitCopyPath;
+    }
+
     private JMenuItem getMitSavePath() {
         if (mitSavePath == null) {
             mitSavePath = new JMenuItem();
@@ -2012,7 +2041,7 @@ public class SudokuFrame extends JFrame implements Asker {
     private JMenuItem getMitAnalyse() {
         if (mitAnalyse == null) {
             mitAnalyse = new JMenuItem();
-            mitAnalyse.setText("Analyze");
+            mitAnalyse.setText("Analyze (and Copy)");
             mitAnalyse.setMnemonic(KeyEvent.VK_F9);
             mitAnalyse.setToolTipText("List the rules required to solve the Sudoku " +
             "and get its average difficulty");
@@ -2042,6 +2071,9 @@ public class SudokuFrame extends JFrame implements Asker {
             optionsMenu.add(getMitShowCandidateMasks());
             optionsMenu.add(getMitSelectTechniques());
             optionsMenu.addSeparator();
+            optionsMenu.add(getMitSinglesMode());
+            optionsMenu.add(getMitBasicsMode());
+            optionsMenu.addSeparator();
             optionsMenu.add(getMitChessMode());
             optionsMenu.add(getMitMathMode());
             optionsMenu.addSeparator();
@@ -2057,6 +2089,9 @@ public class SudokuFrame extends JFrame implements Asker {
             ButtonGroup group = new ButtonGroup();
             group.add(getMitChessMode());
             group.add(getMitMathMode());
+            ButtonGroup apply = new ButtonGroup();
+            apply.add(getMitSinglesMode());
+            apply.add(getMitBasicsMode());
         }
         return optionsMenu;
     }
@@ -2160,6 +2195,44 @@ public class SudokuFrame extends JFrame implements Asker {
             pnlEnabledTechniques.setVisible(false);
         }
         return pnlEnabledTechniques;
+    }
+
+    private JRadioButtonMenuItem getMitSinglesMode() {
+        if (mitSinglesMode == null) {
+            mitSinglesMode = new JRadioButtonMenuItem();
+            mitSinglesMode.setText("Apply button to: Singles (1.0-1.5,2.3)");
+            mitSinglesMode.setSelected((Settings.getInstance().getApply()==23));
+            mitSinglesMode.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                    if (mitSinglesMode.isSelected()) {
+                        Settings.getInstance().setApply(23);
+                        btnApplySingles.setText("Apply Singles");
+                        btnApplySingles.setToolTipText("Apply all (hidden and naked) singles");
+                        repaint();
+                    }
+                }
+            });
+        }
+        return mitSinglesMode;
+    }
+
+    private JRadioButtonMenuItem getMitBasicsMode() {
+        if (mitBasicsMode == null) {
+            mitBasicsMode = new JRadioButtonMenuItem();
+            mitBasicsMode.setText("Apply button to: Basics (1.0-2.8)");
+            mitBasicsMode.setSelected((Settings.getInstance().getApply()==28));
+            mitBasicsMode.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                    if (mitBasicsMode.isSelected()) {
+                        Settings.getInstance().setApply(28);
+                        btnApplySingles.setText("Apply Basics");
+                        btnApplySingles.setToolTipText("Apply all (hidden and naked) singles and basics");
+                        repaint();
+                    }
+                }
+            });
+        }
+        return mitBasicsMode;
     }
 
     private JRadioButtonMenuItem getMitChessMode() {

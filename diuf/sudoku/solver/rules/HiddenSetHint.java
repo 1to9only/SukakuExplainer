@@ -22,7 +22,7 @@ public class HiddenSetHint extends IndirectHint implements Rule, HasParentPotent
     private final Map<Cell, BitSet> highlightPotentials;
     private final Grid.Region region;
 
-    
+
     public HiddenSetHint(IndirectHintProducer rule, Cell[] cells,
             int[] values, Map<Cell, BitSet> highlightPotentials,
             Map<Cell, BitSet> removePotentials, Grid.Region region) {
@@ -109,6 +109,25 @@ public class HiddenSetHint extends IndirectHint implements Rule, HasParentPotent
 
     @Override
     public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(getName());
+        builder.append(": ");
+        if (cells.length <= 4)
+            builder.append(Cell.toFullString(this.cells));
+        else
+            builder.append("Cells [...]");
+        builder.append(": ");
+        for (int i = 0; i < values.length; i++) {
+            if (i > 0)
+                builder.append(",");
+            builder.append(Integer.toString(values[i]));
+        }
+        builder.append(" in ");
+        builder.append(region.toString());
+        return builder.toString();
+    }
+
+    public String toString2() {
         StringBuilder builder = new StringBuilder();
         builder.append(getName());
         builder.append(": ");

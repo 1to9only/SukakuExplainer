@@ -26,10 +26,11 @@ public class BivalueUniversalGrave implements IndirectHintProducer {
         Map<Cell, BitSet> bugValues = new HashMap<Cell, BitSet>();
         BitSet allBugValues = new BitSet(10);
         Set<Cell> commonCells = null;
-        for (Class<? extends Grid.Region> regionType : grid.getRegionTypes3()) {
+        for (Class<? extends Grid.Region> regionType : grid.getRegionTypes()) {
             Grid.Region[] regions = grid.getRegions(regionType);
             for (int i = 0; i < regions.length; i++) {
                 Grid.Region region = regions[i];
+              if ( region != null ) {
                 for (int value = 1; value <= 9; value++) {
                     // Possible positions of a value in a region (row/column/block):
                     BitSet positions = region.getPotentialPositions(value);
@@ -76,6 +77,7 @@ public class BivalueUniversalGrave implements IndirectHintProducer {
                             return;
                     }
                 } // for value
+              }
             } // for i
         } // for regionType
 
@@ -90,10 +92,11 @@ public class BivalueUniversalGrave implements IndirectHintProducer {
         }
         // When bug values have been removed, all remaining candidates must have
         // two positions in each region
-        for (Class<? extends Grid.Region> regionType : temp.getRegionTypes3()) {
+        for (Class<? extends Grid.Region> regionType : temp.getRegionTypes()) {
             Grid.Region[] regions = temp.getRegions(regionType);
             for (int i = 0; i < regions.length; i++) {
                 Grid.Region region = regions[i];
+              if ( region != null ) {
                 for (int value = 1; value <= 9; value++) {
                     // Possible positions of a value in a region (row/column/block):
                     BitSet positions = region.getPotentialPositions(value);
@@ -101,6 +104,7 @@ public class BivalueUniversalGrave implements IndirectHintProducer {
                     if (cardinality != 0 && cardinality != 2)
                         return; // Not a BUG
                 }
+              }
             }
         }
 
@@ -155,11 +159,12 @@ public class BivalueUniversalGrave implements IndirectHintProducer {
     private void addBug3Hint(HintsAccumulator accu, List<Cell> bugCells,
             Map<Cell, BitSet> extraValues, BitSet allExtraValues, Set<Cell> commonCells,
             Grid grid) throws InterruptedException {
-        for (Class<? extends Grid.Region> regionType : grid.getRegionTypes3()) {
+        for (Class<? extends Grid.Region> regionType : grid.getRegionTypes()) {
             // Look for a region of this type shared by bugCells
             Grid.Region region = null;
             for (Cell cell : bugCells) {
                 Grid.Region cellRegion = grid.getRegionAt(regionType, cell.getX(), cell.getY());
+              if ( cellRegion != null ) {
                 if (region == null) {
                     region = cellRegion;
                 } else if (!region.equals(cellRegion)) {
@@ -167,6 +172,7 @@ public class BivalueUniversalGrave implements IndirectHintProducer {
                     region = null;
                     break;
                 }
+              }
             }
             if (region != null) {
                 // A shared region of type regionType has been found
@@ -249,11 +255,12 @@ public class BivalueUniversalGrave implements IndirectHintProducer {
         if (common.cardinality() != 1)
             return; // No BUG type 4
 
-        for (Class<? extends Grid.Region> regionType : grid.getRegionTypes3()) {
+        for (Class<? extends Grid.Region> regionType : grid.getRegionTypes()) {
             // Look for a region of this type shared by all bugCells
             Grid.Region region = null;
             for (Cell cell : bugCells) {
                 Grid.Region cellRegion = grid.getRegionAt(regionType, cell.getX(), cell.getY());
+              if ( cellRegion != null ) {
                 if (region == null) {
                     region = cellRegion;
                 } else if (!region.equals(cellRegion)) {
@@ -261,6 +268,7 @@ public class BivalueUniversalGrave implements IndirectHintProducer {
                     region = null;
                     break;
                 }
+              }
             }
             if (region != null) {
                 // OK, this is a BUG type 4

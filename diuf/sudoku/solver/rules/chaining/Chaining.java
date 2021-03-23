@@ -466,8 +466,9 @@ public class Chaining implements IndirectHintProducer {
 
     private void doRegionChainings(Grid grid, List<ChainingHint> result, Cell cell,
             int value, LinkedSet<Potential> onToOn, LinkedSet<Potential> onToOff) {
-        for (Class<? extends Grid.Region> regionType : grid.getRegionTypes3()) {
+        for (Class<? extends Grid.Region> regionType : grid.getRegionTypes()) {
             Grid.Region region = grid.getRegionAt(regionType, cell.getX(), cell.getY());
+          if ( region != null ) {
             BitSet potentialPositions = region.getPotentialPositions(value);
 
             // Is this region worth ?
@@ -522,6 +523,7 @@ public class Chaining implements IndirectHintProducer {
                     }
                 } // First meet
             } // cardinality >= 3
+          }
         } // for Region
     }
 
@@ -551,8 +553,9 @@ public class Chaining implements IndirectHintProducer {
         }
 
         // Second rule: other potential position for this value get off
-        for (Class<? extends Grid.Region> regionType : grid.getRegionTypes3()) {
+        for (Class<? extends Grid.Region> regionType : grid.getRegionTypes()) {
             Grid.Region region = grid.getRegionAt(regionType, p.cell.getX(), p.cell.getY());
+          if ( region != null ) {
             for (int i = 0; i < 9; i++) {
                 Cell cell = region.getCell(i);
                 if (!cell.equals(p.cell) && cell.hasPotentialValue(p.value))
@@ -560,6 +563,7 @@ public class Chaining implements IndirectHintProducer {
                             getRegionCause(region),
                             "the value can occur only once in the " + region.toString()));
             }
+          }
         }
         return result;
     }
@@ -644,8 +648,9 @@ public class Chaining implements IndirectHintProducer {
         //  partTypes.add(Grid.Row.class);
         //  partTypes.add(Grid.Column.class);
         //  for (Class<? extends Grid.Region> partType : partTypes) {
-            for (Class<? extends Grid.Region> partType : grid.getRegionTypes3()) {
+            for (Class<? extends Grid.Region> partType : grid.getRegionTypes()) {
                 Grid.Region region = grid.getRegionAt(partType, p.cell.getX(), p.cell.getY());
+              if ( region != null ) {
                 BitSet potentialPositions = region.getPotentialPositions(p.value);
                 if (potentialPositions.cardinality() == 2) {
                     int otherPosition = potentialPositions.nextSetBit(0);
@@ -660,6 +665,7 @@ public class Chaining implements IndirectHintProducer {
                     addHiddenParentsOfRegion(pOn, grid, source, region, offPotentials);
                     result.add(pOn);
                 }
+              }
             }
         }
 
