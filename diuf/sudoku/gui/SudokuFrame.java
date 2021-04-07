@@ -95,6 +95,7 @@ public class SudokuFrame extends JFrame implements Asker {
     private JMenu toolMenu = null;
     private JMenuItem mitCheckValidity = null;
     private JMenuItem mitAnalyse = null;
+    private JCheckBoxMenuItem mitAnalyseClipboard = null;
     private JMenuItem mitSolveStep = null;
     private JMenuItem mitGetNextHint = null;
     private JMenuItem mitApplyHint = null;
@@ -128,6 +129,7 @@ public class SudokuFrame extends JFrame implements Asker {
     private JMenuItem mitShowWelcome = null;
     private JMenuItem mitUseSolution = null;
     private JMenuItem mitGenerate = null;
+    private JCheckBoxMenuItem mitGenerateClipboard = null;
     private JMenuItem mitGenerateSolution = null;
     private JCheckBoxMenuItem mitShowCandidates = null;
     private JCheckBoxMenuItem mitShowCandidateMasks = null;
@@ -160,6 +162,7 @@ public class SudokuFrame extends JFrame implements Asker {
     private JCheckBoxMenuItem mitGirandola = null;
     private JCheckBoxMenuItem mitHalloween = null;
     private JCheckBoxMenuItem mitPerCent = null;
+    private JCheckBoxMenuItem mitSdoku = null;
     private JMenuItem mitExtraRegions = null;
     private JMenuItem mitCustomText = null;
     private JMenuItem mitCustomFile = null;
@@ -374,7 +377,7 @@ public class SudokuFrame extends JFrame implements Asker {
     }
 
     private void initialize() {
-        this.setTitle("Sukaku Explainer " + VERSION + "." + REVISION + SUBREV);
+        this.setTitle("Sukaku Explainer " + VERSION + "." + REVISION + "." + SUBREV);
         JMenuBar menuBar = getJJMenuBar();
         setupLookAndFeelMenu();
         this.setJMenuBar(menuBar);
@@ -927,8 +930,9 @@ public class SudokuFrame extends JFrame implements Asker {
             setCommand(getMitNew(), 'N');
             fileMenu.add(getMitUseSolution());
             fileMenu.add(getMitGenerate());
-            fileMenu.add(getMitGenerateSolution());
             setCommand(getMitGenerate(), 'G');
+            fileMenu.add(getMitGenerateClipboard());
+            fileMenu.add(getMitGenerateSolution());
             fileMenu.add(getMitRestart());
             fileMenu.addSeparator();
             fileMenu.add(getMitLoad());
@@ -1003,6 +1007,21 @@ public class SudokuFrame extends JFrame implements Asker {
             });
         }
         return mitGenerate;
+    }
+
+    private JCheckBoxMenuItem getMitGenerateClipboard() {
+        if (mitGenerateClipboard == null) {
+            mitGenerateClipboard = new JCheckBoxMenuItem();
+            mitGenerateClipboard.setText("... and Copy to Clipboard");
+            mitGenerateClipboard.setToolTipText("Copy the generated sudoku to the clipboard");
+            mitGenerateClipboard.setSelected(false);
+            mitGenerateClipboard.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                    Settings.getInstance().setGenerateToClipboard(mitGenerateClipboard.isSelected());
+                }
+            });
+        }
+        return mitGenerateClipboard;
     }
 
     private JMenuItem getMitGenerateSolution() {
@@ -1867,6 +1886,7 @@ public class SudokuFrame extends JFrame implements Asker {
             getMitSolve().setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F8, 0));
             toolMenu.add(getMitAnalyse());
             getMitAnalyse().setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F9, 0));
+            toolMenu.add(getMitAnalyseClipboard());
         }
         return toolMenu;
     }
@@ -2041,7 +2061,7 @@ public class SudokuFrame extends JFrame implements Asker {
     private JMenuItem getMitAnalyse() {
         if (mitAnalyse == null) {
             mitAnalyse = new JMenuItem();
-            mitAnalyse.setText("Analyze (and Copy)");
+            mitAnalyse.setText("Analyze");
             mitAnalyse.setMnemonic(KeyEvent.VK_F9);
             mitAnalyse.setToolTipText("List the rules required to solve the Sudoku " +
             "and get its average difficulty");
@@ -2059,6 +2079,21 @@ public class SudokuFrame extends JFrame implements Asker {
             });
         }
         return mitAnalyse;
+    }
+
+    private JCheckBoxMenuItem getMitAnalyseClipboard() {
+        if (mitAnalyseClipboard == null) {
+            mitAnalyseClipboard = new JCheckBoxMenuItem();
+            mitAnalyseClipboard.setText("... and Copy to Clipboard");
+            mitAnalyseClipboard.setToolTipText("Copy the Analysis to the clipboard");
+            mitAnalyseClipboard.setSelected(false);
+            mitAnalyseClipboard.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                    Settings.getInstance().setAnalyseToClipboard(mitAnalyseClipboard.isSelected());
+                }
+            });
+        }
+        return mitAnalyseClipboard;
     }
 
     private JMenu getOptionsMenu() {
@@ -2484,6 +2519,7 @@ public class SudokuFrame extends JFrame implements Asker {
             VariantsMenu.addSeparator();
             VariantsMenu.add(getMitHalloween());
             VariantsMenu.add(getMitPerCent());
+            VariantsMenu.add(getMitSdoku());
             VariantsMenu.add(getMitExtraRegions());
             VariantsMenu.add(getMitCustomText());
         //  VariantsMenu.add(getMitCustomFile());
@@ -2510,6 +2546,7 @@ public class SudokuFrame extends JFrame implements Asker {
                 // if ( mitLatinSquare.isSelected() ) {
                 //  if ( Settings.getInstance().isHalloween() ) { mitHalloween.setSelected(false); }
                 //  if ( Settings.getInstance().isPerCent() )   { mitPerCent.setSelected(false); }
+                //  if ( Settings.getInstance().isSdoku() )   { mitSdoku.setSelected(false); }
                 // }
                     Settings.getInstance().setCustom(false);
                     Settings.getInstance().setLatinSquare(mitLatinSquare.isSelected());
@@ -2550,6 +2587,7 @@ public class SudokuFrame extends JFrame implements Asker {
                     if ( Settings.getInstance().isGirandola() )      { mitGirandola.setSelected(false); }
                     if ( Settings.getInstance().isHalloween() )      { mitHalloween.setSelected(false); }
                     if ( Settings.getInstance().isPerCent() )        { mitPerCent.setSelected(false); }
+                    if ( Settings.getInstance().isSdoku() )          { mitSdoku.setSelected(false); }
                     Settings.getInstance().setCustom(false);
                     Settings.getInstance().saveChanged();
                     sudokuPanel.getSudokuGrid().updateVanilla();
@@ -2578,10 +2616,11 @@ public class SudokuFrame extends JFrame implements Asker {
             mitDiagonals.setSelected(Settings.getInstance().isDiagonals());
             mitDiagonals.addItemListener(new java.awt.event.ItemListener() {
                 public void itemStateChanged(java.awt.event.ItemEvent e) {
-                   if ( mitDiagonals.isSelected() ) {
-                    if ( Settings.getInstance().isHalloween() ) { mitHalloween.setSelected(false); }
-                    if ( Settings.getInstance().isPerCent() )   { mitPerCent.setSelected(false); }
-                   }
+                // if ( mitDiagonals.isSelected() ) {
+                //  if ( Settings.getInstance().isHalloween() ) { mitHalloween.setSelected(false); }
+                //  if ( Settings.getInstance().isPerCent() )   { mitPerCent.setSelected(false); }
+                //  if ( Settings.getInstance().isSdoku() )     { mitSdoku.setSelected(false); }
+                // }
                     Settings.getInstance().setDiagonals(mitDiagonals.isSelected());
                     Settings.getInstance().saveChanged();
                     sudokuPanel.getSudokuGrid().updateDiagonals();
@@ -2605,6 +2644,7 @@ public class SudokuFrame extends JFrame implements Asker {
                    if ( mitDisjointGroups.isSelected() ) {
                     if ( Settings.getInstance().isHalloween() ) { mitHalloween.setSelected(false); }
                     if ( Settings.getInstance().isPerCent() )   { mitPerCent.setSelected(false); }
+                    if ( Settings.getInstance().isSdoku() )     { mitSdoku.setSelected(false); }
                    }
                     Settings.getInstance().setDisjointGroups(mitDisjointGroups.isSelected());
                     Settings.getInstance().setCustom(false);
@@ -2653,6 +2693,7 @@ public class SudokuFrame extends JFrame implements Asker {
                    if ( mitWindoku.isSelected() ) {
                     if ( Settings.getInstance().isHalloween() ) { mitHalloween.setSelected(false); }
                     if ( Settings.getInstance().isPerCent() )   { mitPerCent.setSelected(false); }
+                //  if ( Settings.getInstance().isSdoku() )     { mitSdoku.setSelected(false); }
                    }
                     Settings.getInstance().setWindoku(mitWindoku.isSelected());
                     Settings.getInstance().setCustom(false);
@@ -2693,6 +2734,7 @@ public class SudokuFrame extends JFrame implements Asker {
                    if ( mitClover.isSelected() ) {
                     if ( Settings.getInstance().isHalloween() ) { mitHalloween.setSelected(false); }
                     if ( Settings.getInstance().isPerCent() )   { mitPerCent.setSelected(false); }
+                    if ( Settings.getInstance().isSdoku() )     { mitSdoku.setSelected(false); }
                    }
                     Settings.getInstance().setCustom(false);
                     Settings.getInstance().saveChanged();
@@ -2739,6 +2781,7 @@ public class SudokuFrame extends JFrame implements Asker {
                     if ( Settings.getInstance().isGirandola() ) { mitGirandola.setSelected(false); }
                     if ( Settings.getInstance().isHalloween() ) { mitHalloween.setSelected(false); }
                     if ( Settings.getInstance().isPerCent() )   { mitPerCent.setSelected(false); }
+                    if ( Settings.getInstance().isSdoku() )     { mitSdoku.setSelected(false); }
                    }
                     Settings.getInstance().setAsterisk(mitAsterisk.isSelected());
                     Settings.getInstance().setCustom(false);
@@ -2774,6 +2817,7 @@ public class SudokuFrame extends JFrame implements Asker {
                     if ( Settings.getInstance().isGirandola() ) { mitGirandola.setSelected(false); }
                     if ( Settings.getInstance().isHalloween() ) { mitHalloween.setSelected(false); }
                     if ( Settings.getInstance().isPerCent() )   { mitPerCent.setSelected(false); }
+                    if ( Settings.getInstance().isSdoku() )     { mitSdoku.setSelected(false); }
                    }
                     Settings.getInstance().setCenterDot(mitCenterDot.isSelected());
                     Settings.getInstance().setCustom(false);
@@ -2809,6 +2853,7 @@ public class SudokuFrame extends JFrame implements Asker {
                     if ( Settings.getInstance().isCenterDot() ) { mitCenterDot.setSelected(false); }
                     if ( Settings.getInstance().isHalloween() ) { mitHalloween.setSelected(false); }
                     if ( Settings.getInstance().isPerCent() )   { mitPerCent.setSelected(false); }
+                    if ( Settings.getInstance().isSdoku() )     { mitSdoku.setSelected(false); }
                    }
                     Settings.getInstance().setGirandola(mitGirandola.isSelected());
                     Settings.getInstance().setCustom(false);
@@ -2849,6 +2894,7 @@ public class SudokuFrame extends JFrame implements Asker {
                         if ( Settings.getInstance().isCenterDot() )      { mitCenterDot.setSelected(false); }
                         if ( Settings.getInstance().isGirandola() )      { mitGirandola.setSelected(false); }
                         if ( Settings.getInstance().isPerCent() )        { mitPerCent.setSelected(false); }
+                        if ( Settings.getInstance().isSdoku() )          { mitSdoku.setSelected(false); }
                     }
                     Settings.getInstance().setHalloween(mitHalloween.isSelected());
                     Settings.getInstance().setCustom(false);
@@ -2889,6 +2935,7 @@ public class SudokuFrame extends JFrame implements Asker {
                         if ( Settings.getInstance().isCenterDot() )      { mitCenterDot.setSelected(false); }
                         if ( Settings.getInstance().isGirandola() )      { mitGirandola.setSelected(false); }
                         if ( Settings.getInstance().isHalloween() )      { mitHalloween.setSelected(false); }
+                        if ( Settings.getInstance().isSdoku() )          { mitSdoku.setSelected(false); }
                     }
                     Settings.getInstance().setPerCent(mitPerCent.isSelected());
                     Settings.getInstance().setCustom(false);
@@ -2909,6 +2956,47 @@ public class SudokuFrame extends JFrame implements Asker {
             });
         }
         return mitPerCent;
+    }
+
+    private JCheckBoxMenuItem getMitSdoku() {
+        if (mitSdoku == null) {
+            mitSdoku = new JCheckBoxMenuItem();
+            mitSdoku.setText("S-doku");
+            mitSdoku.setToolTipText("Sets the puzzle type to S-doku");
+            mitSdoku.setSelected(Settings.getInstance().isSdoku());
+            mitSdoku.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                    if ( mitSdoku.isSelected() ) {
+                        if ( Settings.getInstance().isLatinSquare() )    { mitLatinSquare.setSelected(false); }
+                        if ( Settings.getInstance().isDiagonals() )      { mitDiagonals.setSelected(false); }
+                        if ( Settings.getInstance().isDisjointGroups() ) { mitDisjointGroups.setSelected(false); }
+                        if ( Settings.getInstance().isWindoku() )        { mitWindoku.setSelected(false); }
+                        if ( Settings.getInstance().isClover() )         { mitClover.setSelected(false); }
+                        if ( Settings.getInstance().isAsterisk() )       { mitAsterisk.setSelected(false); }
+                        if ( Settings.getInstance().isCenterDot() )      { mitCenterDot.setSelected(false); }
+                        if ( Settings.getInstance().isGirandola() )      { mitGirandola.setSelected(false); }
+                        if ( Settings.getInstance().isHalloween() )      { mitHalloween.setSelected(false); }
+                        if ( Settings.getInstance().isPerCent() )        { mitPerCent.setSelected(false); }
+                    }
+                    Settings.getInstance().setSdoku(mitSdoku.isSelected());
+                    Settings.getInstance().setCustom(false);
+                    Settings.getInstance().saveChanged();
+                    sudokuPanel.getSudokuGrid().updateSdoku();
+                    sudokuPanel.getSudokuGrid().updateCustom();
+        //          mitCustomCopy.setVisible(false);
+                    mitCustomClockwise.setVisible(false);
+                    mitCustomAntiClockwise.setVisible(false);
+                    mitCustomHorizontal.setVisible(false);
+                    mitCustomVertical.setVisible(false);
+                    mitCustomDiagonal.setVisible(false);
+                    mitCustomAntiDiagonal.setVisible(false);
+                    engine.rebuildSolver();
+                    engine.resetPotentials();
+                    repaint();
+                }
+            });
+        }
+        return mitSdoku;
     }
 
     private JMenuItem getMitExtraRegions() {
@@ -2984,6 +3072,7 @@ public class SudokuFrame extends JFrame implements Asker {
                     if ( Settings.getInstance().isGirandola() )      { mitGirandola.setSelected(false); }
                     if ( Settings.getInstance().isHalloween() )      { mitHalloween.setSelected(false); }
                     if ( Settings.getInstance().isPerCent() )        { mitPerCent.setSelected(false); }
+                    if ( Settings.getInstance().isSdoku() )          { mitSdoku.setSelected(false); }
                     Settings.getInstance().setCustom(true);
                     Settings.getInstance().saveChanged();
                     sudokuPanel.getSudokuGrid().updateCustom();
@@ -3095,6 +3184,7 @@ public class SudokuFrame extends JFrame implements Asker {
                         if ( Settings.getInstance().isGirandola() )      { mitGirandola.setSelected(false); }
                         if ( Settings.getInstance().isHalloween() )      { mitHalloween.setSelected(false); }
                         if ( Settings.getInstance().isPerCent() )        { mitPerCent.setSelected(false); }
+                        if ( Settings.getInstance().isSdoku() )          { mitSdoku.setSelected(false); }
                         Settings.getInstance().setCustom(true);
                         Settings.getInstance().saveChanged();
                         sudokuPanel.getSudokuGrid().updateCustom();
@@ -3143,6 +3233,7 @@ public class SudokuFrame extends JFrame implements Asker {
                                 if ( Settings.getInstance().isGirandola() )      { mitGirandola.setSelected(false); }
                                 if ( Settings.getInstance().isHalloween() )      { mitHalloween.setSelected(false); }
                                 if ( Settings.getInstance().isPerCent() )        { mitPerCent.setSelected(false); }
+                                if ( Settings.getInstance().isSdoku() )          { mitSdoku.setSelected(false); }
                                 Settings.getInstance().setCustom(true);
                                 Settings.getInstance().saveChanged();
                                 sudokuPanel.getSudokuGrid().updateCustom();

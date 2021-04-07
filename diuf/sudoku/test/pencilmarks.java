@@ -14,8 +14,6 @@ import diuf.sudoku.solver.*;
 
 public class pencilmarks {
     static String FORMAT = "ED=%r/%p/%d";
-    static String RELEASE = "2009-01-01";
-    static String VERSION = "1.2.1.3";
     /**
      * Solve input puzzles and print results according to the output format.
      * @param args 81-char puzzles
@@ -100,6 +98,9 @@ public class pencilmarks {
                     break;
                 case 'P':   // PerCent
                     Settings.getInstance().setPerCent(true);
+                    break;
+                case 'S':   // S-doku
+                    Settings.getInstance().setSdoku(true);
                     break;
 
                 case 'T':   // used saved techniques

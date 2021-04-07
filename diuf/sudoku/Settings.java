@@ -19,18 +19,16 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import javax.swing.UIManager;
-
 import diuf.sudoku.*;
-
 /**
  * Global settings of the application.
  * Implemented using the singleton pattern.
  */
 public class Settings {
 
-    public final static int VERSION = 1;
-    public final static int REVISION = 2;
-    public final static String SUBREV = ".1";
+    public final static int VERSION  = 2021;
+    public final static int REVISION = 4;
+    public final static int SUBREV   = 7;
 
     private static Settings instance = null;
 
@@ -75,6 +73,7 @@ public class Settings {
     private boolean isGirandola = false;
     private boolean isHalloween = false;
     private boolean isPerCent = false;
+    private boolean isSdoku = false;
 
     private boolean isCustom = false;
     private String custom = null;       // custom variant regions
@@ -93,6 +92,9 @@ public class Settings {
     private Grid solution;              // solution grid
     private boolean useSolution = false;
     private boolean Factor = false;
+
+    private boolean GenerateToClipboard = false;    // true= copy generated grid to clipboard
+    private boolean AnalyseToClipboard = false;     // true= copy analysis to clipboard
 
     private Settings() {
         init();
@@ -118,6 +120,7 @@ public class Settings {
         isGirandola = false;
         isHalloween = false;
         isPerCent = false;
+        isSdoku = false;
         isCustom = false;
     }
 
@@ -140,6 +143,20 @@ public class Settings {
     }
     public boolean getFactor() {
         return Factor;
+    }
+
+    public void setGenerateToClipboard(boolean b) {
+        this.GenerateToClipboard = b;
+    }
+    public boolean getGenerateToClipboard() {
+        return GenerateToClipboard;
+    }
+
+    public void setAnalyseToClipboard(boolean b) {
+        this.AnalyseToClipboard = b;
+    }
+    public boolean getAnalyseToClipboard() {
+        return AnalyseToClipboard;
     }
 
     public void setRCNotation(boolean isRCNotation) {
@@ -544,6 +561,16 @@ public class Settings {
         return isPerCent;
     }
 
+    public void setSdoku(boolean isSdoku) {
+      if ( this.isSdoku != isSdoku ) {
+        this.isSdoku = isSdoku;
+        isChanged = 1;
+      }
+    }
+    public boolean isSdoku() {
+        return isSdoku;
+    }
+
     public void setCustom(boolean isCustom) {
       if ( this.isCustom != isCustom ) {
         this.isCustom = isCustom;
@@ -779,6 +806,11 @@ public class Settings {
                 }
                 catch (NullPointerException e) { LoadError = 1; }
                 try {
+                    s = (String)stgDetails.get("isS-doku");
+                    isSdoku = s.equals("true")?true:false;
+                }
+                catch (NullPointerException e) { LoadError = 1; }
+                try {
                     s = (String)stgDetails.get("isCustom");
                     isCustom = s.equals("true")?true:false;
                 }
@@ -890,6 +922,7 @@ public class Settings {
         stgDetails.put("isGirandola", isGirandola?"true":"false");
         stgDetails.put("isHalloween", isHalloween?"true":"false");
         stgDetails.put("isPerCent", isPerCent?"true":"false");
+        stgDetails.put("isS-doku", isSdoku?"true":"false");
         stgDetails.put("isCustom", isCustom?"true":"false");
 
         if ( custom != null ) {

@@ -1,5 +1,10 @@
 Changes:
 
+20210407
+- add S-doku variant
+- reverted to previous flatlaf
+- a few other changes
+
 20210323
 - a few fixes, and a few improvements
 

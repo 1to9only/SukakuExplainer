@@ -41,6 +41,8 @@ public class Grid {
     private Girandola[] girandola = new Girandola[1];               // <- one of
     private Halloween[] halloween = new Halloween[3];
     private PerCent[] percent = new PerCent[3];
+    private SdokuBand[] sdokuband = new SdokuBand[3];
+    private SdokuStack[] sdokustack = new SdokuStack[3];
     private Custom[] custom = new Custom[Settings.getInstance().getCount()];
 
     private boolean isVanilla = true;   // =false if solving gattai, unused!!!
@@ -54,6 +56,7 @@ public class Grid {
     private boolean isGirandola = false;
     private boolean isHalloween = false;
     private boolean isPerCent = false;
+    private boolean isSdoku = false;
     private boolean isCustom = false;
     private int CustomNum = Settings.getInstance().getCount();
 
@@ -102,6 +105,16 @@ public class Grid {
     private int[][] PerCentAt = {{-1,-1,-1,-1,-1,-1,-1,-1, 1},{-1, 0, 0, 0,-1,-1,-1, 1,-1},{-1, 0, 0, 0,-1,-1, 1,-1,-1},{-1, 0, 0, 0,-1, 1,-1,-1,-1},{-1,-1,-1,-1, 1,-1,-1,-1,-1},{-1,-1,-1, 1,-1, 2, 2, 2,-1},{-1,-1, 1,-1,-1, 2, 2, 2,-1},{-1, 1,-1,-1,-1, 2, 2, 2,-1},{ 1,-1,-1,-1,-1,-1,-1,-1,-1}};
     private int[][] PerCentIndexOf = {{-1,-1,-1,-1,-1,-1,-1,-1, 0},{-1, 0, 1, 2,-1,-1,-1, 1,-1},{-1, 3, 4, 5,-1,-1, 2,-1,-1},{-1, 6, 7, 8,-1, 3,-1,-1,-1},{-1,-1,-1,-1, 4,-1,-1,-1,-1},{-1,-1,-1, 5,-1, 0, 1, 2,-1},{-1,-1, 6,-1,-1, 3, 4, 5,-1},{-1, 7,-1,-1,-1, 6, 7, 8,-1},{ 8,-1,-1,-1,-1,-1,-1,-1,-1}};
 
+    // SdokuBand
+    private int[][] SdokuBandCells = { { 2, 3, 4, 5, 6,10,16,17,18},{27,37,38,39,40,41,42,43,53},{62,63,64,70,74,75,76,77,78},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1}};
+    private int[][] SdokuBandAt = { {-1,-1, 0, 0, 0, 0, 0,-1,-1},{-1, 0,-1,-1,-1,-1,-1, 0, 0},{ 0,-1,-1,-1,-1,-1,-1,-1,-1},{ 1,-1,-1,-1,-1,-1,-1,-1,-1},{-1, 1, 1, 1, 1, 1, 1, 1,-1},{-1,-1,-1,-1,-1,-1,-1,-1, 1},{-1,-1,-1,-1,-1,-1,-1,-1, 2},{ 2, 2,-1,-1,-1,-1,-1, 2,-1},{-1,-1, 2, 2, 2, 2, 2,-1,-1}};
+    private int[][] SdokuBandIndexOf = { {-1,-1, 0, 1, 2, 3, 4,-1,-1},{-1, 5,-1,-1,-1,-1,-1, 6, 7},{ 8,-1,-1,-1,-1,-1,-1,-1,-1},{ 0,-1,-1,-1,-1,-1,-1,-1,-1},{-1, 1, 2, 3, 4, 5, 6, 7,-1},{-1,-1,-1,-1,-1,-1,-1,-1, 8},{-1,-1,-1,-1,-1,-1,-1,-1, 0},{ 1, 2,-1,-1,-1,-1,-1, 3,-1},{-1,-1, 4, 5, 6, 7, 8,-1,-1}};
+
+    // SdokuStack
+    private int[][] SdokuStackCells = { { 2,10,18,27,37,38,63,64,74},{ 3, 4, 5,39,40,41,75,76,77},{ 6,16,17,42,43,53,62,70,78},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1}};
+    private int[][] SdokuStackAt = { {-1,-1, 0, 1, 1, 1, 2,-1,-1},{-1, 0,-1,-1,-1,-1,-1, 2, 2},{ 0,-1,-1,-1,-1,-1,-1,-1,-1},{ 0,-1,-1,-1,-1,-1,-1,-1,-1},{-1, 0, 0, 1, 1, 1, 2, 2,-1},{-1,-1,-1,-1,-1,-1,-1,-1, 2},{-1,-1,-1,-1,-1,-1,-1,-1, 2},{ 0, 0,-1,-1,-1,-1,-1, 2,-1},{-1,-1, 0, 1, 1, 1, 2,-1,-1}};
+    private int[][] SdokuStackIndexOf = { {-1,-1, 0, 0, 1, 2, 0,-1,-1},{-1, 1,-1,-1,-1,-1,-1, 1, 2},{ 2,-1,-1,-1,-1,-1,-1,-1,-1},{ 3,-1,-1,-1,-1,-1,-1,-1,-1},{-1, 4, 5, 3, 4, 5, 3, 4,-1},{-1,-1,-1,-1,-1,-1,-1,-1, 5},{-1,-1,-1,-1,-1,-1,-1,-1, 6},{ 6, 7,-1,-1,-1,-1,-1, 7,-1},{-1,-1, 8, 6, 7, 8, 8,-1,-1}};
+
     // Custom
     private int[][] CustomCells = { {-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1}};
     private int[][] CustomAt = { {-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1}};
@@ -132,6 +145,8 @@ public class Grid {
         for (int i = 0; i < 3; i++) {
             halloween[i] = new Halloween(i);
             percent[i] = new PerCent(i);
+            sdokuband[i] = new SdokuBand(i);
+            sdokustack[i] = new SdokuStack(i);
         }
         for (int i = 0; i < CustomNum; i++) {
             custom[i] = new Custom(i);
@@ -147,6 +162,7 @@ public class Grid {
         isGirandola = Settings.getInstance().isGirandola();
         isHalloween = Settings.getInstance().isHalloween();
         isPerCent = Settings.getInstance().isPerCent();
+        isSdoku = Settings.getInstance().isSdoku();
         isCustom = Settings.getInstance().isCustom();
         if ( isCustom && Settings.getInstance().getCustom() != null ) {
             customInitialize( Settings.getInstance().getCustom());
@@ -171,6 +187,7 @@ public class Grid {
     public boolean isGirandola() { return this.isGirandola; }
     public boolean isHalloween() { return this.isHalloween; }
     public boolean isPerCent() { return this.isPerCent; }
+    public boolean isSdoku() { return this.isSdoku; }
     public boolean isCustom() { return this.isCustom; }
 
     public void setVanilla() { this.isVanilla = true; }
@@ -183,6 +200,7 @@ public class Grid {
     public void setGirandola() { this.isGirandola = true; }
     public void setHalloween() { this.isHalloween = true; }
     public void setPerCent() { this.isPerCent = true; }
+    public void setSdoku() { this.isSdoku = true; }
     public void setCustom() { this.isCustom = true; }
 
     public void resetVanilla() { this.isVanilla = false; }
@@ -197,6 +215,7 @@ public class Grid {
     public void setGirandola(boolean b) { this.isGirandola = b; }
     public void setHalloween(boolean b) { this.isHalloween = b; }
     public void setPerCent(boolean b) { this.isPerCent = b; }
+    public void setSdoku(boolean b) { this.isSdoku = b; }
     public void setCustom(boolean b) { this.isCustom = b; }
 
     public void updateLatinSquare() { this.isLatinSquare = Settings.getInstance().isLatinSquare(); reset_regionTypes(); }
@@ -208,6 +227,7 @@ public class Grid {
     public void updateGirandola() { this.isGirandola = Settings.getInstance().isGirandola(); reset_regionTypes(); }
     public void updateHalloween() { this.isHalloween = Settings.getInstance().isHalloween(); reset_regionTypes(); }
     public void updatePerCent() { this.isPerCent = Settings.getInstance().isPerCent(); reset_regionTypes(); }
+    public void updateSdoku() { this.isSdoku = Settings.getInstance().isSdoku(); reset_regionTypes(); }
     public void updateCustom() { this.isCustom = Settings.getInstance().isCustom(); reset_regionTypes(); }
 
     public void updateVanilla() { reset_regionTypes(); }
@@ -264,6 +284,10 @@ public class Grid {
             return this.halloween;
         else if (regionType == PerCent.class)
             return this.percent;
+        else if (regionType == SdokuBand.class)
+            return this.sdokuband;
+        else if (regionType == SdokuStack.class)
+            return this.sdokustack;
         else if (regionType == Custom.class)
             return this.custom;
         else
@@ -300,6 +324,10 @@ public class Grid {
         else if (regionType == Halloween.class)
             return 3;
         else if (regionType == PerCent.class)
+            return 3;
+        else if (regionType == SdokuBand.class)
+            return 3;
+        else if (regionType == SdokuStack.class)
             return 3;
         else if (regionType == Custom.class)
             return CustomNum;
@@ -350,7 +378,7 @@ public class Grid {
     /**
      * Get the diagonal at the given index.
      * Diagonals are numbered from left to right, top to bottom.
-     * @param num the index of the diagonal to get, between 0 and 8, inclusive
+     * @param num the index of the diagonal to get, between 0 and 0, inclusive
      * @return the diagonal at the given index
      */
     public Diagonal getDiagonal(int num) {
@@ -365,7 +393,7 @@ public class Grid {
     /**
      * Get the antidiagonal at the given index.
      * AntiDiagonals are numbered from left to right, top to bottom.
-     * @param num the index of the antidiagonal to get, between 0 and 8, inclusive
+     * @param num the index of the antidiagonal to get, between 0 and 0, inclusive
      * @return the antidiagonal at the given index
      */
     public AntiDiagonal getAntiDiagonal(int num) {
@@ -400,7 +428,7 @@ public class Grid {
     /**
      * Get the asterisk at the given index.
      * Asterisks are numbered from left to right, top to bottom.
-     * @param num the index of the asterisk to get, between 0 and 8, inclusive
+     * @param num the index of the asterisk to get, between 0 and 0, inclusive
      * @return the asterisk at the given index
      */
     public Asterisk getAsterisk(int num) {
@@ -415,7 +443,7 @@ public class Grid {
     /**
      * Get the centerdot at the given index.
      * CenterDots are numbered from left to right, top to bottom.
-     * @param num the index of the centerdot to get, between 0 and 8, inclusive
+     * @param num the index of the centerdot to get, between 0 and 0, inclusive
      * @return the centerdot at the given index
      */
     public CenterDot getCenterDot(int num) {
@@ -430,7 +458,7 @@ public class Grid {
     /**
      * Get the girandola at the given index.
      * Girandolas are numbered from left to right, top to bottom.
-     * @param num the index of the girandola to get, between 0 and 8, inclusive
+     * @param num the index of the girandola to get, between 0 and 0, inclusive
      * @return the girandola at the given index
      */
     public Girandola getGirandola(int num) {
@@ -445,7 +473,7 @@ public class Grid {
     /**
      * Get the halloween at the given index.
      * Halloweens are numbered from left to right, top to bottom.
-     * @param num the index of the halloween to get, between 0 and 8, inclusive
+     * @param num the index of the halloween to get, between 0 and 3, inclusive
      * @return the halloween at the given index
      */
     public Halloween getHalloween(int num) {
@@ -460,12 +488,42 @@ public class Grid {
     /**
      * Get the percent at the given index.
      * PerCents are numbered from left to right, top to bottom.
-     * @param num the index of the percent to get, between 0 and 8, inclusive
+     * @param num the index of the percent to get, between 0 and 3, inclusive
      * @return the percent at the given index
      */
     public PerCent getPerCent(int num) {
         if ( num < 3 ) {
             return this.percent[num];
+        }
+        else {
+            return null;
+        }
+    }
+
+    /**
+     * Get the sdokuband at the given index.
+     * SdokuBands are numbered from left to right, top to bottom.
+     * @param num the index of the sdokuband to get, between 0 and 3, inclusive
+     * @return the sdokuband at the given index
+     */
+    public SdokuBand getSdokuBand(int num) {
+        if ( num < 3 ) {
+            return this.sdokuband[num];
+        }
+        else {
+            return null;
+        }
+    }
+
+    /**
+     * Get the sdokustack at the given index.
+     * SdokuStacks are numbered from left to right, top to bottom.
+     * @param num the index of the sdokustack to get, between 0 and 3, inclusive
+     * @return the sdokustack at the given index
+     */
+    public SdokuStack getSdokuStack(int num) {
+        if ( num < 3 ) {
+            return this.sdokustack[num];
         }
         else {
             return null;
@@ -683,6 +741,40 @@ public class Grid {
     }
 
     /**
+     * Get the sdokuband at the given location
+     * @param x the horizontal coordinate
+     * @param y the vertical coordinate
+     * @return the sdokuband at the given coordinates (the coordinates
+     * are coordinates of a cell)
+     */
+    public SdokuBand getSdokuBandAt(int x, int y) {
+        int index = SdokuBandAt[y][x];
+        if ( index != -1 ) {
+            return this.sdokuband[ index];
+        }
+        else {
+            return null;
+        }
+    }
+
+    /**
+     * Get the sdokustack at the given location
+     * @param x the horizontal coordinate
+     * @param y the vertical coordinate
+     * @return the sdokustack at the given coordinates (the coordinates
+     * are coordinates of a cell)
+     */
+    public SdokuStack getSdokuStackAt(int x, int y) {
+        int index = SdokuStackAt[y][x];
+        if ( index != -1 ) {
+            return this.sdokustack[ index];
+        }
+        else {
+            return null;
+        }
+    }
+
+    /**
      * Get the custom at the given location
      * @param x the horizontal coordinate
      * @param y the vertical coordinate
@@ -724,6 +816,10 @@ public class Grid {
             return getHalloweenAt(x, y);
         else if (regionType.equals(Grid.PerCent.class))
             return getPerCentAt(x, y);
+        else if (regionType.equals(Grid.SdokuBand.class))
+            return getSdokuBandAt(x, y);
+        else if (regionType.equals(Grid.SdokuStack.class))
+            return getSdokuStackAt(x, y);
         else if (regionType.equals(Grid.Custom.class))
             return getCustomAt(x, y);
         else
@@ -759,6 +855,10 @@ public class Grid {
             return getHalloweenAt(x, y).getHalloweenNum();
         else if (regionType.equals(Grid.PerCent.class))
             return getPerCentAt(x, y).getPerCentNum();
+        else if (regionType.equals(Grid.SdokuBand.class))
+            return getSdokuBandAt(x, y).getSdokuBandNum();
+        else if (regionType.equals(Grid.SdokuStack.class))
+            return getSdokuStackAt(x, y).getSdokuStackNum();
         else if (regionType.equals(Grid.Custom.class))
             return getCustomAt(x, y).getCustomNum();
         else
@@ -794,6 +894,10 @@ public class Grid {
             return getHalloweenAt(x, y).toString();
         else if (regionType.equals(Grid.PerCent.class))
             return getPerCentAt(x, y).toString();
+        else if (regionType.equals(Grid.SdokuBand.class))
+            return getSdokuBandAt(x, y).toString();
+        else if (regionType.equals(Grid.SdokuStack.class))
+            return getSdokuStackAt(x, y).toString();
         else if (regionType.equals(Grid.Custom.class))
             return getCustomAt(x, y).toString();
         else
@@ -835,6 +939,7 @@ public class Grid {
             if ( isGirandola ) { count += 1; }
             if ( isHalloween ) { count += 1; }
             if ( isPerCent ) { count += 1; }
+            if ( isSdoku ) { count += 2; }
             if ( isCustom ) { count += 1; }
             _regionTypes = new ArrayList<Class<? extends Grid.Region>>(count);
           if ( !isLatinSquare ) {
@@ -866,6 +971,10 @@ public class Grid {
             }
             if ( isPerCent ) {
                 _regionTypes.add(Grid.PerCent.class);
+            }
+            if ( isSdoku ) {
+                _regionTypes.add(Grid.SdokuBand.class);
+                _regionTypes.add(Grid.SdokuStack.class);
             }
             if ( isCustom ) {
                 _regionTypes.add(Grid.Custom.class);
@@ -1009,6 +1118,8 @@ public class Grid {
         @Override
         public abstract String toString();
 
+        public abstract String toString2();
+
         /**
          * Get a string representation of this region
          * @return a string representation of this region
@@ -1060,6 +1171,11 @@ public class Grid {
         @Override
         public String toString() {
             return "row";
+        }
+
+        @Override
+        public String toString2() {
+            return "row" + " " + (rowNum + 1);
         }
 
         @Override
@@ -1116,6 +1232,11 @@ public class Grid {
         @Override
         public String toString() {
             return "column";
+        }
+
+        @Override
+        public String toString2() {
+            return "column" + " " + (columnNum + 1);
         }
 
         @Override
@@ -1183,6 +1304,11 @@ public class Grid {
         }
 
         @Override
+        public String toString2() {
+            return "block" + " " + (vNum * 3 + hNum + 1);
+        }
+
+        @Override
         public String toFullString() {
             return toString() + " " + (vNum * 3 + hNum + 1);
         }
@@ -1229,6 +1355,11 @@ public class Grid {
         @Override
         public String toString() {
             return "diagonal(/)";
+        }
+
+        @Override
+        public String toString2() {
+            return "diagonal (/)";
         }
 
         @Override
@@ -1281,6 +1412,11 @@ public class Grid {
         }
 
         @Override
+        public String toString2() {
+            return "antidiagonal (\\)";
+        }
+
+        @Override
         public String toFullString() {
             return toString() + " " + (antidiagonalNum + 1);
         }
@@ -1316,6 +1452,11 @@ public class Grid {
         @Override
         public String toString() {
             return "disjointgroup";
+        }
+
+        @Override
+        public String toString2() {
+            return "disjointgroup" + " " + (disjointgroupNum + 1);
         }
 
         @Override
@@ -1357,6 +1498,11 @@ public class Grid {
         }
 
         @Override
+        public String toString2() {
+            return "windoku" + " " + (windokuNum + 1);
+        }
+
+        @Override
         public String toFullString() {
             return toString() + " " + (windokuNum + 1);
         }
@@ -1391,6 +1537,11 @@ public class Grid {
 
         @Override
         public String toString() {
+            return "asterisk";
+        }
+
+        @Override
+        public String toString2() {
             return "asterisk";
         }
 
@@ -1433,6 +1584,11 @@ public class Grid {
         }
 
         @Override
+        public String toString2() {
+            return "centerdot";
+        }
+
+        @Override
         public String toFullString() {
             return toString() + " " + (centerdotNum + 1);
         }
@@ -1467,6 +1623,11 @@ public class Grid {
 
         @Override
         public String toString() {
+            return "girandola";
+        }
+
+        @Override
+        public String toString2() {
             return "girandola";
         }
 
@@ -1509,6 +1670,11 @@ public class Grid {
         }
 
         @Override
+        public String toString2() {
+            return "halloween" + " " + (halloweenNum + 1);
+        }
+
+        @Override
         public String toFullString() {
             return toString() + " " + (halloweenNum + 1);
         }
@@ -1547,8 +1713,107 @@ public class Grid {
         }
 
         @Override
+        public String toString2() {
+            return "percent" + " " + (percentNum + 1);
+        }
+
+        @Override
         public String toFullString() {
             return toString() + " " + (percentNum + 1);
+        }
+
+    }
+
+    /**
+     * A SdokuBand constraint of a sudoku grid.
+     */
+    public class SdokuBand extends Region {
+
+        private int sdokubandNum;
+
+        public SdokuBand(int sdokubandNum) {
+            this.sdokubandNum = sdokubandNum;
+        }
+
+        public int getSdokuBandNum() {
+            return this.sdokubandNum;
+        }
+
+        @Override
+        public Cell getCell(int index) {
+            int cellIndex = SdokuBandCells[this.sdokubandNum][index];
+            return cells[cellIndex / 9][cellIndex % 9];
+        }
+
+        @Override
+        public int indexOf(Cell cell) {
+            return SdokuBandIndexOf[cell.getY()][cell.getX()];
+        }
+
+        public int At(int x, int y) {
+            return SdokuBandAt[y][x];
+        }
+
+        @Override
+        public String toString() {
+            return "s-doku band";
+        }
+
+        @Override
+        public String toString2() {
+            return "s-doku band" + " " + (sdokubandNum + 1);
+        }
+
+        @Override
+        public String toFullString() {
+            return toString() + " " + (sdokubandNum + 1);
+        }
+
+    }
+
+    /**
+     * A SdokuStack constraint of a sudoku grid.
+     */
+    public class SdokuStack extends Region {
+
+        private int sdokustackNum;
+
+        public SdokuStack(int sdokustackNum) {
+            this.sdokustackNum = sdokustackNum;
+        }
+
+        public int getSdokuStackNum() {
+            return this.sdokustackNum;
+        }
+
+        @Override
+        public Cell getCell(int index) {
+            int cellIndex = SdokuStackCells[this.sdokustackNum][index];
+            return cells[cellIndex / 9][cellIndex % 9];
+        }
+
+        @Override
+        public int indexOf(Cell cell) {
+            return SdokuStackIndexOf[cell.getY()][cell.getX()];
+        }
+
+        public int At(int x, int y) {
+            return SdokuStackAt[y][x];
+        }
+
+        @Override
+        public String toString() {
+            return "s-doku stack";
+        }
+
+        @Override
+        public String toString2() {
+            return "s-doku stack" + " " + (sdokustackNum + 1);
+        }
+
+        @Override
+        public String toFullString() {
+            return toString() + " " + (sdokustackNum + 1);
         }
 
     }
@@ -1603,6 +1868,11 @@ public class Grid {
         @Override
         public String toString() {
             return "extra region";
+        }
+
+        @Override
+        public String toString2() {
+            return "extra region" + " " + (customNum + 1);
         }
 
         @Override

@@ -8,6 +8,7 @@ package diuf.sudoku.generator;
 import java.util.*;
 
 import diuf.sudoku.*;
+import static diuf.sudoku.Settings.*;
 import diuf.sudoku.solver.*;
 import diuf.sudoku.solver.checks.*;
 
@@ -51,6 +52,8 @@ public class Generator {
             symmetryIndex = (symmetryIndex + 1) % symmetries.size();
             Grid grid = generate(random, symmetry);
             if ( grid == null ) {
+                System.err.println("Failed.");
+                System.err.flush();
                 return null;
             }
 
@@ -66,9 +69,10 @@ public class Generator {
             Solver solver = new Solver(copy);
             solver.rebuildPotentialValues();
             double difficulty = solver.analyseDifficulty(minDifficulty, maxDifficulty);
-            String s = "";
+            String s = ""; int cnt = 0;
             for (int i = 0; i < 81; i++) {
                 int n = grid.getCellValue(i % 9, i / 9);
+                if ( n != 0 ) { cnt++; }
                 s += (n==0)?".":n;
             }
             System.err.println(s);
@@ -77,9 +81,13 @@ public class Generator {
             System.err.println("ED=" + w + "." + p);
             System.err.flush();
             if (difficulty >= minDifficulty && difficulty <= maxDifficulty) {
-                String sClip = s + "\r\nED="+w+"."+p + "\r\n";
+              if ( Settings.getInstance().getGenerateToClipboard() ) {
+                String scnt = "" + cnt;
+                if ( cnt < 10 ) { scnt = " " + scnt; }
+                String sClip = s + " " + scnt + " ED="+w+"."+p;
                 StringSelection data = new StringSelection(sClip);
                 Toolkit.getDefaultToolkit().getSystemClipboard().setContents(data, data);
+              }
                 grid.fixGivens();
                 return grid;
             }

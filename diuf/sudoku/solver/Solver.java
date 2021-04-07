@@ -222,6 +222,10 @@ public class Solver {
         if ( grid.isPerCent() ) {
             cancelBy(Grid.PerCent.class);
         }
+        if ( grid.isSdoku() ) {
+            cancelBy(Grid.SdokuBand.class);
+            cancelBy(Grid.SdokuStack.class);
+        }
         if ( grid.isCustom() ) {
             cancelBy(Grid.Custom.class);
         }

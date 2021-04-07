@@ -110,9 +110,10 @@ public class SudokuPanel extends JPanel {
     private Color DG9 =  new Color(210, 240, 202);
     private Color[] DG_Colors = {DG1, DG2, DG3, DG4, DG5, DG6, DG7, DG8, DG9};
     private Color starColor = new Color(219, 121, 219);
-    private Color halloweenColor = new Color(255, 187, 59); // h:26 s:240 l:148
-    private Color percentColor = new Color(122, 255, 178);  // h:97 s:240 l:177
-    private Color customColor = new Color(244, 138, 138);   // h:0  s:200 l:180
+    private Color halloweenColor = new Color(255, 187, 59); // h:26  s:240 l:148
+    private Color percentColor = new Color(122, 255, 178);  // h:97  s:240 l:177
+    private Color sdokuColor = new Color(248, 177, 248);    // h:200 s:200 l:200
+    private Color customColor = new Color(244, 138, 138);   // h:0   s:200 l:180
 
     public SudokuPanel(SudokuFrame parent) {
         super();
@@ -550,6 +551,10 @@ public class SudokuPanel extends JPanel {
             col = halloweenColor;
         if (grid.isPerCent() && grid.getPerCentAt(cell.getX(),cell.getY())!=null)
             col = percentColor;
+        if (grid.isSdoku() && grid.getSdokuBandAt(cell.getX(),cell.getY())!=null)
+            col = sdokuColor;
+        if (grid.isSdoku() && grid.getSdokuStackAt(cell.getX(),cell.getY())!=null)
+            col = sdokuColor;
         if (grid.isCustom() && grid.getCustomAt(cell.getX(),cell.getY())!=null)
             col = customColor;
         if (redCells != null && redCells.contains(cell))
@@ -603,6 +608,10 @@ public class SudokuPanel extends JPanel {
             col = halloweenColor;
         if (grid.isPerCent() && grid.getPerCentAt(cell.getX(),cell.getY())!=null)
             col = percentColor;
+        if (grid.isSdoku() && grid.getSdokuBandAt(cell.getX(),cell.getY())!=null)
+            col = sdokuColor;
+        if (grid.isSdoku() && grid.getSdokuStackAt(cell.getX(),cell.getY())!=null)
+            col = sdokuColor;
         if (grid.isCustom() && grid.getCustomAt(cell.getX(),cell.getY())!=null)
             col = customColor;
         if (redCells != null && redCells.contains(cell))
@@ -974,6 +983,76 @@ public class SudokuPanel extends JPanel {
                                 }
                             }
                           } else
+                          if (region instanceof Grid.SdokuBand) {
+                            Grid.SdokuBand sdoku = (Grid.SdokuBand)region;
+                            int cti = sdoku.getSdokuBandNum();
+                            int js = 0, jend = 9, jinc = 1; w = 1; h = 1;
+                            int lineWidth = 4;
+                            int offset = lineWidth / 2;
+                            for (int j = js; j < jend ; j+=jinc) {
+                                Cell cell = sdoku.getCell( j);
+                                x = cell.getX();
+                                y = cell.getY();
+                                g.setColor(colors[index % 2]);
+                                if ( y==0 || (y!=0 && cti != sdoku.At(x,y-1)) )
+                                {
+                                    g.fillRect(x * CELL_OUTER_SIZE - offset, y * CELL_OUTER_SIZE - offset, CELL_OUTER_SIZE + lineWidth, lineWidth);
+                                }
+                                if ( x==0 || (x!=0 && cti != sdoku.At(x-1,y)) )
+                                {
+                                    g.fillRect(x * CELL_OUTER_SIZE - offset, y * CELL_OUTER_SIZE - offset, lineWidth, CELL_OUTER_SIZE + lineWidth);
+                                }
+                                if ( x==8 || (x!=8 && cti != sdoku.At(x+1,y)) )
+                                {
+                                    g.fillRect((x+1) * CELL_OUTER_SIZE - offset, y * CELL_OUTER_SIZE - offset, lineWidth, CELL_OUTER_SIZE + lineWidth);
+                                }
+                                if ( y==8 || (y!=8 && cti != sdoku.At(x,y+1)) )
+                                {
+                                    g.fillRect(x * CELL_OUTER_SIZE - offset, (y+1) * CELL_OUTER_SIZE - offset, CELL_OUTER_SIZE + lineWidth, lineWidth);
+                                }
+                                if (rev == 0) {
+                                    Color base = colors[index % 2];
+                                    g.setColor(new Color(base.getRed(), base.getGreen(), base.getBlue(), 12));
+                                    g.fillRect(x * CELL_OUTER_SIZE + 3, y * CELL_OUTER_SIZE + 3,
+                                            w * CELL_OUTER_SIZE - 6, h * CELL_OUTER_SIZE - 6);
+                                }
+                            }
+                          } else
+                          if (region instanceof Grid.SdokuStack) {
+                            Grid.SdokuStack sdoku = (Grid.SdokuStack)region;
+                            int cti = sdoku.getSdokuStackNum();
+                            int js = 0, jend = 9, jinc = 1; w = 1; h = 1;
+                            int lineWidth = 4;
+                            int offset = lineWidth / 2;
+                            for (int j = js; j < jend ; j+=jinc) {
+                                Cell cell = sdoku.getCell( j);
+                                x = cell.getX();
+                                y = cell.getY();
+                                g.setColor(colors[index % 2]);
+                                if ( y==0 || (y!=0 && cti != sdoku.At(x,y-1)) )
+                                {
+                                    g.fillRect(x * CELL_OUTER_SIZE - offset, y * CELL_OUTER_SIZE - offset, CELL_OUTER_SIZE + lineWidth, lineWidth);
+                                }
+                                if ( x==0 || (x!=0 && cti != sdoku.At(x-1,y)) )
+                                {
+                                    g.fillRect(x * CELL_OUTER_SIZE - offset, y * CELL_OUTER_SIZE - offset, lineWidth, CELL_OUTER_SIZE + lineWidth);
+                                }
+                                if ( x==8 || (x!=8 && cti != sdoku.At(x+1,y)) )
+                                {
+                                    g.fillRect((x+1) * CELL_OUTER_SIZE - offset, y * CELL_OUTER_SIZE - offset, lineWidth, CELL_OUTER_SIZE + lineWidth);
+                                }
+                                if ( y==8 || (y!=8 && cti != sdoku.At(x,y+1)) )
+                                {
+                                    g.fillRect(x * CELL_OUTER_SIZE - offset, (y+1) * CELL_OUTER_SIZE - offset, CELL_OUTER_SIZE + lineWidth, lineWidth);
+                                }
+                                if (rev == 0) {
+                                    Color base = colors[index % 2];
+                                    g.setColor(new Color(base.getRed(), base.getGreen(), base.getBlue(), 12));
+                                    g.fillRect(x * CELL_OUTER_SIZE + 3, y * CELL_OUTER_SIZE + 3,
+                                            w * CELL_OUTER_SIZE - 6, h * CELL_OUTER_SIZE - 6);
+                                }
+                            }
+                          } else
                           if (region instanceof Grid.Custom) {
                             Grid.Custom custom = (Grid.Custom)region;
                             int cti = custom.getCustomNum();
@@ -1160,6 +1239,76 @@ public class SudokuPanel extends JPanel {
                                 for (int s = -2 + rev; s <= 2; s+= 2) {
                                     g.drawRect(x * CELL_OUTER_SIZE + s+adj, y * CELL_OUTER_SIZE + s+adj,
                                             w * CELL_OUTER_SIZE - s * 2, h * CELL_OUTER_SIZE - s * 2);
+                                }
+                                if (rev == 0) {
+                                    Color base = colors[index % 2];
+                                    g.setColor(new Color(base.getRed(), base.getGreen(), base.getBlue(), 12));
+                                    g.fillRect(x * CELL_OUTER_SIZE + 3+adj, y * CELL_OUTER_SIZE + 3+adj,
+                                            w * CELL_OUTER_SIZE - 6, h * CELL_OUTER_SIZE - 6);
+                                }
+                            }
+                          } else
+                          if (region instanceof Grid.SdokuBand) {
+                            Grid.SdokuBand sdoku = (Grid.SdokuBand)region;
+                            int cti = sdoku.getSdokuBandNum();
+                            int js = 0, jend = 9, jinc = 1; w = 1; h = 1;
+                            int lineWidth = 4;
+                            int offset = lineWidth / 2;
+                            for (int j = js; j < jend ; j+=jinc) {
+                                Cell cell = sdoku.getCell( j);
+                                x = cell.getX();
+                                y = cell.getY();
+                                g.setColor(colors[index % 2]);
+                                if ( y==0 || (y!=0 && cti != sdoku.At(x,y-1)) )
+                                {
+                                    g.fillRect(x * CELL_OUTER_SIZE - offset+adj, y * CELL_OUTER_SIZE - offset+adj, CELL_OUTER_SIZE + lineWidth, lineWidth);
+                                }
+                                if ( x==0 || (x!=0 && cti != sdoku.At(x-1,y)) )
+                                {
+                                    g.fillRect(x * CELL_OUTER_SIZE - offset+adj, y * CELL_OUTER_SIZE - offset+adj, lineWidth, CELL_OUTER_SIZE + lineWidth);
+                                }
+                                if ( x==8 || (x!=8 && cti != sdoku.At(x+1,y)) )
+                                {
+                                    g.fillRect((x+1) * CELL_OUTER_SIZE - offset+adj, y * CELL_OUTER_SIZE - offset+adj, lineWidth, CELL_OUTER_SIZE + lineWidth);
+                                }
+                                if ( y==8 || (y!=8 && cti != sdoku.At(x,y+1)) )
+                                {
+                                    g.fillRect(x * CELL_OUTER_SIZE - offset+adj, (y+1) * CELL_OUTER_SIZE - offset+adj, CELL_OUTER_SIZE + lineWidth, lineWidth);
+                                }
+                                if (rev == 0) {
+                                    Color base = colors[index % 2];
+                                    g.setColor(new Color(base.getRed(), base.getGreen(), base.getBlue(), 12));
+                                    g.fillRect(x * CELL_OUTER_SIZE + 3+adj, y * CELL_OUTER_SIZE + 3+adj,
+                                            w * CELL_OUTER_SIZE - 6, h * CELL_OUTER_SIZE - 6);
+                                }
+                            }
+                          } else
+                          if (region instanceof Grid.SdokuStack) {
+                            Grid.SdokuStack sdoku = (Grid.SdokuStack)region;
+                            int cti = sdoku.getSdokuStackNum();
+                            int js = 0, jend = 9, jinc = 1; w = 1; h = 1;
+                            int lineWidth = 4;
+                            int offset = lineWidth / 2;
+                            for (int j = js; j < jend ; j+=jinc) {
+                                Cell cell = sdoku.getCell( j);
+                                x = cell.getX();
+                                y = cell.getY();
+                                g.setColor(colors[index % 2]);
+                                if ( y==0 || (y!=0 && cti != sdoku.At(x,y-1)) )
+                                {
+                                    g.fillRect(x * CELL_OUTER_SIZE - offset+adj, y * CELL_OUTER_SIZE - offset+adj, CELL_OUTER_SIZE + lineWidth, lineWidth);
+                                }
+                                if ( x==0 || (x!=0 && cti != sdoku.At(x-1,y)) )
+                                {
+                                    g.fillRect(x * CELL_OUTER_SIZE - offset+adj, y * CELL_OUTER_SIZE - offset+adj, lineWidth, CELL_OUTER_SIZE + lineWidth);
+                                }
+                                if ( x==8 || (x!=8 && cti != sdoku.At(x+1,y)) )
+                                {
+                                    g.fillRect((x+1) * CELL_OUTER_SIZE - offset+adj, y * CELL_OUTER_SIZE - offset+adj, lineWidth, CELL_OUTER_SIZE + lineWidth);
+                                }
+                                if ( y==8 || (y!=8 && cti != sdoku.At(x,y+1)) )
+                                {
+                                    g.fillRect(x * CELL_OUTER_SIZE - offset+adj, (y+1) * CELL_OUTER_SIZE - offset+adj, CELL_OUTER_SIZE + lineWidth, lineWidth);
                                 }
                                 if (rev == 0) {
                                     Color base = colors[index % 2];

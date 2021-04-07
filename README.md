@@ -29,7 +29,7 @@ java.exe -Xrs -Xmx500m -cp SukakuExplainer.jar diuf.sudoku.test.pencilmarks --in
 ```
 java.exe -Xrs -Xmx500m -cp SukakuExplainer.jar diuf.sudoku.test.solve --input=puzzle.txt [options]
 ```
-## Usage - Tester (Analyzer)
+## Usage - Tester (Analyzer) - for vanilla sudoku only
 ```
 java.exe -Xrs -Xmx500m -cp SukakuExplainer.jar diuf.sudoku.test.Tester puzzles.txt puzzles.log
 ```
@@ -51,10 +51,11 @@ None or one of the following (can be combined with above options):
 -C      Center Dots
 -G      Girandola
 ```
-None or one of the following (cannot be combined with above options):
+None or one of the following (can be combined with Diagonals (X) only):
 ```
 -H      Halloween
 -P      Per Cent
+-S      S-doku
 ```
 ##### The options entered are not validated by the program, i.e. enter rubbish options, expect rubbish output!
 ##### If no options are specified, it is a Vanilla sudoku.

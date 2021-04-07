@@ -10,12 +10,13 @@ import java.io.*;
 import java.util.*;
 
 import diuf.sudoku.*;
+import static diuf.sudoku.Settings.*;
 import diuf.sudoku.solver.*;
 
 public class serate {
     static String FORMAT = "%g ED=%r/%p/%d";
-    static String RELEASE = "2009-01-01";
-    static String VERSION = "1.2.1.3";
+    static String THISRELEASE = "" + VERSION + "-" + REVISION + "-" + SUBREV;
+    static String THISVERSION = "" + VERSION + "." + REVISION + "." + SUBREV;
     static void help(int html) {
         if (html != 0) {
             System.err.println("<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML//EN\">");
@@ -84,7 +85,7 @@ public class serate {
         System.err.println("  SudokuExplainer(1), sudoku(1)");
         System.err.println("");
         System.err.println("IMPLEMENTATION");
-        System.err.println("  version     serate " + VERSION + " (Sukaku Explainer) " + RELEASE);
+        System.err.println("  version     serate " + THISVERSION + " (Sukaku Explainer) " + THISRELEASE);
         System.err.println("  authors     Nicolas Juillerat, 1to9only");
         System.err.println("  copyright   Copyright (c) 2006-2009 Nicolas Juillerat, (c) 2019-2020 1to9only");
         System.err.println("  license     Lesser General Public License (LGPL)");
@@ -192,7 +193,7 @@ public class serate {
                     output = v;
                     break;
                 case 'V':
-                    System.err.println(VERSION);
+                    System.err.println(THISVERSION);
                     System.exit(0);
                     break;
 
@@ -224,6 +225,9 @@ public class serate {
                     break;
                 case 'P':   // PerCent
                     Settings.getInstance().setPerCent(true);
+                    break;
+                case 'S':   // S-doku
+                    Settings.getInstance().setSdoku(true);
                     break;
 
                 case 'T':   // used saved techniques
