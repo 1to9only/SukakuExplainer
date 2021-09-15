@@ -27,8 +27,8 @@ import diuf.sudoku.*;
 public class Settings {
 
     public final static int VERSION  = 2021;
-    public final static int REVISION = 4;
-    public final static int SUBREV   = 7;
+    public final static int REVISION = 9;
+    public final static int SUBREV   = 14;
 
     private static Settings instance = null;
 
@@ -96,6 +96,9 @@ public class Settings {
     private boolean GenerateToClipboard = false;    // true= copy generated grid to clipboard
     private boolean AnalyseToClipboard = false;     // true= copy analysis to clipboard
 
+    private boolean isOddEven = false;
+    private String oddeven = null;       // odd/even regions
+
     private Settings() {
         init();
         load();
@@ -122,6 +125,7 @@ public class Settings {
         isPerCent = false;
         isSdoku = false;
         isCustom = false;
+        isOddEven = false;
     }
 
     public void useSolution( Grid grid) {
@@ -606,6 +610,30 @@ public class Settings {
         return count;
     }
 
+    public void setOddEven(boolean isOddEven) {
+      if ( this.isOddEven != isOddEven ) {
+        this.isOddEven = isOddEven;
+        save();
+      }
+    }
+    public boolean isOddEven() {
+        return isOddEven;
+    }
+
+    public void setOddEven(String oddeven) {
+      if ( this.oddeven == null || !(this.oddeven.equals(oddeven)) ) {
+        this.oddeven = oddeven;
+       if ( this.isOddEven != true ) {
+        this.isOddEven = true;
+       }
+        save();
+      }
+    }
+
+    public String getOddEven() {
+        return oddeven;
+    }
+
     public void setApply(int apply) {
       if ( this.apply != apply ) {
         this.apply = apply;
@@ -825,6 +853,15 @@ public class Settings {
                 }
                 catch (NullPointerException e) { LoadError = 1; }
                 try {
+                    s = (String)stgDetails.get("isOddEven");
+                    isOddEven = s.equals("true")?true:false;
+                }
+                catch (NullPointerException e) { LoadError = 1; }
+                try {
+                    oddeven = (String)stgDetails.get("oddeven");
+                }
+                catch (NullPointerException e) { ; }
+                try {
                     s = (String)stgDetails.get("apply");
                   if ( s.length() == 2 ) {
                     apply = (s.charAt(0)-'0')*10 + s.charAt(1)-'0';
@@ -924,11 +961,14 @@ public class Settings {
         stgDetails.put("isPerCent", isPerCent?"true":"false");
         stgDetails.put("isS-doku", isSdoku?"true":"false");
         stgDetails.put("isCustom", isCustom?"true":"false");
-
         if ( custom != null ) {
             stgDetails.put("custom", custom);
         }
         stgDetails.put("count", ""+count);
+        stgDetails.put("isOddEven", isOddEven?"true":"false");
+        if ( oddeven != null ) {
+            stgDetails.put("oddeven", oddeven);
+        }
         stgDetails.put("apply", ""+apply);
 
         if ( methods != null ) {

@@ -127,6 +127,7 @@ public class SudokuFrame extends JFrame implements Asker {
     private JMenuItem mitGetBigClue = null;
     private JMenu mitLookAndFeel = null;
     private JMenuItem mitShowWelcome = null;
+    private JMenuItem mitShowFeatures = null;
     private JMenuItem mitUseSolution = null;
     private JMenuItem mitGenerate = null;
     private JCheckBoxMenuItem mitGenerateClipboard = null;
@@ -163,6 +164,7 @@ public class SudokuFrame extends JFrame implements Asker {
     private JCheckBoxMenuItem mitHalloween = null;
     private JCheckBoxMenuItem mitPerCent = null;
     private JCheckBoxMenuItem mitSdoku = null;
+    private JMenuItem mitOddEven = null;
     private JMenuItem mitExtraRegions = null;
     private JMenuItem mitCustomText = null;
     private JMenuItem mitCustomFile = null;
@@ -193,6 +195,11 @@ public class SudokuFrame extends JFrame implements Asker {
     public void showWelcomeText() {
         String welcomeText = HtmlLoader.loadHtml(this, "Welcome.html");
         setExplanations(welcomeText);
+    }
+
+    public void showFeaturesText() {
+        String featuresText = HtmlLoader.loadHtml(this, "Features.html");
+        setExplanations(featuresText);
     }
 
     void setEngine(SudokuExplainer explainer) {
@@ -2457,6 +2464,7 @@ public class SudokuFrame extends JFrame implements Asker {
             helpMenu.setMnemonic(java.awt.event.KeyEvent.VK_H);
             helpMenu.add(getMitShowWelcome());
             getMitShowWelcome().setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
+            helpMenu.add(getMitShowFeatures());
             helpMenu.addSeparator();
             helpMenu.add(getMitAbout());
         }
@@ -2476,6 +2484,21 @@ public class SudokuFrame extends JFrame implements Asker {
             });
         }
         return mitShowWelcome;
+    }
+
+    private JMenuItem getMitShowFeatures() {
+        if (mitShowFeatures == null) {
+            mitShowFeatures = new JMenuItem();
+            mitShowFeatures.setMnemonic(java.awt.event.KeyEvent.VK_F);
+            mitShowFeatures.setToolTipText("Show details of new features added by 1to9only");
+            mitShowFeatures.setText("Show new features");
+            mitShowFeatures.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    showFeaturesText();
+                }
+            });
+        }
+        return mitShowFeatures;
     }
 
     private JMenuItem getMitAbout() {

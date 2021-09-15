@@ -93,7 +93,7 @@ public class Bug3Hint extends BugHint implements Rule {
     }
 
     public String toString2() {
-        final String[] setNames = new String[] {"Pair", "Triplet", "Quad", "Set (5)", "Set (6)", "Set (7)"};
+        final String[] setNames = new String[] {"Pair", "Triplet", "Quad", "Quintuplet", "Sextuplet", "Septuplet"};
         String setName = setNames[nakedSet.cardinality() - 2];
         return "BUG type 3 " + "(w/Naked " + setName + "): "
             + Cell.toString(bugCells) + " on "
@@ -107,8 +107,7 @@ public class Bug3Hint extends BugHint implements Rule {
         String andBugCells = ValuesFormatter.formatCells(bugCells, " and ");
         String orBugCells = ValuesFormatter.formatCells(bugCells, " or ");
         String orExtraValues = ValuesFormatter.formatValues(allExtraValues, " or ");
-        final String[] setNames = new String[] {"Pair", "Triplet", "Quad", "Set (5)",
-                "Set (6)", "Set (7)"};
+        final String[] setNames = new String[] {"Pair", "Triplet", "Quad", "Quintuplet", "Sextuplet", "Septuplet"};
         String setName = setNames[nakedSet.cardinality() - 2];
         String andOtherCells = ValuesFormatter.formatCells(nakedCells, " and ");
         String andNakedValues = ValuesFormatter.formatValues(nakedSet, " and ");

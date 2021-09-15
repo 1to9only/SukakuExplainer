@@ -29,7 +29,7 @@ public class Chaining implements IndirectHintProducer {
     private final int nestingLimit;
     private Grid saveGrid = new Grid();
     private List<IndirectHintProducer> otherRules;
-    private Grid lastGrid = null;
+//  private Grid lastGrid = null;
     private Collection<ChainingHint> lastHints = null;
 
 
@@ -178,8 +178,7 @@ public class Chaining implements IndirectHintProducer {
                                 LinkedSet<Potential> onToOff = new LinkedSet<Potential>();
                                 boolean doDouble = (cardinality >= 3 && !isNisho && isDynamic);
                                 boolean doContradiction = isDynamic || isNisho;
-                                doBinaryChaining(grid, pOn, pOff, result, onToOn, onToOff,
-                                        doDouble, doContradiction);
+                                doBinaryChaining(grid, pOn, pOff, result, onToOn, onToOff, doDouble, doContradiction);
 
                                 if (!isNisho) {
                                     // Do region chaining
@@ -1096,23 +1095,26 @@ public class Chaining implements IndirectHintProducer {
             return "Forcing Chains & Cycles";
     }
 
-    private void getPreviousHints(HintsAccumulator accu) throws InterruptedException {
-        for (ChainingHint hint : lastHints)
-            accu.add(hint);
-    }
+//  private void getPreviousHints(HintsAccumulator accu) throws InterruptedException {
+//      for (ChainingHint hint : lastHints)
+//          accu.add(hint);
+//  }
 
     public void getHints(Grid grid, HintsAccumulator accu) throws InterruptedException {
-        if (lastGrid != null && grid.equals(lastGrid)) {
-            getPreviousHints(accu);
-            return;
-        }
+//      if (lastGrid != null && grid.equals(lastGrid)) {
+//          getPreviousHints(accu);
+//          return;
+//      }
         List<ChainingHint> result = getHintList(grid);
-        lastGrid = new Grid();
-        grid.copyTo(lastGrid);
+//      lastGrid = new Grid();
+//      grid.copyTo(lastGrid);
         // This filters hints that are equal:
         lastHints = new LinkedHashSet<ChainingHint>(result);
         for (IndirectHint hint : lastHints)
             accu.add(hint);
+
+        lastHints = null;
+        result = null;
     }
 
 }

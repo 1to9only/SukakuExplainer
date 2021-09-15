@@ -216,7 +216,7 @@ public class AlignedExclusionHint extends IndirectHint implements Rule {
             result = HtmlLoader.loadHtml(this, "AlignedPairExclusionHint.html");
         else
             result = HtmlLoader.loadHtml(this, "AlignedExclusionHint.html");
-        String[] names = {"Pair", "Triplet", "Quad", "Set (5)", "Set (6)"};
+        String[] names = {"Pair", "Triplet", "Quad", "Quintuplet", "Sextuplet", "Septuplet"};
         int degree = cells.length;
         String name = names[degree - 2];
         String cellNames = ValuesFormatter.formatCells(cells, " and ");

@@ -172,14 +172,31 @@ public class BruteForceAnalysis implements WarningHintProducer {
         } while (hint != null);
         if (isSolved(grid))
             return true;
+        int[] indexes = new int[81];
+        for (int i = 0; i < indexes.length; i++)
+            indexes[i] = i;
+        // Shuffle
+      if (rnd != null) {
+        for (int i = 0; i < 81; i++) {
+            int p1 = rnd.nextInt(81);
+            int p2 = rnd.nextInt(81);
+            int temp = indexes[p1];
+            indexes[p1] = indexes[p2];
+            indexes[p2] = temp;
+        }
+      }
         /*
          * (2) Look for the cell with the least number of potentials.
          * Seems to give the best results (in term of speed) empirically
          */
         Cell leastCell = null;
         int leastCardinality = 10;
-        for (int y = 0; y < 9; y++) {
-            for (int x = 0; x < 9; x++) {
+        for (int i = 0; i < 81; i++) {
+            int index = indexes[i];
+            int y = index / 9;
+            int x = index % 9;
+//      for (int y = 0; y < 9; y++) {
+//          for (int x = 0; x < 9; x++) {
                 Cell cell = grid.getCell(x, y);
                 if (cell.getValue() == 0) {
                     int cardinality = cell.getPotentialValues().cardinality();
@@ -188,7 +205,7 @@ public class BruteForceAnalysis implements WarningHintProducer {
                         leastCell = cell;
                     }
                 }
-            }
+//          }
         }
         // (3) Try each possible value for that cell
         Grid savePoint = new Grid();
@@ -226,7 +243,7 @@ public class BruteForceAnalysis implements WarningHintProducer {
          * may require a too huge number of iterations without this check
          */
         iterations++;
-        if ( iterations >= 10000 )  // 1to9only: drop out after this many attempts
+        if ( iterations >= 20000 )  // 1to9only: drop out after this many attempts
             return false;
         if (!isFillable(grid))
             return false;
@@ -249,14 +266,31 @@ public class BruteForceAnalysis implements WarningHintProducer {
         } while (hint != null);
         if (isSolved(grid))
             return true;
+        int[] indexes = new int[81];
+        for (int i = 0; i < indexes.length; i++)
+            indexes[i] = i;
+        // Shuffle
+      if (rnd != null) {
+        for (int i = 0; i < 81; i++) {
+            int p1 = rnd.nextInt(81);
+            int p2 = rnd.nextInt(81);
+            int temp = indexes[p1];
+            indexes[p1] = indexes[p2];
+            indexes[p2] = temp;
+        }
+      }
         /*
          * (2) Look for the cell with the least number of potentials.
          * Seems to give the best results (in term of speed) empirically
          */
         Cell leastCell = null;
         int leastCardinality = 10;
-        for (int y = 0; y < 9; y++) {
-            for (int x = 0; x < 9; x++) {
+        for (int i = 0; i < 81; i++) {
+            int index = indexes[i];
+            int y = index / 9;
+            int x = index % 9;
+//      for (int y = 0; y < 9; y++) {
+//          for (int x = 0; x < 9; x++) {
                 Cell cell = grid.getCell(x, y);
                 if (cell.getValue() == 0) {
                     int cardinality = cell.getPotentialValues().cardinality();
@@ -265,7 +299,7 @@ public class BruteForceAnalysis implements WarningHintProducer {
                         leastCell = cell;
                     }
                 }
-            }
+//          }
         }
         // (3) Try each possible value for that cell
         Grid savePoint = new Grid();

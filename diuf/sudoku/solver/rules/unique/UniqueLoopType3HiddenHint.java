@@ -93,7 +93,7 @@ public class UniqueLoopType3HiddenHint extends UniqueLoopHint {
 
     @Override
     public String getExtraInfo() {
-        final String[] setNames = new String[] {"Pair", "Triplet", "Quad", "Set (5)", "Set (6)", "Set (7)"};
+        final String[] setNames = new String[] {"Pair", "Triplet", "Quad", "Quintuplet", "Sextuplet", "Septuplet"};
         String setName = setNames[hiddenValues.cardinality() - 2];
         return " (w/Hidden " +  setName + ")";
     }
@@ -108,8 +108,7 @@ public class UniqueLoopType3HiddenHint extends UniqueLoopHint {
         String cell1 = c1.toString();
         String cell2 = c2.toString();
         String valuesOrName = ValuesFormatter.formatValues(otherValues, " or ");
-        final String[] setNames = new String[] {"Pair", "Triplet", "Quad", "Set (5)",
-                "Set (6)", "Set (7)"};
+        final String[] setNames = new String[] {"Pair", "Triplet", "Quad", "Quintuplet", "Sextuplet", "Septuplet"};
         String setName = setNames[hiddenValues.cardinality() - 2];
         Cell[] cells = new Cell[hiddenIndexes.length];
         for (int i = 0; i < cells.length; i++)

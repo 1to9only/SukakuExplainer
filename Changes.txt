@@ -1,5 +1,9 @@
 Changes:
 
+20210915
+- fixed null exception in Generate...
+- other fixes and improvements (some are work-in-progress)
+
 20210407
 - add S-doku variant
 - reverted to previous flatlaf

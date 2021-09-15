@@ -919,7 +919,7 @@ public class SudokuExplainer {
             String z = tempStack.pop();
             String x = z.substring( 0, 2);
             pathStack.push(z);
-            z = z.substring( 2);
+            z = z.substring( 2); z = z.replaceAll( "<>", "&lt;&gt;");
             if ( x.charAt( 0)=='H' || x.charAt( 0)=='K' || x.charAt( 0)=='M' || x.charAt( 0)=='N' ) {
                 hintscount += 1;
                 solutionpath += "" + hintscount + ": " + z + "<br>\r\n";
@@ -1092,17 +1092,24 @@ public class SudokuExplainer {
                     BitSet cellPots = remPots.get(cell);
                     if ( countCells == 0 ) { s += ":"; }
                     if ( countCells > 0 ) { s += ","; }
-                    s += " -";
+                    s += " r" + (cell.getY()+1) + "c" + (cell.getX()+1) + "<>";
+                    int countPots = 0;
                     for (int pv=1; pv<=9; pv++ ) {
-                        if ( cellPots.get( pv) ) { s += pv; }
+                        if ( cellPots.get( pv) ) { if ( countPots != 0 ) { s += ","; } s += pv; countPots++; }
                     }
-                    s += "r" + (cell.getY()+1) + "c" + (cell.getX()+1);
                     countCells++;
                 }
                 Cell cell = iHint.getCell();
                 if (cell != null) {
-                    s += ": r" + (cell.getY()+1) + "c" + (cell.getX()+1) + "=" + iHint.getValue();
+                    s += ", r" + (cell.getY()+1) + "c" + (cell.getX()+1) + "=" + iHint.getValue();
                 }
+            }
+        }
+        if (hint instanceof DirectHint) {
+            DirectHint iHint = (DirectHint)hint;
+            Cell cell = iHint.getCell();
+            if (cell != null) {
+                s += ": r" + (cell.getY()+1) + "c" + (cell.getX()+1) + "=" + iHint.getValue();
             }
         }
         this.pathStack.push("H:"+w+"."+p +", "+hint.toString2()+s);    // cell solved by hint

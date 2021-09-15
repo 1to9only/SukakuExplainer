@@ -299,7 +299,7 @@ public class Locking implements IndirectHintProducer {
                     // Get the potential positions of the value in part1
                     BitSet potentialPositions = region1.getPotentialPositions(value);
                     int potentialCardinality = potentialPositions.cardinality();
-                    if (potentialCardinality > 1 && potentialCardinality < 6) {
+                    if (potentialCardinality > 1 && potentialCardinality < 7) {
 
                         Cell[] regionCells = new Cell[potentialCardinality]; // highlighted potentials
                         List<Cell> result = new ArrayList<Cell>();           // generalized intersection cells
