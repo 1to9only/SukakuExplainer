@@ -3191,7 +3191,12 @@ public class SudokuFrame extends JFrame implements Asker {
                     if ( inputtext == null ) {      // Cancelled
                         isValidInput = true;
                     }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(SudokuFrame.this, "Error: Text input: Incorrect length (must be 81-chars)", "Load Custom", JOptionPane.WARNING_MESSAGE); isValidInput = false;
+                    }
                   }
+                  if ( isValidInput ) {
                     if ( inputtext != null && inputtext.length() >= 81 ) {
                         inputtext = inputtext.replace( "A", "1"); inputtext = inputtext.replace( "B", "2"); inputtext = inputtext.replace( "C", "3"); inputtext = inputtext.replace( "D", "4"); inputtext = inputtext.replace( "E", "5"); inputtext = inputtext.replace( "F", "6"); inputtext = inputtext.replace( "G", "7"); inputtext = inputtext.replace( "H", "8"); inputtext = inputtext.replace( "I", "9");
                         Settings settings = Settings.getInstance();
@@ -3223,6 +3228,7 @@ public class SudokuFrame extends JFrame implements Asker {
                         engine.resetPotentials();
                         repaint();
                     }
+                  }
                 }
             });
         }
