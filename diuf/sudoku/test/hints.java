@@ -29,6 +29,7 @@ public class hints {
         BufferedReader  reader = null;
     //  PrintWriter     writer = null;
         int             arg;
+        int             multi = 0;  // for multi solutions sudoku (for JPF's closure)
         char            c;
         Settings.getInstance().setNoSaves();
         try {
@@ -68,6 +69,10 @@ public class hints {
                     break;
                 case 'o':
                     output = v;
+                    break;
+
+                case 'M':
+                    multi = 1;      // for multi solutions sudoku (for JPF's closure)
                     break;
 
                 case 'L':   // LatinSquare
@@ -190,14 +195,19 @@ public class hints {
                     }
                 }
                     System.out.println(puzzle); System.out.flush();
-                    Solver solver = new Solver(grid);
+                    Solver solver = new Solver(grid, multi);
                     solver.want = 0;
                 if (puzzle.length() >= 81 && puzzle.length() < 729)
                 {
                     solver.rebuildPotentialValues();
                 }
                     try {
+                      if ( multi == 0 ) {
                         solver.getHintsHint();
+                      }
+                      if ( multi == 1 ) {
+                        solver.getClosureHintsHint();
+                      }
                     } catch (UnsupportedOperationException ex) {
                         solver.difficulty = solver.pearl = solver.diamond = 0.0;
                     }

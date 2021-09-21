@@ -118,6 +118,7 @@ public class serate {
         int             ordinal = 0;
         char            want = 0;
         int             arg;
+        int             multi = 0;  // for multi solutions sudoku (for JPF's closure)
         long            t;
         char            c;
         Settings.getInstance().setNoSaves();
@@ -195,6 +196,10 @@ public class serate {
                 case 'V':
                     System.err.println(THISVERSION);
                     System.exit(0);
+                    break;
+
+                case 'M':
+                    multi = 1;      // for multi solutions sudoku (for JPF's closure)
                     break;
 
                 case 'L':   // LatinSquare
@@ -319,7 +324,7 @@ public class serate {
                     }
                 }
                     t = System.currentTimeMillis();
-                    Solver solver = new Solver(grid);
+                    Solver solver = new Solver(grid, multi);
                     solver.want = want;
                 if (puzzle.length() >= 81 && puzzle.length() < 729)
                 {
@@ -327,7 +332,12 @@ public class serate {
                 }
                     ordinal++;
                     try {
+                      if ( multi == 0 ) {
                         solver.getDifficulty();
+                      }
+                      if ( multi == 1 ) {
+                        solver.getClosureDifficulty();
+                      }
                     } catch (UnsupportedOperationException ex) {
                         solver.difficulty = solver.pearl = solver.diamond = 0.0;
                     }
