@@ -1,5 +1,15 @@
 Changes:
 
+20210923
+- 'Generate (NFC enabled, can use 100% CPU)...' for very hard sudokus
+- built using jdk-8u301
+
+20210921
+- added rating sudokus with multiple solutions! Use -M option
+
+20210920
+- small fix to text input dialog
+
 20210915
 - fixed null exception in Generate...
 - other fixes and improvements (some are work-in-progress)
@@ -44,6 +54,7 @@ Changes:
 
 20201014:
 - make cell size bigger, and other changes
+
 
 20201013:
 - from: https://www.formdev.com/flatlaf/ [update to 0.42]

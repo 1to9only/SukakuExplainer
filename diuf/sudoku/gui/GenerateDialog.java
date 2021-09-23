@@ -42,7 +42,7 @@ public class GenerateDialog extends JDialog {
         },
         Diabolical {
             @Override public double getMinDifficulty() { return 6.1; }
-            @Override public double getMaxDifficulty() { return 11.0; }
+            @Override public double getMaxDifficulty() { return 12.0; }
         };
 
         public abstract double getMinDifficulty();
@@ -66,14 +66,16 @@ public class GenerateDialog extends JDialog {
     private boolean isExact = false;
 
     private GeneratorThread generator = null;
+    private GeneratorNFCThread generatornfc = null;
     private List<Grid> sudokuList = new ArrayList<Grid>();
     private int sudokuIndex = 0;
     private Map<Grid, Hint> sudokuAnalyses = new HashMap<Grid, Hint>();
+    private boolean isNFCEnabled = false;
 
-
-    public GenerateDialog(JFrame owner, SudokuExplainer engine) {
+    public GenerateDialog(JFrame owner, SudokuExplainer engine, boolean isNFC) {
         super(owner, false);
         this.engine = engine;
+        this.isNFCEnabled = isNFC;
         initParameters();
         initGUI();
     }
@@ -363,8 +365,14 @@ public class GenerateDialog extends JDialog {
         List<Symmetry> symList = new ArrayList<Symmetry>(symmetries);
 
         // Generate grid
+      if ( isNFCEnabled == false ) {
         generator = new GeneratorThread(symList, minDifficulty, maxDifficulty);
         generator.start();
+      }
+      if ( isNFCEnabled == true ) {
+        generatornfc = new GeneratorNFCThread(symList, minDifficulty, maxDifficulty);
+        generatornfc.start();
+      }
     }
 
     /**
@@ -402,6 +410,59 @@ public class GenerateDialog extends JDialog {
             });
             generator = new Generator();
             final Grid result = generator.generate(symmetries, minDifficulty, maxDifficulty);
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    if (result != null) {
+                        sudokuList.add(result);
+                        sudokuIndex = sudokuList.size() - 1;
+                        refreshSudokuPanel();
+                    }
+                    if (GenerateDialog.this.isVisible()) {
+                        AutoBusy.setBusy(GenerateDialog.this, false);
+                        btnGenerate.setText("Generate");
+                    }
+                }
+            });
+            GenerateDialog.this.generator = null;
+        }
+
+    }
+
+    /**
+     * Thread that generates a mew grid.
+     */
+    private class GeneratorNFCThread extends Thread {
+
+        private final List<Symmetry> symmetries;
+        private final double minDifficulty;
+        private final double maxDifficulty;
+
+        private Generator generator;
+
+
+        public GeneratorNFCThread(List<Symmetry> symmetries, double minDifficulty, double maxDifficulty) {
+            this.symmetries = symmetries;
+            this.minDifficulty = minDifficulty;
+            this.maxDifficulty = maxDifficulty;
+        }
+
+        @Override
+        public void interrupt() {
+            generator.interrupt();
+        }
+
+        @Override
+        public void run() {
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    engine.setGrid(new Grid());
+                    AutoBusy.setBusy(GenerateDialog.this, true);
+                    AutoBusy.setBusy(btnGenerate, false);
+                    btnGenerate.setText("Stop");
+                }
+            });
+            generator = new Generator();
+            final Grid result = generator.generatenfc(symmetries, minDifficulty, maxDifficulty);
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
                     if (result != null) {

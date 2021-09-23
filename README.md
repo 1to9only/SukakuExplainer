@@ -59,5 +59,28 @@ None or one of the following (can be combined with Diagonals (X) only):
 ```
 ##### The options entered are not validated by the program, i.e. enter rubbish options, expect rubbish output!
 ##### If no options are specified, it is a Vanilla sudoku.
+
+### Options - Limited support for rating sudokus with multiple solutions!
+```
+-M      for sudokus with multiple solutions (this also disables the UL and BUG solving techniques)
+```
+For more info see: http://forum.enjoysudoku.com/help-with-sudoku-explainer-t6677-270.html#p305813
+
+Examples:
+```
+java.exe -Xrs -Xmx1g -cp SukakuExplainer.jar diuf.sudoku.test.serate -M --input=sample.txt --output=sample.se
+
+java.exe -Xrs -Xmx1g -cp SukakuExplainer.jar diuf.sudoku.test.pencilmarks -M --input=sample.txt >sample.p
+
+java.exe -Xrs -Xmx1g -cp SukakuExplainer.jar diuf.sudoku.test.hints -M --input=sample.txt >sample.h
+```
+## Hidden Features
+### Get more hints
+If you hold down the Ctrl or Shift key, and click on the 'Get all hints' button - you'll get even more hints.
+
+The feature does not work with the accelerator key (F6) or from the 'Tools' drop down menu.
+
+As expected, getting more hints takes longer!
+
 &nbsp;
 

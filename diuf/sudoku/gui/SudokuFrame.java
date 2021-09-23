@@ -130,6 +130,7 @@ public class SudokuFrame extends JFrame implements Asker {
     private JMenuItem mitShowFeatures = null;
     private JMenuItem mitUseSolution = null;
     private JMenuItem mitGenerate = null;
+    private JMenuItem mitGenerateNFC = null;
     private JCheckBoxMenuItem mitGenerateClipboard = null;
     private JMenuItem mitGenerateSolution = null;
     private JCheckBoxMenuItem mitShowCandidates = null;
@@ -938,6 +939,7 @@ public class SudokuFrame extends JFrame implements Asker {
             fileMenu.add(getMitUseSolution());
             fileMenu.add(getMitGenerate());
             setCommand(getMitGenerate(), 'G');
+            fileMenu.add(getMitGenerateNFC());
             fileMenu.add(getMitGenerateClipboard());
             fileMenu.add(getMitGenerateSolution());
             fileMenu.add(getMitRestart());
@@ -1005,7 +1007,7 @@ public class SudokuFrame extends JFrame implements Asker {
             mitGenerate.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     if (generateDialog == null || !generateDialog.isVisible()) {
-                        generateDialog = new GenerateDialog(SudokuFrame.this, engine);
+                        generateDialog = new GenerateDialog(SudokuFrame.this, engine, false);
                         generateDialog.pack();
                         offsetDialog(generateDialog);
                     }
@@ -1014,6 +1016,25 @@ public class SudokuFrame extends JFrame implements Asker {
             });
         }
         return mitGenerate;
+    }
+
+    private JMenuItem getMitGenerateNFC() {
+        if (mitGenerateNFC == null) {
+            mitGenerateNFC = new JMenuItem();
+            mitGenerateNFC.setText("Generate (NFC enabled, can use 100% CPU)...");
+            mitGenerateNFC.setToolTipText("Open a dialog to generate a random Sudoku puzzle");
+            mitGenerateNFC.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    if (generateDialog == null || !generateDialog.isVisible()) {
+                        generateDialog = new GenerateDialog(SudokuFrame.this, engine, true);
+                        generateDialog.pack();
+                        offsetDialog(generateDialog);
+                    }
+                    generateDialog.setVisible(true);
+                }
+            });
+        }
+        return mitGenerateNFC;
     }
 
     private JCheckBoxMenuItem getMitGenerateClipboard() {

@@ -68,7 +68,7 @@ public class Generator {
             grid.copyTo(copy);
             Solver solver = new Solver(copy);
             solver.rebuildPotentialValues();
-            double difficulty = solver.analyseDifficulty(minDifficulty, maxDifficulty);
+            double difficulty = solver.analyseNFCDifficulty(minDifficulty, maxDifficulty);
             String s = ""; int cnt = 0;
             for (int i = 0; i < 81; i++) {
                 int n = grid.getCellValue(i % 9, i / 9);
@@ -111,7 +111,7 @@ public class Generator {
      * @param maxDifficulty the maximum difficulty of the grid
      * @return the generated grid
      */
-    public Grid genermax(List<Symmetry> symmetries, double minDifficulty, double maxDifficulty) {
+    public Grid generatenfc(List<Symmetry> symmetries, double minDifficulty, double maxDifficulty) {
 //a     assert !symmetries.isEmpty() : "No symmetries specified";
         Random random = new Random();
         int symmetryIndex = random.nextInt(symmetries.size());
@@ -121,6 +121,8 @@ public class Generator {
             symmetryIndex = (symmetryIndex + 1) % symmetries.size();
             Grid grid = generate(random, symmetry);
             if ( grid == null ) {
+                System.err.println("Failed.");
+                System.err.flush();
                 return null;
             }
 
@@ -135,10 +137,11 @@ public class Generator {
             grid.copyTo(copy);
             Solver solver = new Solver(copy);
             solver.rebuildPotentialValues();
-            double difficulty = solver.analmaxDifficulty(minDifficulty, maxDifficulty);
-            String s = "";
+            double difficulty = solver.analyseNFCDifficulty(minDifficulty, maxDifficulty);
+            String s = ""; int cnt = 0;
             for (int i = 0; i < 81; i++) {
                 int n = grid.getCellValue(i % 9, i / 9);
+                if ( n != 0 ) { cnt++; }
                 s += (n==0)?".":n;
             }
             System.err.println(s);
@@ -146,9 +149,17 @@ public class Generator {
             int p = w % 10; w /= 10;
             System.err.println("ED=" + w + "." + p);
             System.err.flush();
-            if (difficulty < 19.0)
+            if (difficulty >= minDifficulty && difficulty <= maxDifficulty) {
+              if ( Settings.getInstance().getGenerateToClipboard() ) {
+                String scnt = "" + cnt;
+                if ( cnt < 10 ) { scnt = " " + scnt; }
+                String sClip = s + " " + scnt + " ED="+w+"."+p;
+                StringSelection data = new StringSelection(sClip);
+                Toolkit.getDefaultToolkit().getSystemClipboard().setContents(data, data);
+              }
+                grid.fixGivens();
                 return grid;
-
+            }
             if (isInterrupted) {
                 System.err.println("Stopped.");
                 System.err.flush();

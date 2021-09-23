@@ -1,10 +1,29 @@
 <html>
  <body>
   <h2>New features added by <b>1to9only</b>!</h2>
+  <p><b>Generate (NFC enabled, can use 100% CPU)...</b><br>
+  'Generate...' does NOT check for Nested Forcing Chains, so the max generated ED is in the 9.0-10.0 range.<br>
+  Enabling NFC checking can generate higher-rated sudokus, but this can use 100% CPU for minutes/hours!!<br>
+  2021.09.23<br>
+  </p>
+  <p><b>Limited support for rating sudokus with multiple solutions</b><br>
+  For more info see:
+  <a href="http://forum.enjoysudoku.com/help-with-sudoku-explainer-t6677-270.html#p305813">
+           http://forum.enjoysudoku.com/help-with-sudoku-explainer-t6677-270.html#p305813</a>
+  (copy link and paste into browser).<br>
+  Option: Use -M for sudokus with multiple solutions. Using -M disables the UL and BUG solving techniques.<br>
+<pre>
+java.exe -Xrs -Xmx1g -cp SukakuExplainer.jar diuf.sudoku.test.serate -M --input=sample.txt --output=sample.se
+java.exe -Xrs -Xmx1g -cp SukakuExplainer.jar diuf.sudoku.test.pencilmarks -M --input=sample.txt >sample.p
+java.exe -Xrs -Xmx1g -cp SukakuExplainer.jar diuf.sudoku.test.hints -M --input=sample.txt >sample.h
+</pre>
+  2021.09.23<br>
   <p><b>Get more hints</b>:<br>
   If you hold down the Ctrl or Shift key, and click on the 'Get all hints' button - you'll get even more hints.<br>
   The feature does not work with the accelerator key (F6) or from the 'Tools' drop down menu.<br>
   As expected, getting more hints takes longer!<br>
+  </p>
+  <p>&nbsp;
   </p>
  </body>
 </html>

@@ -648,7 +648,7 @@ public class Solver {
      * @return The actual difficulty if it is between the
      * given bounds. An arbitrary out-of-bounds value else.
      */
-    public double analmaxDifficulty(double min, double max) {
+    public double analyseNFCDifficulty(double min, double max) {
         int oldPriority = lowerPriority();
         try {
             double difficulty = 0.0;
@@ -666,10 +666,8 @@ public class Solver {
                     // Only used for generator. Ignore advanced/experimental techniques
                     for (IndirectHintProducer producer : advancedHintProducers)
                         producer.getHints(grid, accu);
-                  if ( Settings.getInstance().getFactor() ) {
                     for (IndirectHintProducer producer : experimentalHintProducers)
                         producer.getHints(grid, accu);
-                  }
                 } catch (InterruptedException willHappen) {}
                 Hint hint = accu.getHint();
                 if (hint == null) {
