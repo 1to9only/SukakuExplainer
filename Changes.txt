@@ -1,5 +1,8 @@
 Changes:
 
+20210928
+- added rating for custom extra regions sudokus, use -U option
+
 20210923
 - 'Generate (NFC enabled, can use 100% CPU)...' for very hard sudokus
 - built using jdk-8u301

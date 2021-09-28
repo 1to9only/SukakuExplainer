@@ -63,12 +63,6 @@ public class Generator {
                 return null;
             }
 
-            // Analyse difficulty
-            Grid copy = new Grid();
-            grid.copyTo(copy);
-            Solver solver = new Solver(copy);
-            solver.rebuildPotentialValues();
-            double difficulty = solver.analyseNFCDifficulty(minDifficulty, maxDifficulty);
             String s = ""; int cnt = 0;
             for (int i = 0; i < 81; i++) {
                 int n = grid.getCellValue(i % 9, i / 9);
@@ -76,6 +70,14 @@ public class Generator {
                 s += (n==0)?".":n;
             }
             System.err.println(s);
+            System.err.flush();
+
+            // Analyse difficulty
+            Grid copy = new Grid();
+            grid.copyTo(copy);
+            Solver solver = new Solver(copy);
+            solver.rebuildPotentialValues();
+            double difficulty = solver.analyseNFCDifficulty(minDifficulty, maxDifficulty);
             int w = (int)((difficulty + 0.05) * 10);
             int p = w % 10; w /= 10;
             System.err.println("ED=" + w + "." + p);
@@ -132,12 +134,6 @@ public class Generator {
                 return null;
             }
 
-            // Analyse difficulty
-            Grid copy = new Grid();
-            grid.copyTo(copy);
-            Solver solver = new Solver(copy);
-            solver.rebuildPotentialValues();
-            double difficulty = solver.analyseNFCDifficulty(minDifficulty, maxDifficulty);
             String s = ""; int cnt = 0;
             for (int i = 0; i < 81; i++) {
                 int n = grid.getCellValue(i % 9, i / 9);
@@ -145,6 +141,14 @@ public class Generator {
                 s += (n==0)?".":n;
             }
             System.err.println(s);
+            System.err.flush();
+
+            // Analyse difficulty
+            Grid copy = new Grid();
+            grid.copyTo(copy);
+            Solver solver = new Solver(copy);
+            solver.rebuildPotentialValues();
+            double difficulty = solver.analyseNFCDifficulty(minDifficulty, maxDifficulty);
             int w = (int)((difficulty + 0.05) * 10);
             int p = w % 10; w /= 10;
             System.err.println("ED=" + w + "." + p);

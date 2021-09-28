@@ -1110,11 +1110,11 @@ public class Chaining implements IndirectHintProducer {
 //      grid.copyTo(lastGrid);
         // This filters hints that are equal:
         lastHints = new LinkedHashSet<ChainingHint>(result);
+        result = null;
         for (IndirectHint hint : lastHints)
             accu.add(hint);
 
         lastHints = null;
-        result = null;
     }
 
 }

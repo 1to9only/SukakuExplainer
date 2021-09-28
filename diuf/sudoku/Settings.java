@@ -28,7 +28,7 @@ public class Settings {
 
     public final static int VERSION  = 2021;
     public final static int REVISION = 9;
-    public final static int SUBREV   = 23;
+    public final static int SUBREV   = 28;
 
     private static Settings instance = null;
 

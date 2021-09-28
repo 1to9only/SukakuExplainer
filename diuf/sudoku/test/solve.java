@@ -103,6 +103,10 @@ public class solve {
                     Settings.getInstance().setSdoku(true);
                     break;
 
+                case 'U':   // Custom
+                    Settings.getInstance().setCustom(true);
+                    break;
+
                 case 'T':   // used saved techniques
                     Settings.getInstance().unpackmethods();
                     break;
