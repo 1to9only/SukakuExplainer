@@ -238,8 +238,27 @@ public class Solver {
         for (int y = 0; y < 9; y++) {
             for (int x = 0; x < 9; x++) {
                 Cell cell = grid.getCell(x, y);
-                if (cell.getValue() != 0)
+                if (cell.getValue() != 0) {
                     cell.clearPotentialValues();
+                }
+                else {
+                  if (grid.isOddEven()) {
+                    char ch = Settings.getInstance().getOddEven().charAt(cell.getY()*9+cell.getX());
+                    if ( ch=='o' || ch=='O' ) { // isOdd cell, remove Even candidates
+                        if ( cell.hasPotentialValue( 2) ) { cell.removePotentialValue( 2); }
+                        if ( cell.hasPotentialValue( 4) ) { cell.removePotentialValue( 4); }
+                        if ( cell.hasPotentialValue( 6) ) { cell.removePotentialValue( 6); }
+                        if ( cell.hasPotentialValue( 8) ) { cell.removePotentialValue( 8); }
+                    }
+                    if ( ch=='e' || ch=='E' ) { // isEven cell, remove Odd candidates
+                        if ( cell.hasPotentialValue( 1) ) { cell.removePotentialValue( 1); }
+                        if ( cell.hasPotentialValue( 3) ) { cell.removePotentialValue( 3); }
+                        if ( cell.hasPotentialValue( 5) ) { cell.removePotentialValue( 5); }
+                        if ( cell.hasPotentialValue( 7) ) { cell.removePotentialValue( 7); }
+                        if ( cell.hasPotentialValue( 9) ) { cell.removePotentialValue( 9); }
+                    }
+                  }
+                }
             }
         }
         if ( !grid.isLatinSquare() ) {

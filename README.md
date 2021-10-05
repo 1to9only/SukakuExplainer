@@ -60,17 +60,7 @@ None or one of the following (can be combined with Diagonals (X) only):
 ##### The options entered are not validated by the program, i.e. enter rubbish options, expect rubbish output!
 ##### If no options are specified, it is a Vanilla sudoku.
 
-### Options - support for rating cUstom sudokus with 2-4 or more extra regions
-```
--U      for cUstom sudokus with 2-4 or more extra regions
-```
-To use this feature in command-line: serate, hints, pencilmarks and solve:
-In GUI, setup the sudoku with the correct extra regions layout. Exit GUI. This saves the layout in SukakuExplainer.json.
-Example:
-```
-java.exe -Xrs -Xmx1g -cp SukakuExplainer.jar diuf.sudoku.test.serate -U -X --input=custom.txt --output=custom.se
-```
-### Options - Limited support for rating sudokus with multiple solutions!
+### Options - support for rating sudokus with multiple solutions!
 ```
 -M      for sudokus with multiple solutions (this also disables the UL and BUG solving techniques)
 ```
@@ -83,6 +73,26 @@ java.exe -Xrs -Xmx1g -cp SukakuExplainer.jar diuf.sudoku.test.serate -M --input=
 java.exe -Xrs -Xmx1g -cp SukakuExplainer.jar diuf.sudoku.test.pencilmarks -M --input=sample.txt >sample.p
 
 java.exe -Xrs -Xmx1g -cp SukakuExplainer.jar diuf.sudoku.test.hints -M --input=sample.txt >sample.h
+```
+### Options - support for rating cUstom sudokus with 2-4 or more extra regions
+```
+-U      for cUstom sudokus with 2-4 or more extra regions
+```
+To use this feature in command-line: serate, hints, pencilmarks and solve:
+In GUI, setup the sudoku with the correct extra regions layout. Exit GUI. This saves the layout in SukakuExplainer.json.
+Example:
+```
+java.exe -Xrs -Xmx1g -cp SukakuExplainer.jar diuf.sudoku.test.serate -U -X --input=custom.txt --output=custom.se
+```
+### Options - support for odd/eVen sudokus
+```
+-V      for odd/eVen sudokus (odd or even, or both odd and even)
+```
+To use this feature in command-line: serate, hints, pencilmarks and solve:
+In GUI, setup the sudoku with the correct odd/even layout. Exit GUI. This saves the layout in SukakuExplainer.json.
+Example:
+```
+java.exe -Xrs -Xmx1g -cp SukakuExplainer.jar diuf.sudoku.test.serate -V --input=oddeven.txt --output=oddeven.se
 ```
 ## Hidden Features
 ### Get more hints

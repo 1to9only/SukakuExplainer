@@ -106,6 +106,9 @@ public class solve {
                 case 'U':   // Custom
                     Settings.getInstance().setCustom(true);
                     break;
+                case 'V':   // OddEven
+                    Settings.getInstance().setOddEven(true);
+                    break;
 
                 case 'T':   // used saved techniques
                     Settings.getInstance().unpackmethods();

@@ -114,6 +114,7 @@ public class SudokuPanel extends JPanel {
     private Color percentColor = new Color(122, 255, 178);  // h:97  s:240 l:177
     private Color sdokuColor = new Color(248, 177, 248);    // h:200 s:200 l:200
     private Color customColor = new Color(244, 138, 138);   // h:0   s:200 l:180
+    private Color oddevenColor = new Color(177, 177, 248);  // h:160 s:200 l:200
 
     public SudokuPanel(SudokuFrame parent) {
         super();
@@ -658,7 +659,7 @@ public class SudokuPanel extends JPanel {
             AffineTransform.getTranslateInstance(LEGEND_GAP_SIZE, GRID_GAP_SIZE);
         g2.transform(translate);
         g.clearRect(0, 0, GRID_SIZE, GRID_SIZE);
-        paintSelectionAndFocus(g);
+        paintSelectionAndFocus(g, g2);
         paintGrid(g);
         paintHighlightedRegions(g);
         paintCellsValues(g);
@@ -676,7 +677,7 @@ public class SudokuPanel extends JPanel {
         initGraphics(g2);
         g.setColor(backgroundColor);
         g.fillRect(0, 0, GRID_SIZE+4, GRID_SIZE+4);
-        paint2SelectionAndFocus(g, 2);
+        paint2SelectionAndFocus(g, g2, 2);
         paint2Grid(g, 2);
         paint2HighlightedRegions(g, 2);
         paint2CellsValues(g, 2);
@@ -761,7 +762,7 @@ public class SudokuPanel extends JPanel {
         }
     }
 
-    private void paintSelectionAndFocus(Graphics g) {
+    private void paintSelectionAndFocus(Graphics g, Graphics2D g2) {
         Rectangle clip = g.getClipBounds();
         Rectangle cellRect = new Rectangle();
         for (int y = 0; y < 9; y++) {
@@ -771,17 +772,91 @@ public class SudokuPanel extends JPanel {
                     Cell cell = grid.getCell(x, y);
                     initFillColor(g, cell);
                     g.fillRect(x * CELL_OUTER_SIZE, y * CELL_OUTER_SIZE, CELL_OUTER_SIZE, CELL_OUTER_SIZE);
+                  if (grid.isOddEven()) {
+                    char ch = Settings.getInstance().getOddEven().charAt(cell.getY()*9+cell.getX());
+                    if ( ch=='o' || ch=='O' ) {
+                      g.setColor( oddevenColor);
+                      g.fillOval( x*CELL_OUTER_SIZE+((CELL_OUTER_SIZE-CELL_INNER_SIZE)/2),
+                                  y*CELL_OUTER_SIZE+((CELL_OUTER_SIZE-CELL_INNER_SIZE)/2),
+                                  CELL_INNER_SIZE,
+                                  CELL_INNER_SIZE);
+                    }
+                    if ( ch=='e' || ch=='E' ) {
+                      g.setColor( oddevenColor);
+                     if ( Settings.getInstance().getevenshape() == 3 ) {
+                      Polygon poly = new Polygon(
+                                        new int[]{ x*CELL_OUTER_SIZE+(CELL_INNER_SIZE/2)+((CELL_OUTER_SIZE-CELL_INNER_SIZE)/2),
+                                                   x*CELL_OUTER_SIZE+CELL_INNER_SIZE+((CELL_OUTER_SIZE-CELL_INNER_SIZE)/2)-1,
+                                                   x*CELL_OUTER_SIZE+((CELL_OUTER_SIZE-CELL_INNER_SIZE)/2)+1},
+                                        new int[]{ y*CELL_OUTER_SIZE+((CELL_OUTER_SIZE-CELL_INNER_SIZE)/2),
+                                                   y*CELL_OUTER_SIZE+CELL_INNER_SIZE+((CELL_OUTER_SIZE-CELL_INNER_SIZE)/2)-1,
+                                                   y*CELL_OUTER_SIZE+CELL_INNER_SIZE+((CELL_OUTER_SIZE-CELL_INNER_SIZE)/2)-1},
+                                        3);
+                      g2.fill( poly);
+                     }
+                     if ( Settings.getInstance().getevenshape() != 3 ) {
+                      Polygon poly = new Polygon(
+                                        new int[]{ x*CELL_OUTER_SIZE+((CELL_OUTER_SIZE-CELL_INNER_SIZE)/2)+2,
+                                                   x*CELL_OUTER_SIZE+CELL_INNER_SIZE+((CELL_OUTER_SIZE-CELL_INNER_SIZE)/2)-2,
+                                                   x*CELL_OUTER_SIZE+CELL_INNER_SIZE+((CELL_OUTER_SIZE-CELL_INNER_SIZE)/2)-2,
+                                                   x*CELL_OUTER_SIZE+((CELL_OUTER_SIZE-CELL_INNER_SIZE)/2)+2},
+                                        new int[]{ y*CELL_OUTER_SIZE+((CELL_OUTER_SIZE-CELL_INNER_SIZE)/2)+1,
+                                                   y*CELL_OUTER_SIZE+((CELL_OUTER_SIZE-CELL_INNER_SIZE)/2)+1,
+                                                   y*CELL_OUTER_SIZE+CELL_INNER_SIZE+((CELL_OUTER_SIZE-CELL_INNER_SIZE)/2)-2,
+                                                   y*CELL_OUTER_SIZE+CELL_INNER_SIZE+((CELL_OUTER_SIZE-CELL_INNER_SIZE)/2)-2},
+                                        4);
+                      g2.fill( poly);
+                     }
+                    }
+                  }
                 }
             }
         }
     }
 
-    private void paint2SelectionAndFocus(Graphics g, int adj) {
+    private void paint2SelectionAndFocus(Graphics g, Graphics2D g2, int adj) {
         for (int y = 0; y < 9; y++) {
             for (int x = 0; x < 9; x++) {
                     Cell cell = grid.getCell(x, y);
                     init2FillColor(g, cell);
                     g.fillRect(x * CELL_OUTER_SIZE+adj, y * CELL_OUTER_SIZE+adj, CELL_OUTER_SIZE, CELL_OUTER_SIZE);
+                  if (grid.isOddEven()) {
+                    char ch = Settings.getInstance().getOddEven().charAt(cell.getY()*9+cell.getX());
+                    if ( ch=='o' || ch=='O' ) {
+                      g.setColor( oddevenColor);
+                      g.fillOval( x*CELL_OUTER_SIZE+((CELL_OUTER_SIZE-CELL_INNER_SIZE)/2)+adj,
+                                  y*CELL_OUTER_SIZE+((CELL_OUTER_SIZE-CELL_INNER_SIZE)/2)+adj,
+                                  CELL_INNER_SIZE,
+                                  CELL_INNER_SIZE);
+                    }
+                    if ( ch=='e' || ch=='E' ) {
+                      g.setColor( oddevenColor);
+                     if ( Settings.getInstance().getevenshape() == 3 ) {
+                      Polygon poly = new Polygon(
+                                        new int[]{ x*CELL_OUTER_SIZE+(CELL_INNER_SIZE/2)+((CELL_OUTER_SIZE-CELL_INNER_SIZE)/2)+adj,
+                                                   x*CELL_OUTER_SIZE+CELL_INNER_SIZE+((CELL_OUTER_SIZE-CELL_INNER_SIZE)/2)-1+adj,
+                                                   x*CELL_OUTER_SIZE+((CELL_OUTER_SIZE-CELL_INNER_SIZE)/2)+1+adj},
+                                        new int[]{ y*CELL_OUTER_SIZE+((CELL_OUTER_SIZE-CELL_INNER_SIZE)/2)+adj,
+                                                   y*CELL_OUTER_SIZE+CELL_INNER_SIZE+((CELL_OUTER_SIZE-CELL_INNER_SIZE)/2)-1+adj,
+                                                   y*CELL_OUTER_SIZE+CELL_INNER_SIZE+((CELL_OUTER_SIZE-CELL_INNER_SIZE)/2)-1+adj},
+                                        3);
+                      g2.fill( poly);
+                     }
+                     if ( Settings.getInstance().getevenshape() != 3 ) {
+                      Polygon poly = new Polygon(
+                                        new int[]{ x*CELL_OUTER_SIZE+((CELL_OUTER_SIZE-CELL_INNER_SIZE)/2)+2+adj,
+                                                   x*CELL_OUTER_SIZE+CELL_INNER_SIZE+((CELL_OUTER_SIZE-CELL_INNER_SIZE)/2)-2+adj,
+                                                   x*CELL_OUTER_SIZE+CELL_INNER_SIZE+((CELL_OUTER_SIZE-CELL_INNER_SIZE)/2)-2+adj,
+                                                   x*CELL_OUTER_SIZE+((CELL_OUTER_SIZE-CELL_INNER_SIZE)/2)+2+adj},
+                                        new int[]{ y*CELL_OUTER_SIZE+((CELL_OUTER_SIZE-CELL_INNER_SIZE)/2)+1+adj,
+                                                   y*CELL_OUTER_SIZE+((CELL_OUTER_SIZE-CELL_INNER_SIZE)/2)+1+adj,
+                                                   y*CELL_OUTER_SIZE+CELL_INNER_SIZE+((CELL_OUTER_SIZE-CELL_INNER_SIZE)/2)-2+adj,
+                                                   y*CELL_OUTER_SIZE+CELL_INNER_SIZE+((CELL_OUTER_SIZE-CELL_INNER_SIZE)/2)-2+adj},
+                                        4);
+                      g2.fill( poly);
+                     }
+                    }
+                  }
             }
         }
     }

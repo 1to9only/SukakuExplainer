@@ -27,8 +27,8 @@ import diuf.sudoku.*;
 public class Settings {
 
     public final static int VERSION  = 2021;
-    public final static int REVISION = 9;
-    public final static int SUBREV   = 28;
+    public final static int REVISION = 10;
+    public final static int SUBREV   = 5;
 
     private static Settings instance = null;
 
@@ -97,7 +97,10 @@ public class Settings {
     private boolean AnalyseToClipboard = false;     // true= copy analysis to clipboard
 
     private boolean isOddEven = false;
-    private String oddeven = null;       // odd/even regions
+    private boolean isOddEvenNoGivens = true;
+    private String oddeven = null;                  // odd/even regions
+    private static String oddshape = "circle";
+    private int evenshape = 3;                      // =3 triangle, =4 square
 
     private Settings() {
         init();
@@ -620,6 +623,16 @@ public class Settings {
         return isOddEven;
     }
 
+    public void setOddEvenNoGivens(boolean isOddEvenNoGivens) {
+      if ( this.isOddEvenNoGivens != isOddEvenNoGivens ) {
+        this.isOddEvenNoGivens = isOddEvenNoGivens;
+        save();
+      }
+    }
+    public boolean isOddEvenNoGivens() {
+        return isOddEvenNoGivens;
+    }
+
     public void setOddEven(String oddeven) {
       if ( this.oddeven == null || !(this.oddeven.equals(oddeven)) ) {
         this.oddeven = oddeven;
@@ -632,6 +645,14 @@ public class Settings {
 
     public String getOddEven() {
         return oddeven;
+    }
+
+    public String getoddshape() {
+        return oddshape;
+    }
+
+    public int getevenshape() {
+        return evenshape;
     }
 
     public void setApply(int apply) {
@@ -858,9 +879,23 @@ public class Settings {
                 }
                 catch (NullPointerException e) { LoadError = 1; }
                 try {
+                    s = (String)stgDetails.get("isOddEvenNoGivens");
+                    isOddEvenNoGivens = s.equals("true")?true:false;
+                }
+                catch (NullPointerException e) { LoadError = 1; }
+                try {
                     oddeven = (String)stgDetails.get("oddeven");
                 }
                 catch (NullPointerException e) { ; }
+            //  try {
+            //      oddshape = (String)stgDetails.get("oddshape");
+            //  }
+            //  catch (NullPointerException e) { LoadError = 1; }
+                try {
+                    s = (String)stgDetails.get("evenshape");
+                    evenshape = s.charAt(0) - '0';
+                }
+                catch (NullPointerException e) { LoadError = 1; }
                 try {
                     s = (String)stgDetails.get("apply");
                   if ( s.length() == 2 ) {
@@ -966,9 +1001,12 @@ public class Settings {
         }
         stgDetails.put("count", ""+count);
         stgDetails.put("isOddEven", isOddEven?"true":"false");
+        stgDetails.put("isOddEvenNoGivens", isOddEvenNoGivens?"true":"false");
         if ( oddeven != null ) {
             stgDetails.put("oddeven", oddeven);
         }
+        stgDetails.put("oddshape", oddshape);
+        stgDetails.put("evenshape", ""+evenshape);
         stgDetails.put("apply", ""+apply);
 
         if ( methods != null ) {

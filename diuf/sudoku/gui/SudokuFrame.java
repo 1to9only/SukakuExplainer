@@ -166,6 +166,7 @@ public class SudokuFrame extends JFrame implements Asker {
     private JCheckBoxMenuItem mitPerCent = null;
     private JCheckBoxMenuItem mitSdoku = null;
     private JMenuItem mitOddEven = null;
+    private JCheckBoxMenuItem mitOddEvenNoGivens = null;
     private JMenuItem mitExtraRegions = null;
     private JMenuItem mitCustomText = null;
     private JMenuItem mitCustomFile = null;
@@ -2566,6 +2567,8 @@ public class SudokuFrame extends JFrame implements Asker {
             VariantsMenu.add(getMitSdoku());
             VariantsMenu.add(getMitExtraRegions());
             VariantsMenu.add(getMitCustomText());
+            VariantsMenu.add(getMitOddEven());
+        //  VariantsMenu.add(getMitOddEvenNoGivens());
         //  VariantsMenu.add(getMitCustomFile());
         //  VariantsMenu.add(getMitCustomCopy());
             VariantsMenu.addSeparator();
@@ -2590,13 +2593,15 @@ public class SudokuFrame extends JFrame implements Asker {
                 // if ( mitLatinSquare.isSelected() ) {
                 //  if ( Settings.getInstance().isHalloween() ) { mitHalloween.setSelected(false); }
                 //  if ( Settings.getInstance().isPerCent() )   { mitPerCent.setSelected(false); }
-                //  if ( Settings.getInstance().isSdoku() )   { mitSdoku.setSelected(false); }
+                //  if ( Settings.getInstance().isSdoku() )     { mitSdoku.setSelected(false); }
                 // }
                     Settings.getInstance().setCustom(false);
+                    Settings.getInstance().setOddEven(false);
                     Settings.getInstance().setLatinSquare(mitLatinSquare.isSelected());
                     Settings.getInstance().saveChanged();
                     sudokuPanel.getSudokuGrid().updateLatinSquare();
                     sudokuPanel.getSudokuGrid().updateCustom();
+                    sudokuPanel.getSudokuGrid().updateOddEven();
         //          mitCustomCopy.setVisible(false);
                     mitCustomClockwise.setVisible(false);
                     mitCustomAntiClockwise.setVisible(false);
@@ -2633,9 +2638,11 @@ public class SudokuFrame extends JFrame implements Asker {
                     if ( Settings.getInstance().isPerCent() )        { mitPerCent.setSelected(false); }
                     if ( Settings.getInstance().isSdoku() )          { mitSdoku.setSelected(false); }
                     Settings.getInstance().setCustom(false);
+                    Settings.getInstance().setOddEven(false);
                     Settings.getInstance().saveChanged();
                     sudokuPanel.getSudokuGrid().updateVanilla();
                     sudokuPanel.getSudokuGrid().updateCustom();
+                    sudokuPanel.getSudokuGrid().updateOddEven();
         //          mitCustomCopy.setVisible(false);
                     mitCustomClockwise.setVisible(false);
                     mitCustomAntiClockwise.setVisible(false);
@@ -2692,9 +2699,11 @@ public class SudokuFrame extends JFrame implements Asker {
                    }
                     Settings.getInstance().setDisjointGroups(mitDisjointGroups.isSelected());
                     Settings.getInstance().setCustom(false);
+                    Settings.getInstance().setOddEven(false);
                     Settings.getInstance().saveChanged();
                     sudokuPanel.getSudokuGrid().updateDisjointGroups();
                     sudokuPanel.getSudokuGrid().updateCustom();
+                    sudokuPanel.getSudokuGrid().updateOddEven();
         //          mitCustomCopy.setVisible(false);
                     mitCustomClockwise.setVisible(false);
                     mitCustomAntiClockwise.setVisible(false);
@@ -2741,9 +2750,11 @@ public class SudokuFrame extends JFrame implements Asker {
                    }
                     Settings.getInstance().setWindoku(mitWindoku.isSelected());
                     Settings.getInstance().setCustom(false);
+                    Settings.getInstance().setOddEven(false);
                     Settings.getInstance().saveChanged();
                     sudokuPanel.getSudokuGrid().updateWindoku();
                     sudokuPanel.getSudokuGrid().updateCustom();
+                    sudokuPanel.getSudokuGrid().updateOddEven();
         //          mitCustomCopy.setVisible(false);
                     mitCustomClockwise.setVisible(false);
                     mitCustomAntiClockwise.setVisible(false);
@@ -2781,8 +2792,10 @@ public class SudokuFrame extends JFrame implements Asker {
                     if ( Settings.getInstance().isSdoku() )     { mitSdoku.setSelected(false); }
                    }
                     Settings.getInstance().setCustom(false);
+                    Settings.getInstance().setOddEven(false);
                     Settings.getInstance().saveChanged();
                     sudokuPanel.getSudokuGrid().updateCustom();
+                    sudokuPanel.getSudokuGrid().updateOddEven();
         //          mitCustomCopy.setVisible(false);
                     mitCustomClockwise.setVisible(false);
                     mitCustomAntiClockwise.setVisible(false);
@@ -2829,9 +2842,11 @@ public class SudokuFrame extends JFrame implements Asker {
                    }
                     Settings.getInstance().setAsterisk(mitAsterisk.isSelected());
                     Settings.getInstance().setCustom(false);
+                    Settings.getInstance().setOddEven(false);
                     Settings.getInstance().saveChanged();
                     sudokuPanel.getSudokuGrid().updateAsterisk();
                     sudokuPanel.getSudokuGrid().updateCustom();
+                    sudokuPanel.getSudokuGrid().updateOddEven();
         //          mitCustomCopy.setVisible(false);
                     mitCustomClockwise.setVisible(false);
                     mitCustomAntiClockwise.setVisible(false);
@@ -2865,9 +2880,11 @@ public class SudokuFrame extends JFrame implements Asker {
                    }
                     Settings.getInstance().setCenterDot(mitCenterDot.isSelected());
                     Settings.getInstance().setCustom(false);
+                    Settings.getInstance().setOddEven(false);
                     Settings.getInstance().saveChanged();
                     sudokuPanel.getSudokuGrid().updateCenterDot();
                     sudokuPanel.getSudokuGrid().updateCustom();
+                    sudokuPanel.getSudokuGrid().updateOddEven();
         //          mitCustomCopy.setVisible(false);
                     mitCustomClockwise.setVisible(false);
                     mitCustomAntiClockwise.setVisible(false);
@@ -2901,9 +2918,11 @@ public class SudokuFrame extends JFrame implements Asker {
                    }
                     Settings.getInstance().setGirandola(mitGirandola.isSelected());
                     Settings.getInstance().setCustom(false);
+                    Settings.getInstance().setOddEven(false);
                     Settings.getInstance().saveChanged();
                     sudokuPanel.getSudokuGrid().updateGirandola();
                     sudokuPanel.getSudokuGrid().updateCustom();
+                    sudokuPanel.getSudokuGrid().updateOddEven();
         //          mitCustomCopy.setVisible(false);
                     mitCustomClockwise.setVisible(false);
                     mitCustomAntiClockwise.setVisible(false);
@@ -2942,9 +2961,11 @@ public class SudokuFrame extends JFrame implements Asker {
                     }
                     Settings.getInstance().setHalloween(mitHalloween.isSelected());
                     Settings.getInstance().setCustom(false);
+                    Settings.getInstance().setOddEven(false);
                     Settings.getInstance().saveChanged();
                     sudokuPanel.getSudokuGrid().updateHalloween();
                     sudokuPanel.getSudokuGrid().updateCustom();
+                    sudokuPanel.getSudokuGrid().updateOddEven();
         //          mitCustomCopy.setVisible(false);
                     mitCustomClockwise.setVisible(false);
                     mitCustomAntiClockwise.setVisible(false);
@@ -2983,9 +3004,11 @@ public class SudokuFrame extends JFrame implements Asker {
                     }
                     Settings.getInstance().setPerCent(mitPerCent.isSelected());
                     Settings.getInstance().setCustom(false);
+                    Settings.getInstance().setOddEven(false);
                     Settings.getInstance().saveChanged();
                     sudokuPanel.getSudokuGrid().updatePerCent();
                     sudokuPanel.getSudokuGrid().updateCustom();
+                    sudokuPanel.getSudokuGrid().updateOddEven();
         //          mitCustomCopy.setVisible(false);
                     mitCustomClockwise.setVisible(false);
                     mitCustomAntiClockwise.setVisible(false);
@@ -3024,9 +3047,11 @@ public class SudokuFrame extends JFrame implements Asker {
                     }
                     Settings.getInstance().setSdoku(mitSdoku.isSelected());
                     Settings.getInstance().setCustom(false);
+                    Settings.getInstance().setOddEven(false);
                     Settings.getInstance().saveChanged();
                     sudokuPanel.getSudokuGrid().updateSdoku();
                     sudokuPanel.getSudokuGrid().updateCustom();
+                    sudokuPanel.getSudokuGrid().updateOddEven();
         //          mitCustomCopy.setVisible(false);
                     mitCustomClockwise.setVisible(false);
                     mitCustomAntiClockwise.setVisible(false);
@@ -3101,7 +3126,7 @@ public class SudokuFrame extends JFrame implements Asker {
                     if ( index == 46 ) line = new String( "................1..1111111..1.......................2..2222222..2................ 46 ZZ2");
                     if ( index == 47 ) line = new String( ".......1..1111111..1..............2..2222222..2..............3..3333333..3....... 47 ZZ3");
                     if ( index == 48 ) line = new String( "...1.2.....11.22...11...22.11.....221...3...2.1..3..2.....3........3......33333.. 48 TR3");
-                    line = line.replace( ".", "0");
+                //  line = line.replace( ".", "0");
                     Settings settings = Settings.getInstance();
                     settings.setCustom( line.substring( 0, 81));
                     sudokuPanel.getSudokuGrid().customInitialize( line.substring( 0, 81));
@@ -3118,8 +3143,10 @@ public class SudokuFrame extends JFrame implements Asker {
                     if ( Settings.getInstance().isPerCent() )        { mitPerCent.setSelected(false); }
                     if ( Settings.getInstance().isSdoku() )          { mitSdoku.setSelected(false); }
                     Settings.getInstance().setCustom(true);
+                    Settings.getInstance().setOddEven(false);
                     Settings.getInstance().saveChanged();
                     sudokuPanel.getSudokuGrid().updateCustom();
+                    sudokuPanel.getSudokuGrid().updateOddEven();
         //          mitCustomCopy.setVisible(true);
                     mitCustomClockwise.setVisible(true);
                     mitCustomAntiClockwise.setVisible(true);
@@ -3144,12 +3171,13 @@ public class SudokuFrame extends JFrame implements Asker {
             mitCustomText.setToolTipText("Load a Custom variant layout (text input)");
             mitCustomText.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                  String inputtext = null;
+                  String inputtext = Settings.getInstance().getCustom();
+                  if ( inputtext == null ) { inputtext = ""; }
                   boolean isValidInput = false;
                   while ( !isValidInput ) {
                     inputtext = (String)JOptionPane.showInputDialog(
                         SudokuFrame.this, "Enter custom variant layout (81-chars), must be valid, 2-4 extra regions best.",
-                        "Load Custom", JOptionPane.PLAIN_MESSAGE, null, null, "");
+                        "Load Custom", JOptionPane.PLAIN_MESSAGE, null, null, inputtext);
                     if ( inputtext != null && inputtext.length() >= 81 ) {
                         isValidInput = true;
                         int chcount = 0;
@@ -3235,8 +3263,10 @@ public class SudokuFrame extends JFrame implements Asker {
                         if ( Settings.getInstance().isPerCent() )        { mitPerCent.setSelected(false); }
                         if ( Settings.getInstance().isSdoku() )          { mitSdoku.setSelected(false); }
                         Settings.getInstance().setCustom(true);
+                        Settings.getInstance().setOddEven(false);
                         Settings.getInstance().saveChanged();
                         sudokuPanel.getSudokuGrid().updateCustom();
+                        sudokuPanel.getSudokuGrid().updateOddEven();
         //              mitCustomCopy.setVisible(true);
                         mitCustomClockwise.setVisible(true);
                         mitCustomAntiClockwise.setVisible(true);
@@ -3254,6 +3284,103 @@ public class SudokuFrame extends JFrame implements Asker {
             });
         }
         return mitCustomText;
+    }
+
+    private JMenuItem getMitOddEven() {
+        if (mitOddEven == null) {
+            mitOddEven = new JMenuItem();
+            mitOddEven.setText("Odd/Even... (text input)");
+            mitOddEven.setToolTipText("Load Odd/Even region(s) layout (text input)");
+            mitOddEven.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                  String inputtext = Settings.getInstance().getOddEven();
+                  if ( inputtext == null ) { inputtext = ""; }
+                  boolean isValidInput = false;
+                  while ( !isValidInput ) {
+                    inputtext = (String)JOptionPane.showInputDialog(
+                        SudokuFrame.this, "Enter [O]dd/[E]ven layout (81-chars), must be valid, only odd or even or both.",
+                        "Load Odd/Even", JOptionPane.PLAIN_MESSAGE, null, null, inputtext);
+                    if ( inputtext != null && inputtext.length() >= 81 ) {
+                        isValidInput = true;
+                        int odcount = 0;
+                        int evcount = 0;
+                        for (int i=0; i<81; i++ ) {
+                            char ch = inputtext.charAt(i);
+                            if ( ch=='O' || ch=='o') { odcount++; }
+                            else
+                            if ( ch=='E' || ch=='e') { evcount++; }
+                            else
+                            if ( ch!='.' && ch !='0' ) { JOptionPane.showMessageDialog(SudokuFrame.this, "Invalid char: "+ch, "Load Odd/Even", JOptionPane.WARNING_MESSAGE); isValidInput = false; break; }
+                        }
+                      if ( isValidInput ) {
+                        if ( odcount == 0 && evcount == 0 ) {
+                          JOptionPane.showMessageDialog(SudokuFrame.this, "Invalid: no Odd/Even layout found!", "Load Odd/Even", JOptionPane.WARNING_MESSAGE); isValidInput = false; break;
+                        }
+                      }
+                    }
+                    else
+                    if ( inputtext == null ) {      // Cancelled
+                        isValidInput = true;
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(SudokuFrame.this, "Error: Text input: Incorrect length (must be 81-chars)", "Load Odd/Even", JOptionPane.WARNING_MESSAGE); isValidInput = false;
+                    }
+                  }
+                  if ( isValidInput ) {
+                    if ( inputtext != null && inputtext.length() >= 81 ) {
+
+                        Settings settings = Settings.getInstance();
+                        settings.setOddEven( inputtext.substring( 0, 81));
+                    //  sudokuPanel.getSudokuGrid().oddevenInitialize( inputtext.substring( 0, 81));
+                        if ( Settings.getInstance().isLatinSquare() )    { mitLatinSquare.setSelected(false); }
+                        if ( Settings.getInstance().isDiagonals() )      { mitDiagonals.setSelected(false); }
+                        if ( Settings.getInstance().isDisjointGroups() ) { mitDisjointGroups.setSelected(false); }
+                        if ( Settings.getInstance().isWindoku() )        { mitWindoku.setSelected(false); }
+                        if ( Settings.getInstance().isClover() )         { mitClover.setSelected(false); }
+                        if ( Settings.getInstance().isAsterisk() )       { mitAsterisk.setSelected(false); }
+                        if ( Settings.getInstance().isCenterDot() )      { mitCenterDot.setSelected(false); }
+                        if ( Settings.getInstance().isGirandola() )      { mitGirandola.setSelected(false); }
+                        if ( Settings.getInstance().isHalloween() )      { mitHalloween.setSelected(false); }
+                        if ( Settings.getInstance().isPerCent() )        { mitPerCent.setSelected(false); }
+                        if ( Settings.getInstance().isSdoku() )          { mitSdoku.setSelected(false); }
+                        Settings.getInstance().setCustom(false);
+                        Settings.getInstance().setOddEven(true);
+                        Settings.getInstance().saveChanged();
+                        sudokuPanel.getSudokuGrid().updateCustom();
+                        sudokuPanel.getSudokuGrid().updateOddEven();
+
+                        mitCustomClockwise.setVisible(false);
+                        mitCustomAntiClockwise.setVisible(false);
+                        mitCustomHorizontal.setVisible(false);
+                        mitCustomVertical.setVisible(false);
+                        mitCustomDiagonal.setVisible(false);
+                        mitCustomAntiDiagonal.setVisible(false);
+                        engine.clearGrid();
+                        engine.rebuildSolver();
+                        engine.resetPotentials();
+                        repaint();
+                    }
+                  }
+                }
+            });
+        }
+        return mitOddEven;
+    }
+
+    private JCheckBoxMenuItem getMitOddEvenNoGivens() {
+        if (mitOddEvenNoGivens == null) {
+            mitOddEvenNoGivens = new JCheckBoxMenuItem();
+            mitOddEvenNoGivens.setText("[Gen] No givens in Odd/Even cells");
+            mitOddEvenNoGivens.setToolTipText("[Generate] No givens in Odd/Even cells");
+            mitOddEvenNoGivens.setSelected(Settings.getInstance().isOddEvenNoGivens());
+            mitOddEvenNoGivens.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                    Settings.getInstance().setOddEvenNoGivens(mitOddEvenNoGivens.isSelected());
+                }
+            });
+        }
+        return mitOddEvenNoGivens;
     }
 
     private JMenuItem getMitCustomFile() {
@@ -3285,8 +3412,10 @@ public class SudokuFrame extends JFrame implements Asker {
                                 if ( Settings.getInstance().isPerCent() )        { mitPerCent.setSelected(false); }
                                 if ( Settings.getInstance().isSdoku() )          { mitSdoku.setSelected(false); }
                                 Settings.getInstance().setCustom(true);
+                                Settings.getInstance().setOddEven(false);
                                 Settings.getInstance().saveChanged();
                                 sudokuPanel.getSudokuGrid().updateCustom();
+                                sudokuPanel.getSudokuGrid().updateOddEven();
         //                      mitCustomCopy.setVisible(true);
                                 mitCustomClockwise.setVisible(true);
                                 mitCustomAntiClockwise.setVisible(true);

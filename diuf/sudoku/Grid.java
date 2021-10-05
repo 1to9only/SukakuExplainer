@@ -59,6 +59,7 @@ public class Grid {
     private boolean isSdoku = false;
     private boolean isCustom = false;
     private int CustomNum = Settings.getInstance().getCount();
+    private boolean isOddEven = false;
 
     // Diagonal
     private int[][] DiagonalCells = { { 8,16,24,32,40,48,56,64,72},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1,-1,-1,-1,-1}};
@@ -167,6 +168,7 @@ public class Grid {
         if ( isCustom && Settings.getInstance().getCustom() != null ) {
             customInitialize( Settings.getInstance().getCustom());
         }
+        isOddEven = Settings.getInstance().isOddEven();
     }
 
     public int isSudoku() {
@@ -189,6 +191,7 @@ public class Grid {
     public boolean isPerCent() { return this.isPerCent; }
     public boolean isSdoku() { return this.isSdoku; }
     public boolean isCustom() { return this.isCustom; }
+    public boolean isOddEven() { return this.isOddEven; }
 
     public void setVanilla() { this.isVanilla = true; }
     public void setLatinSquare() { this.isLatinSquare = true; }
@@ -202,6 +205,7 @@ public class Grid {
     public void setPerCent() { this.isPerCent = true; }
     public void setSdoku() { this.isSdoku = true; }
     public void setCustom() { this.isCustom = true; }
+    public void setOddEven() { this.isOddEven = true; }
 
     public void resetVanilla() { this.isVanilla = false; }
 
@@ -217,6 +221,7 @@ public class Grid {
     public void setPerCent(boolean b) { this.isPerCent = b; }
     public void setSdoku(boolean b) { this.isSdoku = b; }
     public void setCustom(boolean b) { this.isCustom = b; }
+    public void setOddEven(boolean b) { this.isOddEven = b; }
 
     public void updateLatinSquare() { this.isLatinSquare = Settings.getInstance().isLatinSquare(); reset_regionTypes(); }
     public void updateDiagonals() { this.isDiagonals = Settings.getInstance().isDiagonals(); reset_regionTypes(); }
@@ -229,6 +234,7 @@ public class Grid {
     public void updatePerCent() { this.isPerCent = Settings.getInstance().isPerCent(); reset_regionTypes(); }
     public void updateSdoku() { this.isSdoku = Settings.getInstance().isSdoku(); reset_regionTypes(); }
     public void updateCustom() { this.isCustom = Settings.getInstance().isCustom(); reset_regionTypes(); }
+    public void updateOddEven() { this.isOddEven = Settings.getInstance().isOddEven(); reset_regionTypes(); }
 
     public void updateVanilla() { reset_regionTypes(); }
 

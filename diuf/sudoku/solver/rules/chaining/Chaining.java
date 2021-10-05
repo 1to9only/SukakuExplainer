@@ -30,7 +30,7 @@ public class Chaining implements IndirectHintProducer {
     private Grid saveGrid = new Grid();
     private List<IndirectHintProducer> otherRules;
 //  private Grid lastGrid = null;
-    private Collection<ChainingHint> lastHints = null;
+//  private Collection<ChainingHint> lastHints = null;
 
 
     /**
@@ -1109,12 +1109,9 @@ public class Chaining implements IndirectHintProducer {
 //      lastGrid = new Grid();
 //      grid.copyTo(lastGrid);
         // This filters hints that are equal:
-        lastHints = new LinkedHashSet<ChainingHint>(result);
-        result = null;
+        Collection<ChainingHint> lastHints = new LinkedHashSet<ChainingHint>(result);
         for (IndirectHint hint : lastHints)
             accu.add(hint);
-
-        lastHints = null;
     }
 
 }

@@ -207,6 +207,17 @@ public class Generator {
         Grid solution = new Grid();
         grid.copyTo(solution);
 
+        if ( grid.isOddEven() && Settings.getInstance().isOddEvenNoGivens() ) {
+            String oddeven = Settings.getInstance().getOddEven();
+            for (int i = 0; i < 81; i++) {
+                char ch = oddeven.charAt(i);
+                if ( ch=='o' || ch=='O' || ch=='e' || ch=='E' ) {
+                    Cell cell = grid.getCell(i%9, i/9);
+                    cell.setValue(0);
+                }
+            }
+        }
+
         // Build running indexes
         int[] indexes = new int[81];
 
@@ -237,6 +248,14 @@ public class Generator {
                 int x = indexes[index] % 9;
                 Point[] points = symmetry.getPoints(x, y);
 
+               boolean cellsCheckedOut = true;
+               for (Point p : points) {
+                   Cell cell = grid.getCell(p.x, p.y);
+                   if (cell.getValue() == 0) {
+                       cellsCheckedOut = false;
+                   }
+               }
+               if (cellsCheckedOut) {
                 // Remove cells
                 boolean cellRemoved = false;
                 for (Point p : points) {
@@ -264,6 +283,7 @@ public class Generator {
 //                      attempts += 1;
                     }
                 }
+               }
               }
                 index = (index + 1) % 81; // Next index (indexing scrambled array of indexes)
                 countDown--;

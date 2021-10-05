@@ -1,5 +1,10 @@
 Changes:
 
+20211005
+- added GUI support for odd/even sudokus (odd or even or both)
+- added rating for odd/even sudokus, use -V option
+- other improvements
+
 20210928
 - added rating for custom extra regions sudokus, use -U option
 

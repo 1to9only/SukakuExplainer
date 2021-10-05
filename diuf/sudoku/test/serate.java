@@ -75,7 +75,7 @@ public class serate {
         System.err.println("      Write output to FILE instead of the standard output.");
         System.err.println("  -p, --pearl");
         System.err.println("      Terminate rating if the puzzle is not a pearl.");
-        System.err.println("  -V, --version");
+        System.err.println("  -v, --version");
         System.err.println("      Print the Sukaku Explainer (serate) version and exit.");
         System.err.println("");
         System.err.println("INVOCATION");
@@ -154,7 +154,7 @@ public class serate {
                     else if (s.equals("pearl"))
                         c = 'p';
                     else if (s.equals("version"))
-                        c = 'V';
+                        c = 'v';
                     else
                         c = '?';
                 }
@@ -193,7 +193,7 @@ public class serate {
                 case 'o':
                     output = v;
                     break;
-                case 'V':
+                case 'v':
                     System.err.println(THISVERSION);
                     System.exit(0);
                     break;
@@ -237,6 +237,9 @@ public class serate {
 
                 case 'U':   // Custom
                     Settings.getInstance().setCustom(true);
+                    break;
+                case 'V':   // OddEven
+                    Settings.getInstance().setOddEven(true);
                     break;
 
                 case 'T':   // used saved techniques
