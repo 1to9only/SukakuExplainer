@@ -483,7 +483,6 @@ public class SudokuFrame extends JFrame implements Asker {
             hintsTree.setCellRenderer(new HintsTreeCellRenderer());
             hintsTree.setExpandsSelectedPaths(true);
             hintsTree.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
-
                 public void valueChanged(javax.swing.event.TreeSelectionEvent e) {
                     if (hintsTree.isEnabled()) {
                         Collection<HintNode> selection = new ArrayList<HintNode>();
@@ -2384,7 +2383,11 @@ public class SudokuFrame extends JFrame implements Asker {
             mitRotateClockwise.setToolTipText("Rotates the sudoku Clockwise 90 degrees");
             mitRotateClockwise.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
+                  if ( Settings.getInstance().isCustom() ) {
+                    sudokuPanel.getSudokuGrid().rotateCustomClockwise();
+                  } else {
                     sudokuPanel.getSudokuGrid().rotateClockwise();
+                  }
                     engine.rebuildSolver();
                     engine.resetPotentials();
                     repaint();
@@ -2401,7 +2404,11 @@ public class SudokuFrame extends JFrame implements Asker {
             mitRotateAntiClockwise.setToolTipText("Rotates the sudoku Anti-Clockwise 90 degrees");
             mitRotateAntiClockwise.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
+                  if ( Settings.getInstance().isCustom() ) {
+                    sudokuPanel.getSudokuGrid().rotateCustomAntiClockwise();
+                  } else {
                     sudokuPanel.getSudokuGrid().rotateAntiClockwise();
+                  }
                     engine.rebuildSolver();
                     engine.resetPotentials();
                     repaint();
@@ -2418,7 +2425,11 @@ public class SudokuFrame extends JFrame implements Asker {
             mitRotateHorizontal.setToolTipText("Rotates the sudoku Horizontally");
             mitRotateHorizontal.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
+                  if ( Settings.getInstance().isCustom() ) {
+                    sudokuPanel.getSudokuGrid().rotateCustomHorizontal();
+                  } else {
                     sudokuPanel.getSudokuGrid().rotateHorizontal();
+                  }
                     engine.rebuildSolver();
                     engine.resetPotentials();
                     repaint();
@@ -2435,7 +2446,11 @@ public class SudokuFrame extends JFrame implements Asker {
             mitRotateVertical.setToolTipText("Rotates the sudoku Vertically");
             mitRotateVertical.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
+                  if ( Settings.getInstance().isCustom() ) {
+                    sudokuPanel.getSudokuGrid().rotateCustomVertical();
+                  } else {
                     sudokuPanel.getSudokuGrid().rotateVertical();
+                  }
                     engine.rebuildSolver();
                     engine.resetPotentials();
                     repaint();
@@ -2452,7 +2467,11 @@ public class SudokuFrame extends JFrame implements Asker {
             mitRotateDiagonal.setToolTipText("Rotates the sudoku Diagonally");
             mitRotateDiagonal.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
+                  if ( Settings.getInstance().isCustom() ) {
+                    sudokuPanel.getSudokuGrid().rotateCustomDiagonal();
+                  } else {
                     sudokuPanel.getSudokuGrid().rotateDiagonal();
+                  }
                     engine.rebuildSolver();
                     engine.resetPotentials();
                     repaint();
@@ -2469,7 +2488,11 @@ public class SudokuFrame extends JFrame implements Asker {
             mitRotateAntiDiagonal.setToolTipText("Rotates the sudoku Anti-Diagonally");
             mitRotateAntiDiagonal.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
+                  if ( Settings.getInstance().isCustom() ) {
+                    sudokuPanel.getSudokuGrid().rotateCustomAntiDiagonal();
+                  } else {
                     sudokuPanel.getSudokuGrid().rotateAntiDiagonal();
+                  }
                     engine.rebuildSolver();
                     engine.resetPotentials();
                     repaint();
@@ -2571,13 +2594,13 @@ public class SudokuFrame extends JFrame implements Asker {
         //  VariantsMenu.add(getMitOddEvenNoGivens());
         //  VariantsMenu.add(getMitCustomFile());
         //  VariantsMenu.add(getMitCustomCopy());
-            VariantsMenu.addSeparator();
-            VariantsMenu.add(getMitCustomClockwise());
-            VariantsMenu.add(getMitCustomAntiClockwise());
-            VariantsMenu.add(getMitCustomHorizontal());
-            VariantsMenu.add(getMitCustomVertical());
-            VariantsMenu.add(getMitCustomDiagonal());
-            VariantsMenu.add(getMitCustomAntiDiagonal());
+    //      VariantsMenu.addSeparator();
+    //      VariantsMenu.add(getMitCustomClockwise());
+    //      VariantsMenu.add(getMitCustomAntiClockwise());
+    //      VariantsMenu.add(getMitCustomHorizontal());
+    //      VariantsMenu.add(getMitCustomVertical());
+    //      VariantsMenu.add(getMitCustomDiagonal());
+    //      VariantsMenu.add(getMitCustomAntiDiagonal());
         }
         return VariantsMenu;
     }
@@ -2603,12 +2626,12 @@ public class SudokuFrame extends JFrame implements Asker {
                     sudokuPanel.getSudokuGrid().updateCustom();
                     sudokuPanel.getSudokuGrid().updateOddEven();
         //          mitCustomCopy.setVisible(false);
-                    mitCustomClockwise.setVisible(false);
-                    mitCustomAntiClockwise.setVisible(false);
-                    mitCustomHorizontal.setVisible(false);
-                    mitCustomVertical.setVisible(false);
-                    mitCustomDiagonal.setVisible(false);
-                    mitCustomAntiDiagonal.setVisible(false);
+    //              mitCustomClockwise.setVisible(false);
+    //              mitCustomAntiClockwise.setVisible(false);
+    //              mitCustomHorizontal.setVisible(false);
+    //              mitCustomVertical.setVisible(false);
+    //              mitCustomDiagonal.setVisible(false);
+    //              mitCustomAntiDiagonal.setVisible(false);
                     engine.rebuildSolver();
                     engine.resetPotentials();
                     repaint();
@@ -2644,12 +2667,12 @@ public class SudokuFrame extends JFrame implements Asker {
                     sudokuPanel.getSudokuGrid().updateCustom();
                     sudokuPanel.getSudokuGrid().updateOddEven();
         //          mitCustomCopy.setVisible(false);
-                    mitCustomClockwise.setVisible(false);
-                    mitCustomAntiClockwise.setVisible(false);
-                    mitCustomHorizontal.setVisible(false);
-                    mitCustomVertical.setVisible(false);
-                    mitCustomDiagonal.setVisible(false);
-                    mitCustomAntiDiagonal.setVisible(false);
+    //              mitCustomClockwise.setVisible(false);
+    //              mitCustomAntiClockwise.setVisible(false);
+    //              mitCustomHorizontal.setVisible(false);
+    //              mitCustomVertical.setVisible(false);
+    //              mitCustomDiagonal.setVisible(false);
+    //              mitCustomAntiDiagonal.setVisible(false);
                     engine.rebuildSolver();
                     engine.resetPotentials();
                     repaint();
@@ -2705,12 +2728,12 @@ public class SudokuFrame extends JFrame implements Asker {
                     sudokuPanel.getSudokuGrid().updateCustom();
                     sudokuPanel.getSudokuGrid().updateOddEven();
         //          mitCustomCopy.setVisible(false);
-                    mitCustomClockwise.setVisible(false);
-                    mitCustomAntiClockwise.setVisible(false);
-                    mitCustomHorizontal.setVisible(false);
-                    mitCustomVertical.setVisible(false);
-                    mitCustomDiagonal.setVisible(false);
-                    mitCustomAntiDiagonal.setVisible(false);
+    //              mitCustomClockwise.setVisible(false);
+    //              mitCustomAntiClockwise.setVisible(false);
+    //              mitCustomHorizontal.setVisible(false);
+    //              mitCustomVertical.setVisible(false);
+    //              mitCustomDiagonal.setVisible(false);
+    //              mitCustomAntiDiagonal.setVisible(false);
                     engine.rebuildSolver();
                     engine.resetPotentials();
                     repaint();
@@ -2756,12 +2779,12 @@ public class SudokuFrame extends JFrame implements Asker {
                     sudokuPanel.getSudokuGrid().updateCustom();
                     sudokuPanel.getSudokuGrid().updateOddEven();
         //          mitCustomCopy.setVisible(false);
-                    mitCustomClockwise.setVisible(false);
-                    mitCustomAntiClockwise.setVisible(false);
-                    mitCustomHorizontal.setVisible(false);
-                    mitCustomVertical.setVisible(false);
-                    mitCustomDiagonal.setVisible(false);
-                    mitCustomAntiDiagonal.setVisible(false);
+    //              mitCustomClockwise.setVisible(false);
+    //              mitCustomAntiClockwise.setVisible(false);
+    //              mitCustomHorizontal.setVisible(false);
+    //              mitCustomVertical.setVisible(false);
+    //              mitCustomDiagonal.setVisible(false);
+    //              mitCustomAntiDiagonal.setVisible(false);
                     engine.rebuildSolver();
                     engine.resetPotentials();
                     repaint();
@@ -2797,12 +2820,12 @@ public class SudokuFrame extends JFrame implements Asker {
                     sudokuPanel.getSudokuGrid().updateCustom();
                     sudokuPanel.getSudokuGrid().updateOddEven();
         //          mitCustomCopy.setVisible(false);
-                    mitCustomClockwise.setVisible(false);
-                    mitCustomAntiClockwise.setVisible(false);
-                    mitCustomHorizontal.setVisible(false);
-                    mitCustomVertical.setVisible(false);
-                    mitCustomDiagonal.setVisible(false);
-                    mitCustomAntiDiagonal.setVisible(false);
+    //              mitCustomClockwise.setVisible(false);
+    //              mitCustomAntiClockwise.setVisible(false);
+    //              mitCustomHorizontal.setVisible(false);
+    //              mitCustomVertical.setVisible(false);
+    //              mitCustomDiagonal.setVisible(false);
+    //              mitCustomAntiDiagonal.setVisible(false);
                     repaint();
                 }
             });
@@ -2848,12 +2871,12 @@ public class SudokuFrame extends JFrame implements Asker {
                     sudokuPanel.getSudokuGrid().updateCustom();
                     sudokuPanel.getSudokuGrid().updateOddEven();
         //          mitCustomCopy.setVisible(false);
-                    mitCustomClockwise.setVisible(false);
-                    mitCustomAntiClockwise.setVisible(false);
-                    mitCustomHorizontal.setVisible(false);
-                    mitCustomVertical.setVisible(false);
-                    mitCustomDiagonal.setVisible(false);
-                    mitCustomAntiDiagonal.setVisible(false);
+    //              mitCustomClockwise.setVisible(false);
+    //              mitCustomAntiClockwise.setVisible(false);
+    //              mitCustomHorizontal.setVisible(false);
+    //              mitCustomVertical.setVisible(false);
+    //              mitCustomDiagonal.setVisible(false);
+    //              mitCustomAntiDiagonal.setVisible(false);
                     engine.rebuildSolver();
                     engine.resetPotentials();
                     repaint();
@@ -2886,12 +2909,12 @@ public class SudokuFrame extends JFrame implements Asker {
                     sudokuPanel.getSudokuGrid().updateCustom();
                     sudokuPanel.getSudokuGrid().updateOddEven();
         //          mitCustomCopy.setVisible(false);
-                    mitCustomClockwise.setVisible(false);
-                    mitCustomAntiClockwise.setVisible(false);
-                    mitCustomHorizontal.setVisible(false);
-                    mitCustomVertical.setVisible(false);
-                    mitCustomDiagonal.setVisible(false);
-                    mitCustomAntiDiagonal.setVisible(false);
+    //              mitCustomClockwise.setVisible(false);
+    //              mitCustomAntiClockwise.setVisible(false);
+    //              mitCustomHorizontal.setVisible(false);
+    //              mitCustomVertical.setVisible(false);
+    //              mitCustomDiagonal.setVisible(false);
+    //              mitCustomAntiDiagonal.setVisible(false);
                     engine.rebuildSolver();
                     engine.resetPotentials();
                     repaint();
@@ -2924,12 +2947,12 @@ public class SudokuFrame extends JFrame implements Asker {
                     sudokuPanel.getSudokuGrid().updateCustom();
                     sudokuPanel.getSudokuGrid().updateOddEven();
         //          mitCustomCopy.setVisible(false);
-                    mitCustomClockwise.setVisible(false);
-                    mitCustomAntiClockwise.setVisible(false);
-                    mitCustomHorizontal.setVisible(false);
-                    mitCustomVertical.setVisible(false);
-                    mitCustomDiagonal.setVisible(false);
-                    mitCustomAntiDiagonal.setVisible(false);
+    //              mitCustomClockwise.setVisible(false);
+    //              mitCustomAntiClockwise.setVisible(false);
+    //              mitCustomHorizontal.setVisible(false);
+    //              mitCustomVertical.setVisible(false);
+    //              mitCustomDiagonal.setVisible(false);
+    //              mitCustomAntiDiagonal.setVisible(false);
                     engine.rebuildSolver();
                     engine.resetPotentials();
                     repaint();
@@ -2967,12 +2990,12 @@ public class SudokuFrame extends JFrame implements Asker {
                     sudokuPanel.getSudokuGrid().updateCustom();
                     sudokuPanel.getSudokuGrid().updateOddEven();
         //          mitCustomCopy.setVisible(false);
-                    mitCustomClockwise.setVisible(false);
-                    mitCustomAntiClockwise.setVisible(false);
-                    mitCustomHorizontal.setVisible(false);
-                    mitCustomVertical.setVisible(false);
-                    mitCustomDiagonal.setVisible(false);
-                    mitCustomAntiDiagonal.setVisible(false);
+    //              mitCustomClockwise.setVisible(false);
+    //              mitCustomAntiClockwise.setVisible(false);
+    //              mitCustomHorizontal.setVisible(false);
+    //              mitCustomVertical.setVisible(false);
+    //              mitCustomDiagonal.setVisible(false);
+    //              mitCustomAntiDiagonal.setVisible(false);
                     engine.rebuildSolver();
                     engine.resetPotentials();
                     repaint();
@@ -3010,12 +3033,12 @@ public class SudokuFrame extends JFrame implements Asker {
                     sudokuPanel.getSudokuGrid().updateCustom();
                     sudokuPanel.getSudokuGrid().updateOddEven();
         //          mitCustomCopy.setVisible(false);
-                    mitCustomClockwise.setVisible(false);
-                    mitCustomAntiClockwise.setVisible(false);
-                    mitCustomHorizontal.setVisible(false);
-                    mitCustomVertical.setVisible(false);
-                    mitCustomDiagonal.setVisible(false);
-                    mitCustomAntiDiagonal.setVisible(false);
+    //              mitCustomClockwise.setVisible(false);
+    //              mitCustomAntiClockwise.setVisible(false);
+    //              mitCustomHorizontal.setVisible(false);
+    //              mitCustomVertical.setVisible(false);
+    //              mitCustomDiagonal.setVisible(false);
+    //              mitCustomAntiDiagonal.setVisible(false);
                     engine.rebuildSolver();
                     engine.resetPotentials();
                     repaint();
@@ -3053,12 +3076,12 @@ public class SudokuFrame extends JFrame implements Asker {
                     sudokuPanel.getSudokuGrid().updateCustom();
                     sudokuPanel.getSudokuGrid().updateOddEven();
         //          mitCustomCopy.setVisible(false);
-                    mitCustomClockwise.setVisible(false);
-                    mitCustomAntiClockwise.setVisible(false);
-                    mitCustomHorizontal.setVisible(false);
-                    mitCustomVertical.setVisible(false);
-                    mitCustomDiagonal.setVisible(false);
-                    mitCustomAntiDiagonal.setVisible(false);
+    //              mitCustomClockwise.setVisible(false);
+    //              mitCustomAntiClockwise.setVisible(false);
+    //              mitCustomHorizontal.setVisible(false);
+    //              mitCustomVertical.setVisible(false);
+    //              mitCustomDiagonal.setVisible(false);
+    //              mitCustomAntiDiagonal.setVisible(false);
                     engine.rebuildSolver();
                     engine.resetPotentials();
                     repaint();
@@ -3148,12 +3171,12 @@ public class SudokuFrame extends JFrame implements Asker {
                     sudokuPanel.getSudokuGrid().updateCustom();
                     sudokuPanel.getSudokuGrid().updateOddEven();
         //          mitCustomCopy.setVisible(true);
-                    mitCustomClockwise.setVisible(true);
-                    mitCustomAntiClockwise.setVisible(true);
-                    mitCustomHorizontal.setVisible(true);
-                    mitCustomVertical.setVisible(true);
-                    mitCustomDiagonal.setVisible(true);
-                    mitCustomAntiDiagonal.setVisible(true);
+    //              mitCustomClockwise.setVisible(true);
+    //              mitCustomAntiClockwise.setVisible(true);
+    //              mitCustomHorizontal.setVisible(true);
+    //              mitCustomVertical.setVisible(true);
+    //              mitCustomDiagonal.setVisible(true);
+    //              mitCustomAntiDiagonal.setVisible(true);
                     engine.clearGrid();
                     engine.rebuildSolver();
                     engine.resetPotentials();
@@ -3268,12 +3291,12 @@ public class SudokuFrame extends JFrame implements Asker {
                         sudokuPanel.getSudokuGrid().updateCustom();
                         sudokuPanel.getSudokuGrid().updateOddEven();
         //              mitCustomCopy.setVisible(true);
-                        mitCustomClockwise.setVisible(true);
-                        mitCustomAntiClockwise.setVisible(true);
-                        mitCustomHorizontal.setVisible(true);
-                        mitCustomVertical.setVisible(true);
-                        mitCustomDiagonal.setVisible(true);
-                        mitCustomAntiDiagonal.setVisible(true);
+    //                  mitCustomClockwise.setVisible(true);
+    //                  mitCustomAntiClockwise.setVisible(true);
+    //                  mitCustomHorizontal.setVisible(true);
+    //                  mitCustomVertical.setVisible(true);
+    //                  mitCustomDiagonal.setVisible(true);
+    //                  mitCustomAntiDiagonal.setVisible(true);
                         engine.clearGrid();
                         engine.rebuildSolver();
                         engine.resetPotentials();
@@ -3350,12 +3373,12 @@ public class SudokuFrame extends JFrame implements Asker {
                         sudokuPanel.getSudokuGrid().updateCustom();
                         sudokuPanel.getSudokuGrid().updateOddEven();
 
-                        mitCustomClockwise.setVisible(false);
-                        mitCustomAntiClockwise.setVisible(false);
-                        mitCustomHorizontal.setVisible(false);
-                        mitCustomVertical.setVisible(false);
-                        mitCustomDiagonal.setVisible(false);
-                        mitCustomAntiDiagonal.setVisible(false);
+    //                  mitCustomClockwise.setVisible(false);
+    //                  mitCustomAntiClockwise.setVisible(false);
+    //                  mitCustomHorizontal.setVisible(false);
+    //                  mitCustomVertical.setVisible(false);
+    //                  mitCustomDiagonal.setVisible(false);
+    //                  mitCustomAntiDiagonal.setVisible(false);
                         engine.clearGrid();
                         engine.rebuildSolver();
                         engine.resetPotentials();
@@ -3417,12 +3440,12 @@ public class SudokuFrame extends JFrame implements Asker {
                                 sudokuPanel.getSudokuGrid().updateCustom();
                                 sudokuPanel.getSudokuGrid().updateOddEven();
         //                      mitCustomCopy.setVisible(true);
-                                mitCustomClockwise.setVisible(true);
-                                mitCustomAntiClockwise.setVisible(true);
-                                mitCustomHorizontal.setVisible(true);
-                                mitCustomVertical.setVisible(true);
-                                mitCustomDiagonal.setVisible(true);
-                                mitCustomAntiDiagonal.setVisible(true);
+    //                          mitCustomClockwise.setVisible(true);
+    //                          mitCustomAntiClockwise.setVisible(true);
+    //                          mitCustomHorizontal.setVisible(true);
+    //                          mitCustomVertical.setVisible(true);
+    //                          mitCustomDiagonal.setVisible(true);
+    //                          mitCustomAntiDiagonal.setVisible(true);
                                 engine.clearGrid();
                                 engine.rebuildSolver();
                                 engine.resetPotentials();

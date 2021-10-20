@@ -870,10 +870,23 @@ public class SudokuPanel extends JPanel {
             } else {
                 lineWidth = 2;
                 g.setColor(borderColor);
-            }
             offset = lineWidth / 2;
             g.fillRect(i * CELL_OUTER_SIZE - offset, 0 - offset, lineWidth, GRID_SIZE + lineWidth);
             g.fillRect(0 - offset, i * CELL_OUTER_SIZE - offset, GRID_SIZE + lineWidth, lineWidth);
+            }
+        }
+        for (int i = 0; i <= 9; i++) {
+            int lineWidth, offset;
+            if (i % 9 == 0 || (i % 3 == 0  && !grid.isLatinSquare())) {
+                lineWidth = 4;
+                g.setColor(borderColor);
+            offset = lineWidth / 2;
+            g.fillRect(i * CELL_OUTER_SIZE - offset, 0 - offset, lineWidth, GRID_SIZE + lineWidth);
+            g.fillRect(0 - offset, i * CELL_OUTER_SIZE - offset, GRID_SIZE + lineWidth, lineWidth);
+            } else {
+                lineWidth = 2;
+                g.setColor(borderColor);
+            }
         }
         if (grid.isDiagonals()) {
             g.setColor(borderColor);
@@ -902,10 +915,23 @@ public class SudokuPanel extends JPanel {
             } else {
                 lineWidth = 2;
                 g.setColor(borderColor);
-            }
             offset = lineWidth / 2;
             g.fillRect(i * CELL_OUTER_SIZE - offset+adj, 0 - offset+adj, lineWidth, GRID_SIZE + lineWidth);
             g.fillRect(0 - offset+adj, i * CELL_OUTER_SIZE - offset+adj, GRID_SIZE + lineWidth, lineWidth);
+            }
+        }
+        for (int i = 0; i <= 9; i++) {
+            int lineWidth, offset;
+            if (i % 9 == 0 || (i % 3 == 0  && !grid.isLatinSquare())) {
+                lineWidth = 4;
+                g.setColor(borderColor);
+            offset = lineWidth / 2;
+            g.fillRect(i * CELL_OUTER_SIZE - offset+adj, 0 - offset+adj, lineWidth, GRID_SIZE + lineWidth);
+            g.fillRect(0 - offset+adj, i * CELL_OUTER_SIZE - offset+adj, GRID_SIZE + lineWidth, lineWidth);
+            } else {
+                lineWidth = 2;
+                g.setColor(borderColor);
+            }
         }
         if (grid.isDiagonals()) {
             g.setColor(borderColor);

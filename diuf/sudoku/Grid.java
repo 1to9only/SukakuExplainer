@@ -1892,6 +1892,7 @@ public class Grid {
      * custom regions - region numbered 1-9, ideally 2-4 regions is good.
      */
     public void customInitialize(String regions) {
+        regions = regions.replace( "A", "1"); regions = regions.replace( "B", "2"); regions = regions.replace( "C", "3"); regions = regions.replace( "D", "4"); regions = regions.replace( "E", "5"); regions = regions.replace( "F", "6"); regions = regions.replace( "G", "7"); regions = regions.replace( "H", "8"); regions = regions.replace( "I", "9");
         CustomNum = 0; regions = regions.replace( ".", "0");
         for (int y = 0; y < 9; y++) { int x = 0;
             for (int z = 0; z < 9; z++) { CustomCells[ y][ z] = -1; }

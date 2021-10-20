@@ -1,5 +1,9 @@
 Changes:
 
+20211020
+- remove custom rotations, instead use sudoku rotations
+- a few cosmetic changes
+
 20211005
 - added GUI support for odd/even sudokus (odd or even or both)
 - added rating for odd/even sudokus, use -V option

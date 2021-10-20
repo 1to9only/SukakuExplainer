@@ -590,7 +590,7 @@ public class Settings {
 
     public void setCustom(String custom) {
       if ( this.custom == null || !(this.custom.equals(custom)) ) {
-        this.custom = custom;
+        this.custom = custom.replace( "0", ".");
        if ( this.isCustom != true ) {
         this.isCustom = true;
        }
@@ -635,7 +635,7 @@ public class Settings {
 
     public void setOddEven(String oddeven) {
       if ( this.oddeven == null || !(this.oddeven.equals(oddeven)) ) {
-        this.oddeven = oddeven;
+        this.oddeven = oddeven.replace( "0", ".");
        if ( this.isOddEven != true ) {
         this.isOddEven = true;
        }
