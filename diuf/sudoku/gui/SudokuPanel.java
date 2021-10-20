@@ -556,8 +556,12 @@ public class SudokuPanel extends JPanel {
             col = sdokuColor;
         if (grid.isSdoku() && grid.getSdokuStackAt(cell.getX(),cell.getY())!=null)
             col = sdokuColor;
-        if (grid.isCustom() && grid.getCustomAt(cell.getX(),cell.getY())!=null)
+        if (grid.isCustom() && grid.getCustomAt(cell.getX(),cell.getY())!=null && Settings.getInstance().getCount()!=9)
             col = customColor;
+        if (grid.isCustom() && grid.getCustomAt(cell.getX(),cell.getY())!=null && Settings.getInstance().getCount()==9) {
+            Grid.Custom custom = grid.getCustomAt(cell.getX(),cell.getY());
+            col = DG_Colors[custom.getCustomNum()];
+        }
         if (redCells != null && redCells.contains(cell))
             col = redCellColor;
         else if (greenCells != null && greenCells.contains(cell))
@@ -613,8 +617,12 @@ public class SudokuPanel extends JPanel {
             col = sdokuColor;
         if (grid.isSdoku() && grid.getSdokuStackAt(cell.getX(),cell.getY())!=null)
             col = sdokuColor;
-        if (grid.isCustom() && grid.getCustomAt(cell.getX(),cell.getY())!=null)
+        if (grid.isCustom() && grid.getCustomAt(cell.getX(),cell.getY())!=null && Settings.getInstance().getCount()!=9)
             col = customColor;
+        if (grid.isCustom() && grid.getCustomAt(cell.getX(),cell.getY())!=null && Settings.getInstance().getCount()==9) {
+            Grid.Custom custom = grid.getCustomAt(cell.getX(),cell.getY());
+            col = DG_Colors[custom.getCustomNum()];
+        }
         if (redCells != null && redCells.contains(cell))
             col = redCellColor;
         else if (greenCells != null && greenCells.contains(cell))

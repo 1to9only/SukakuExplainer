@@ -1,6 +1,7 @@
 Changes:
 
 20211020
+- colorize custom sudokus with 9 extra regions with DG colors
 - remove custom rotations, instead use sudoku rotations
 - a few cosmetic changes
 
