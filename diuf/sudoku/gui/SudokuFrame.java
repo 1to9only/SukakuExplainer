@@ -2618,13 +2618,13 @@ public class SudokuFrame extends JFrame implements Asker {
                 //  if ( Settings.getInstance().isPerCent() )   { mitPerCent.setSelected(false); }
                 //  if ( Settings.getInstance().isSdoku() )     { mitSdoku.setSelected(false); }
                 // }
-                    Settings.getInstance().setCustom(false);
-                    Settings.getInstance().setOddEven(false);
+    //              Settings.getInstance().setCustom(false);
+    //              Settings.getInstance().setOddEven(false);
                     Settings.getInstance().setLatinSquare(mitLatinSquare.isSelected());
                     Settings.getInstance().saveChanged();
                     sudokuPanel.getSudokuGrid().updateLatinSquare();
-                    sudokuPanel.getSudokuGrid().updateCustom();
-                    sudokuPanel.getSudokuGrid().updateOddEven();
+    //              sudokuPanel.getSudokuGrid().updateCustom();
+    //              sudokuPanel.getSudokuGrid().updateOddEven();
         //          mitCustomCopy.setVisible(false);
     //              mitCustomClockwise.setVisible(false);
     //              mitCustomAntiClockwise.setVisible(false);
@@ -2772,6 +2772,7 @@ public class SudokuFrame extends JFrame implements Asker {
                 //  if ( Settings.getInstance().isSdoku() )     { mitSdoku.setSelected(false); }
                    }
                     Settings.getInstance().setWindoku(mitWindoku.isSelected());
+                   if ( mitAsterisk.isSelected() )
                     Settings.getInstance().setCustom(false);
                     Settings.getInstance().setOddEven(false);
                     Settings.getInstance().saveChanged();
@@ -2895,7 +2896,7 @@ public class SudokuFrame extends JFrame implements Asker {
             mitCenterDot.addItemListener(new java.awt.event.ItemListener() {
                 public void itemStateChanged(java.awt.event.ItemEvent e) {
                    if ( mitCenterDot.isSelected() ) {
-                    if ( Settings.getInstance().isAsterisk() ) { mitAsterisk.setSelected(false); }
+                    if ( Settings.getInstance().isAsterisk() )  { mitAsterisk.setSelected(false); }
                     if ( Settings.getInstance().isGirandola() ) { mitGirandola.setSelected(false); }
                     if ( Settings.getInstance().isHalloween() ) { mitHalloween.setSelected(false); }
                     if ( Settings.getInstance().isPerCent() )   { mitPerCent.setSelected(false); }
@@ -2933,7 +2934,7 @@ public class SudokuFrame extends JFrame implements Asker {
             mitGirandola.addItemListener(new java.awt.event.ItemListener() {
                 public void itemStateChanged(java.awt.event.ItemEvent e) {
                    if ( mitGirandola.isSelected() ) {
-                    if ( Settings.getInstance().isAsterisk() ) { mitAsterisk.setSelected(false); }
+                    if ( Settings.getInstance().isAsterisk() )  { mitAsterisk.setSelected(false); }
                     if ( Settings.getInstance().isCenterDot() ) { mitCenterDot.setSelected(false); }
                     if ( Settings.getInstance().isHalloween() ) { mitHalloween.setSelected(false); }
                     if ( Settings.getInstance().isPerCent() )   { mitPerCent.setSelected(false); }
@@ -3154,10 +3155,10 @@ public class SudokuFrame extends JFrame implements Asker {
                     settings.setCustom( line.substring( 0, 81));
                     sudokuPanel.getSudokuGrid().customInitialize( line.substring( 0, 81));
 
-                    if ( Settings.getInstance().isLatinSquare() )    { mitLatinSquare.setSelected(false); }
-                    if ( Settings.getInstance().isDiagonals() )      { mitDiagonals.setSelected(false); }
+    //              if ( Settings.getInstance().isLatinSquare() )    { mitLatinSquare.setSelected(false); }
+    //              if ( Settings.getInstance().isDiagonals() )      { mitDiagonals.setSelected(false); }
                     if ( Settings.getInstance().isDisjointGroups() ) { mitDisjointGroups.setSelected(false); }
-                    if ( Settings.getInstance().isWindoku() )        { mitWindoku.setSelected(false); }
+    //              if ( Settings.getInstance().isWindoku() )        { mitWindoku.setSelected(false); }
                     if ( Settings.getInstance().isClover() )         { mitClover.setSelected(false); }
                     if ( Settings.getInstance().isAsterisk() )       { mitAsterisk.setSelected(false); }
                     if ( Settings.getInstance().isCenterDot() )      { mitCenterDot.setSelected(false); }
@@ -3197,6 +3198,7 @@ public class SudokuFrame extends JFrame implements Asker {
                   String inputtext = Settings.getInstance().getCustom();
                   if ( inputtext == null ) { inputtext = ""; }
                   boolean isValidInput = false;
+                  int cellscount = 0;
                   while ( !isValidInput ) {
                     inputtext = (String)JOptionPane.showInputDialog(
                         SudokuFrame.this, "Enter custom variant layout (81-chars), must be valid, 2-4 extra regions best.",
@@ -3206,7 +3208,7 @@ public class SudokuFrame extends JFrame implements Asker {
                         int chcount = 0;
                         for (int i=0; i<81; i++ ) {
                             char ch = inputtext.charAt(i);
-                            if ( (ch>='1' && ch<='9') || (ch>='A' && ch<='I') ) { chcount++; }
+                            if ( (ch>='1' && ch<='9') || (ch>='A' && ch<='I') ) { chcount++; cellscount++; }
                             else
                             if ( ch!='.' && ch !='0' ) { JOptionPane.showMessageDialog(SudokuFrame.this, "Invalid char: "+ch, "Load Custom", JOptionPane.WARNING_MESSAGE); isValidInput = false; break; }
                         }
@@ -3254,7 +3256,7 @@ public class SudokuFrame extends JFrame implements Asker {
                             }
                           }
                         }
-                        if ( adjoins != 0 ) {
+                        if ( cellscount != 81 && adjoins != 0 ) {   // if cellscount == 81, it's a jigsaw layout
                           JOptionPane.showMessageDialog(SudokuFrame.this, "Warning: Extra regions in contact, i.e. touching! ("+adjoins+")", "Load Custom", JOptionPane.WARNING_MESSAGE); isValidInput = false; break;
                         }
                       }
@@ -3274,10 +3276,10 @@ public class SudokuFrame extends JFrame implements Asker {
                         Settings settings = Settings.getInstance();
                         settings.setCustom( inputtext.substring( 0, 81));
                         sudokuPanel.getSudokuGrid().customInitialize( inputtext.substring( 0, 81));
-                        if ( Settings.getInstance().isLatinSquare() )    { mitLatinSquare.setSelected(false); }
-                        if ( Settings.getInstance().isDiagonals() )      { mitDiagonals.setSelected(false); }
+    //                  if ( Settings.getInstance().isLatinSquare() )    { mitLatinSquare.setSelected(false); }
+    //                  if ( Settings.getInstance().isDiagonals() )      { mitDiagonals.setSelected(false); }
                         if ( Settings.getInstance().isDisjointGroups() ) { mitDisjointGroups.setSelected(false); }
-                        if ( Settings.getInstance().isWindoku() )        { mitWindoku.setSelected(false); }
+    //                  if ( Settings.getInstance().isWindoku() )        { mitWindoku.setSelected(false); }
                         if ( Settings.getInstance().isClover() )         { mitClover.setSelected(false); }
                         if ( Settings.getInstance().isAsterisk() )       { mitAsterisk.setSelected(false); }
                         if ( Settings.getInstance().isCenterDot() )      { mitCenterDot.setSelected(false); }
@@ -3356,8 +3358,8 @@ public class SudokuFrame extends JFrame implements Asker {
                         Settings settings = Settings.getInstance();
                         settings.setOddEven( inputtext.substring( 0, 81));
                     //  sudokuPanel.getSudokuGrid().oddevenInitialize( inputtext.substring( 0, 81));
-                        if ( Settings.getInstance().isLatinSquare() )    { mitLatinSquare.setSelected(false); }
-                        if ( Settings.getInstance().isDiagonals() )      { mitDiagonals.setSelected(false); }
+    //                  if ( Settings.getInstance().isLatinSquare() )    { mitLatinSquare.setSelected(false); }
+    //                  if ( Settings.getInstance().isDiagonals() )      { mitDiagonals.setSelected(false); }
                         if ( Settings.getInstance().isDisjointGroups() ) { mitDisjointGroups.setSelected(false); }
                         if ( Settings.getInstance().isWindoku() )        { mitWindoku.setSelected(false); }
                         if ( Settings.getInstance().isClover() )         { mitClover.setSelected(false); }
@@ -3423,9 +3425,10 @@ public class SudokuFrame extends JFrame implements Asker {
                         if (result == JFileChooser.APPROVE_OPTION) {
                             File selectedFile = chooser.getSelectedFile();
                             if ( engine.loadCustom(selectedFile) == 1 ) {
-                                if ( Settings.getInstance().isLatinSquare() )    { mitLatinSquare.setSelected(false); }
-                                if ( Settings.getInstance().isDiagonals() )      { mitDiagonals.setSelected(false); }
+    //                          if ( Settings.getInstance().isLatinSquare() )    { mitLatinSquare.setSelected(false); }
+    //                          if ( Settings.getInstance().isDiagonals() )      { mitDiagonals.setSelected(false); }
                                 if ( Settings.getInstance().isDisjointGroups() ) { mitDisjointGroups.setSelected(false); }
+                              if ( Settings.getInstance().isAsterisk() )
                                 if ( Settings.getInstance().isWindoku() )        { mitWindoku.setSelected(false); }
                                 if ( Settings.getInstance().isClover() )         { mitClover.setSelected(false); }
                                 if ( Settings.getInstance().isAsterisk() )       { mitAsterisk.setSelected(false); }

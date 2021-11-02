@@ -1873,12 +1873,12 @@ public class Grid {
 
         @Override
         public String toString() {
-            return "extra region";
+            return ((CustomNum!=9)?"extra region":"jigsaw");
         }
 
         @Override
         public String toString2() {
-            return "extra region" + " " + (customNum + 1);
+            return ((CustomNum!=9)?"extra region":"jigsaw") + " " + (customNum + 1);
         }
 
         @Override

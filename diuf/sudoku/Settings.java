@@ -12,6 +12,7 @@ import java.io.FileWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.File;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -27,8 +28,8 @@ import diuf.sudoku.*;
 public class Settings {
 
     public final static int VERSION  = 2021;
-    public final static int REVISION = 10;
-    public final static int SUBREV   = 5;
+    public final static int REVISION = 11;
+    public final static int SUBREV   = 2;
 
     private static Settings instance = null;
 
@@ -681,6 +682,11 @@ public class Settings {
 
     @SuppressWarnings("unchecked")
     public void load() {
+        File file = new File(jsonFilename);
+        if (file.exists() && file.length() == 0) {
+        //  System.err.println(jsonFilename+" is corrupted, deleting...");
+            file.delete();
+        }
         LoadError = 0;
         JSONParser jsonParser = new JSONParser();
         try (FileReader reader = new FileReader(jsonFilename)) {

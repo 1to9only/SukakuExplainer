@@ -1,5 +1,12 @@
 Changes:
 
+20211026
+- fix General Intersection in JS jigsaws
+- improve custom variant setup for JS|B|W|X|
+- a custom variant with 9 extra regions is a jigsaw
+- detect possible corrupted config (json) file
+- built using jdk-8u311
+
 20211020
 - colorize custom sudokus with 9 extra regions with DG colors
 - remove custom rotations, instead use sudoku rotations
