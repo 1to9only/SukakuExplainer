@@ -797,6 +797,17 @@ public class Grid {
         }
     }
 
+    /**
+     * Get the custom number at the given location
+     * @param x the horizontal coordinate
+     * @param y the vertical coordinate
+     * @return the custom number at the given coordinates (the coordinates
+     * are coordinates of a cell)
+     */
+    public int getCustomNumAt(int x, int y) {
+        return CustomAt[y][x];
+    }
+
     public Grid.Region getRegionAt(Class<? extends Grid.Region> regionType, int x, int y) {
         if (regionType.equals(Grid.Row.class))
             return getRowAt(x, y);

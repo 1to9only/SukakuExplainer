@@ -378,10 +378,20 @@ public class SudokuExplainer {
         frame.showWelcomeText();
     }
 
-    private boolean isGridEmpty() {
+    public boolean isGridEmpty() {
         for (int y = 0; y < 9; y++) {
             for (int x = 0; x < 9; x++) {
                 if (grid.getCellValue(x, y) != 0)
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isGridFilled() {
+        for (int y = 0; y < 9; y++) {
+            for (int x = 0; x < 9; x++) {
+                if (grid.getCellValue(x, y) == 0)
                     return false;
             }
         }

@@ -56,13 +56,12 @@ public class Locking implements IndirectHintProducer {
         getHints(grid, Grid.DisjointGroup.class, Grid.Block.class, accu); }
         getHints(grid, Grid.DisjointGroup.class, Grid.Column.class, accu);
         getHints(grid, Grid.DisjointGroup.class, Grid.Row.class, accu);
-      }
-
-      if ( grid.isDiagonals() && grid.isDisjointGroups() ) {
+       if ( grid.isDiagonals() ) {
         getHints(grid, Grid.Diagonal.class, Grid.DisjointGroup.class, accu);
         getHints(grid, Grid.AntiDiagonal.class, Grid.DisjointGroup.class, accu);
         getHints(grid, Grid.DisjointGroup.class, Grid.Diagonal.class, accu);
         getHints(grid, Grid.DisjointGroup.class, Grid.AntiDiagonal.class, accu);
+       }
       }
 
       if ( grid.isWindoku() ) {
@@ -74,18 +73,16 @@ public class Locking implements IndirectHintProducer {
         getHints(grid, Grid.Windoku.class, Grid.Block.class, accu); }
         getHints(grid, Grid.Windoku.class, Grid.Column.class, accu);
         getHints(grid, Grid.Windoku.class, Grid.Row.class, accu);
-      }
-
-      if ( grid.isDiagonals() && grid.isWindoku() ) {
+       if ( grid.isDiagonals() ) {
         getHints(grid, Grid.Diagonal.class, Grid.Windoku.class, accu);
         getHints(grid, Grid.AntiDiagonal.class, Grid.Windoku.class, accu);
         getHints(grid, Grid.Windoku.class, Grid.Diagonal.class, accu);
         getHints(grid, Grid.Windoku.class, Grid.AntiDiagonal.class, accu);
-      }
-
-      if ( grid.isDisjointGroups() && grid.isWindoku() ) {
+       }
+       if ( grid.isDisjointGroups() ) {
         getHints(grid, Grid.DisjointGroup.class, Grid.Windoku.class, accu);
         getHints(grid, Grid.Windoku.class, Grid.DisjointGroup.class, accu);
+       }
       }
 
       if ( grid.isAsterisk() ) {
@@ -97,6 +94,16 @@ public class Locking implements IndirectHintProducer {
         getHints(grid, Grid.Asterisk.class, Grid.Block.class, accu); }
         getHints(grid, Grid.Asterisk.class, Grid.Column.class, accu);
         getHints(grid, Grid.Asterisk.class, Grid.Row.class, accu);
+       if ( grid.isDiagonals() ) {
+        getHints(grid, Grid.Diagonal.class, Grid.Asterisk.class, accu);
+        getHints(grid, Grid.AntiDiagonal.class, Grid.Asterisk.class, accu);
+        getHints(grid, Grid.Asterisk.class, Grid.Diagonal.class, accu);
+        getHints(grid, Grid.Asterisk.class, Grid.AntiDiagonal.class, accu);
+       }
+       if ( grid.isWindoku() ) {
+        getHints(grid, Grid.Windoku.class, Grid.Asterisk.class, accu);
+        getHints(grid, Grid.Asterisk.class, Grid.Windoku.class, accu);
+       }
       }
 
       if ( grid.isCenterDot() ) {
@@ -108,6 +115,16 @@ public class Locking implements IndirectHintProducer {
         getHints(grid, Grid.CenterDot.class, Grid.Block.class, accu); }
         getHints(grid, Grid.CenterDot.class, Grid.Column.class, accu);
         getHints(grid, Grid.CenterDot.class, Grid.Row.class, accu);
+       if ( grid.isDiagonals() ) {
+        getHints(grid, Grid.Diagonal.class, Grid.CenterDot.class, accu);
+        getHints(grid, Grid.AntiDiagonal.class, Grid.CenterDot.class, accu);
+        getHints(grid, Grid.CenterDot.class, Grid.Diagonal.class, accu);
+        getHints(grid, Grid.CenterDot.class, Grid.AntiDiagonal.class, accu);
+       }
+       if ( grid.isWindoku() ) {
+        getHints(grid, Grid.Windoku.class, Grid.CenterDot.class, accu);
+        getHints(grid, Grid.CenterDot.class, Grid.Windoku.class, accu);
+       }
       }
 
       if ( grid.isGirandola() ) {
@@ -119,6 +136,16 @@ public class Locking implements IndirectHintProducer {
         getHints(grid, Grid.Girandola.class, Grid.Block.class, accu); }
         getHints(grid, Grid.Girandola.class, Grid.Column.class, accu);
         getHints(grid, Grid.Girandola.class, Grid.Row.class, accu);
+       if ( grid.isDiagonals() ) {
+        getHints(grid, Grid.Diagonal.class, Grid.Girandola.class, accu);
+        getHints(grid, Grid.AntiDiagonal.class, Grid.Girandola.class, accu);
+        getHints(grid, Grid.Girandola.class, Grid.Diagonal.class, accu);
+        getHints(grid, Grid.Girandola.class, Grid.AntiDiagonal.class, accu);
+       }
+       if ( grid.isWindoku() ) {
+        getHints(grid, Grid.Windoku.class, Grid.Girandola.class, accu);
+        getHints(grid, Grid.Girandola.class, Grid.Windoku.class, accu);
+       }
       }
 
       if ( grid.isHalloween() ) {
@@ -130,6 +157,16 @@ public class Locking implements IndirectHintProducer {
         getHints(grid, Grid.Halloween.class, Grid.Block.class, accu); }
         getHints(grid, Grid.Halloween.class, Grid.Column.class, accu);
         getHints(grid, Grid.Halloween.class, Grid.Row.class, accu);
+       if ( grid.isDiagonals() ) {
+        getHints(grid, Grid.Diagonal.class, Grid.Halloween.class, accu);
+        getHints(grid, Grid.AntiDiagonal.class, Grid.Halloween.class, accu);
+        getHints(grid, Grid.Halloween.class, Grid.Diagonal.class, accu);
+        getHints(grid, Grid.Halloween.class, Grid.AntiDiagonal.class, accu);
+       }
+       if ( grid.isWindoku() ) {
+        getHints(grid, Grid.Windoku.class, Grid.Halloween.class, accu);
+        getHints(grid, Grid.Halloween.class, Grid.Windoku.class, accu);
+       }
       }
 
       if ( grid.isPerCent() ) {
@@ -141,6 +178,16 @@ public class Locking implements IndirectHintProducer {
         getHints(grid, Grid.PerCent.class, Grid.Block.class, accu); }
         getHints(grid, Grid.PerCent.class, Grid.Column.class, accu);
         getHints(grid, Grid.PerCent.class, Grid.Row.class, accu);
+       if ( grid.isDiagonals() ) {
+        getHints(grid, Grid.Diagonal.class, Grid.PerCent.class, accu);
+        getHints(grid, Grid.AntiDiagonal.class, Grid.PerCent.class, accu);
+        getHints(grid, Grid.PerCent.class, Grid.Diagonal.class, accu);
+        getHints(grid, Grid.PerCent.class, Grid.AntiDiagonal.class, accu);
+       }
+       if ( grid.isWindoku() ) {
+        getHints(grid, Grid.Windoku.class, Grid.PerCent.class, accu);
+        getHints(grid, Grid.PerCent.class, Grid.Windoku.class, accu);
+       }
       }
 
       if ( grid.isSdoku() ) {
@@ -158,6 +205,22 @@ public class Locking implements IndirectHintProducer {
         getHints(grid, Grid.SdokuStack.class, Grid.Column.class, accu);
         getHints(grid, Grid.SdokuBand.class, Grid.Row.class, accu);
         getHints(grid, Grid.SdokuStack.class, Grid.Row.class, accu);
+       if ( grid.isDiagonals() ) {
+        getHints(grid, Grid.Diagonal.class, Grid.SdokuBand.class, accu);
+        getHints(grid, Grid.Diagonal.class, Grid.SdokuStack.class, accu);
+        getHints(grid, Grid.AntiDiagonal.class, Grid.SdokuBand.class, accu);
+        getHints(grid, Grid.AntiDiagonal.class, Grid.SdokuStack.class, accu);
+        getHints(grid, Grid.SdokuBand.class, Grid.Diagonal.class, accu);
+        getHints(grid, Grid.SdokuStack.class, Grid.Diagonal.class, accu);
+        getHints(grid, Grid.SdokuBand.class, Grid.AntiDiagonal.class, accu);
+        getHints(grid, Grid.SdokuStack.class, Grid.AntiDiagonal.class, accu);
+       }
+       if ( grid.isWindoku() ) {
+        getHints(grid, Grid.Windoku.class, Grid.SdokuBand.class, accu);
+        getHints(grid, Grid.Windoku.class, Grid.SdokuStack.class, accu);
+        getHints(grid, Grid.SdokuBand.class, Grid.Windoku.class, accu);
+        getHints(grid, Grid.SdokuStack.class, Grid.Windoku.class, accu);
+       }
       }
 
       if ( grid.isCustom() ) {
@@ -169,6 +232,16 @@ public class Locking implements IndirectHintProducer {
         getHints(grid, Grid.Custom.class, Grid.Block.class, accu); }
         getHints(grid, Grid.Custom.class, Grid.Column.class, accu);
         getHints(grid, Grid.Custom.class, Grid.Row.class, accu);
+       if ( grid.isDiagonals() ) {
+        getHints(grid, Grid.Diagonal.class, Grid.Custom.class, accu);
+        getHints(grid, Grid.AntiDiagonal.class, Grid.Custom.class, accu);
+        getHints(grid, Grid.Custom.class, Grid.Diagonal.class, accu);
+        getHints(grid, Grid.Custom.class, Grid.AntiDiagonal.class, accu);
+       }
+       if ( grid.isWindoku() ) {
+        getHints(grid, Grid.Windoku.class, Grid.Custom.class, accu);
+        getHints(grid, Grid.Custom.class, Grid.Windoku.class, accu);
+       }
       }
 
         // generalized intersection
@@ -176,12 +249,8 @@ public class Locking implements IndirectHintProducer {
       if ( !isDirectMode ) {
        if ( !grid.isLatinSquare() ) {
         getHintsG(grid, Grid.Block.class, accu); }
-       if ( grid.isDiagonals() || grid.isDisjointGroups() || grid.isWindoku()
-         || grid.isAsterisk() || grid.isCenterDot() || grid.isGirandola()
-         || grid.isHalloween() || grid.isPerCent() || grid.isSdoku() || grid.isCustom() ) {
         getHintsG(grid, Grid.Column.class, accu);
         getHintsG(grid, Grid.Row.class, accu);
-       }
 
        if ( grid.isDiagonals() ) {
         getHintsG(grid, Grid.Diagonal.class, accu);

@@ -116,6 +116,43 @@ public class SudokuPanel extends JPanel {
     private Color customColor = new Color(244, 138, 138);   // h:0   s:200 l:180
     private Color oddevenColor = new Color(177, 177, 248);  // h:160 s:200 l:200
 
+    private Color Pastel01 = new Color( 119, 221, 119);     // Pastel Green            #77dd77
+    private Color Pastel02 = new Color( 137, 207, 240);     // Baby Blue               #89cff0
+    private Color Pastel03 = new Color( 153, 197, 196);     // Pastel Turquoise        #99c5c4
+    private Color Pastel04 = new Color( 154, 222, 219);     // Blue Green Pastel       #9adedb
+    private Color Pastel05 = new Color( 170, 148, 153);     // Persian Pastel          #aa9499
+    private Color Pastel06 = new Color( 170, 240, 209);     // Magic Mint              #aaf0d1
+    private Color Pastel07 = new Color( 178, 251, 165);     // Light Pastel Green      #b2fba5
+    private Color Pastel08 = new Color( 179, 158, 181);     // Pastel Purple           #b39eb5
+    private Color Pastel09 = new Color( 189, 176, 208);     // Pastel Lilac            #bdb0d0
+    private Color Pastel10 = new Color( 190, 231, 165);     // Pastel Pea              #bee7a5
+    private Color Pastel11 = new Color( 190, 253, 115);     // Light Lime              #befd73
+    private Color Pastel12 = new Color( 193, 198, 252);     // Light Periwinkle        #c1c6fc
+    private Color Pastel13 = new Color( 198, 164, 164);     // Pale Mauve              #c6a4a4
+    private Color Pastel14 = new Color( 200, 255, 176);     // Light Light Green       #c8ffb0
+    private Color Pastel15 = new Color( 203, 153, 201);     // Pastel Violet           #cb99c9
+    private Color Pastel16 = new Color( 206, 240, 204);     // Pastel Mint             #cef0cc
+    private Color Pastel17 = new Color( 207, 207, 196);     // Pastel Grey             #cfcfc4
+    private Color Pastel18 = new Color( 214, 255, 254);     // Pale Blue               #d6fffe
+    private Color Pastel19 = new Color( 216, 161, 196);     // Pastel Lavender         #d8a1c4
+    private Color Pastel20 = new Color( 222, 165, 164);     // Pastel Pink             #dea5a4
+    private Color Pastel21 = new Color( 222, 236, 225);     // Pastel Smirk            #deece1
+    private Color Pastel22 = new Color( 223, 216, 225);     // Pastel Day              #dfd8e1
+    private Color Pastel23 = new Color( 229, 217, 211);     // Pastel Parchment        #e5d9d3
+    private Color Pastel24 = new Color( 233, 209, 191);     // Pastel Rose Tan         #e9d1bf
+    private Color Pastel25 = new Color( 244, 154, 194);     // Pastel Magenta          #f49ac2
+    private Color Pastel26 = new Color( 244, 191, 255);     // Electric Lavender       #f4bfff
+    private Color Pastel27 = new Color( 253, 253, 150);     // Pastel Yellow           #fdfd96
+    private Color Pastel28 = new Color( 255, 105,  97);     // Pastel Red              #ff6961
+    private Color Pastel29 = new Color( 255, 150,  79);     // Pastel Orange           #ff964f
+    private Color Pastel30 = new Color( 255, 152, 153);     // American Pink           #ff9899
+    private Color Pastel31 = new Color( 255, 183, 206);     // Baby Pink               #ffb7ce
+    private Color Pastel32 = new Color( 202, 155, 247);     // Baby Purple             #ca9bf7
+    private Color Pastel33 = new Color( 131, 105,  83);     // Pastel Brown            #836953
+
+    private Color[] Pastel_Colors = { Pastel01, Pastel02, Pastel03, Pastel04, Pastel05, Pastel06, Pastel07, Pastel08, Pastel09, Pastel10, Pastel11, Pastel12, Pastel13, Pastel14, Pastel15, Pastel16, Pastel17, Pastel18, Pastel19, Pastel20, Pastel21, Pastel22, Pastel23, Pastel24, Pastel25, Pastel26, Pastel27, Pastel28, Pastel29, Pastel30, Pastel31, Pastel32, Pastel33};
+    private int[] Pastel_Index = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32};
+
     public SudokuPanel(SudokuFrame parent) {
         super();
         this.parent = parent;
@@ -134,6 +171,21 @@ public class SudokuPanel extends JPanel {
         smallFont = new Font(CLUE_FONT_NAME, Font.PLAIN, FONT_SIZE_SMALL);
         bigFont = new Font(FONT_NAME, Font.PLAIN, FONT_SIZE_BIG);
         legendFont = new Font(FONT_NAME, Font.PLAIN, FONT_SIZE_LEGEND);
+        newColors(0);
+    }
+
+    public void newColors(int paint) {
+        Random random = new Random( System.currentTimeMillis());
+        for (int i = 0; i < 33; i++) {
+            int p1 = random.nextInt(32);
+            int p2 = random.nextInt(32);
+            int temp = Pastel_Index[p1];
+            Pastel_Index[p1] = Pastel_Index[p2];
+            Pastel_Index[p2] = temp;
+        }
+        if ( paint == 1 ) {
+            repaint();
+        }
     }
 
     private void rescale() {
@@ -560,7 +612,7 @@ public class SudokuPanel extends JPanel {
             col = customColor;
         if (grid.isCustom() && grid.getCustomAt(cell.getX(),cell.getY())!=null && Settings.getInstance().getCount()==9) {
             Grid.Custom custom = grid.getCustomAt(cell.getX(),cell.getY());
-            col = DG_Colors[custom.getCustomNum()];
+            col = Pastel_Colors[ Pastel_Index[ custom.getCustomNum()+1]];
         }
         if (redCells != null && redCells.contains(cell))
             col = redCellColor;
@@ -621,7 +673,7 @@ public class SudokuPanel extends JPanel {
             col = customColor;
         if (grid.isCustom() && grid.getCustomAt(cell.getX(),cell.getY())!=null && Settings.getInstance().getCount()==9) {
             Grid.Custom custom = grid.getCustomAt(cell.getX(),cell.getY());
-            col = DG_Colors[custom.getCustomNum()];
+            col = Pastel_Colors[ Pastel_Index[ custom.getCustomNum()+1]];
         }
         if (redCells != null && redCells.contains(cell))
             col = redCellColor;
