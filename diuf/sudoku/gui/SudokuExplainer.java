@@ -1097,12 +1097,16 @@ public class SudokuExplainer {
             IndirectHint iHint = (IndirectHint)hint;
             if ( iHint.isWorth() ) {
                 int countCells = 0;
-                Map<Cell, BitSet> remPots = iHint.getRemovablePotentials();
-                for (Cell cell : remPots.keySet()) {
-                    BitSet cellPots = remPots.get(cell);
+                Map<Cell, BitSet> getPots = iHint.getRemovablePotentials();
+                Map<Integer, BitSet> remPots = new TreeMap<Integer, BitSet>();
+                for (Cell cell : getPots.keySet()) {
+                    remPots.put(cell.getY()*9+cell.getX(), getPots.get(cell));
+                }
+                for (int cellindex : remPots.keySet()) {
+                    BitSet cellPots = remPots.get(cellindex);
                     if ( countCells == 0 ) { s += ":"; }
                     if ( countCells > 0 ) { s += ","; }
-                    s += " r" + (cell.getY()+1) + "c" + (cell.getX()+1) + "<>";
+                    s += " r" + (cellindex/9+1) + "c" + (cellindex%9+1) + "<>";
                     int countPots = 0;
                     for (int pv=1; pv<=9; pv++ ) {
                         if ( cellPots.get( pv) ) { if ( countPots != 0 ) { s += ","; } s += pv; countPots++; }

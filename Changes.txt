@@ -1,5 +1,11 @@
 Changes:
 
+20211202
+- changes to hints output
+
+20211104
+- improvements, in variants, in intersections
+
 20211026
 - fix General Intersection in JS jigsaws
 - improve custom variant setup for JS|B|W|X|
