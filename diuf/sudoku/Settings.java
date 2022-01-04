@@ -27,9 +27,9 @@ import diuf.sudoku.*;
  */
 public class Settings {
 
-    public final static int VERSION  = 2021;
-    public final static int REVISION = 12;
-    public final static int SUBREV   = 2;
+    public final static int VERSION  = 2022;
+    public final static int REVISION = 1;
+    public final static int SUBREV   = 4;
 
     private static Settings instance = null;
 

@@ -1,5 +1,8 @@
 Changes:
 
+20220104
+- fix nullpointerexception in addBug3Hint
+
 20211202
 - changes to hints output
 
