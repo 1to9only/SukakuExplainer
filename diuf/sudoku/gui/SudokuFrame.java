@@ -94,6 +94,7 @@ public class SudokuFrame extends JFrame implements Asker {
     private JMenuItem mitPaste = null;
     private JMenu toolMenu = null;
     private JMenuItem mitCheckValidity = null;
+    private JMenuItem mitCheckUniqueSolution = null;
     private JMenuItem mitAnalyse = null;
     private JCheckBoxMenuItem mitAnalyseClipboard = null;
     private JMenuItem mitSolveStep = null;
@@ -1894,6 +1895,7 @@ public class SudokuFrame extends JFrame implements Asker {
             toolMenu.addSeparator();
             toolMenu.add(getMitCheckValidity());
             getMitCheckValidity().setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
+            toolMenu.add(getMitCheckUniqueSolution());
             toolMenu.add(getMitSolveStep());
             getMitSolveStep().setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0));
             toolMenu.add(getMitGetNextHint());
@@ -1963,6 +1965,22 @@ public class SudokuFrame extends JFrame implements Asker {
             });
         }
         return mitCheckValidity;
+    }
+
+    private JMenuItem getMitCheckUniqueSolution() {
+        if (mitCheckUniqueSolution == null) {
+            mitCheckUniqueSolution = new JMenuItem();
+            mitCheckUniqueSolution.setText("Check uniqueness only");
+        //  mitCheckUniqueSolution.setMnemonic(KeyEvent.VK_F2);
+            mitCheckUniqueSolution.setToolTipText("Check if the Sudoku has exactly one solution");
+            mitCheckUniqueSolution.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    if (engine.checkUniqueSolution())
+                        setExplanations(HtmlLoader.loadHtml(this, "Valid.html"));
+                }
+            });
+        }
+        return mitCheckUniqueSolution;
     }
 
     private JMenuItem getMitSolveStep() {

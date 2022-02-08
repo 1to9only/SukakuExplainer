@@ -1,5 +1,8 @@
 Changes:
 
+20220208
+- add Check uniqueness only
+
 20220104
 - fix nullpointerexception in addBug3Hint
 
