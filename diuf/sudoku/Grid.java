@@ -809,35 +809,35 @@ public class Grid {
     }
 
     public Grid.Region getRegionAt(Class<? extends Grid.Region> regionType, int x, int y) {
-        if (regionType.equals(Grid.Row.class))
+        if (Grid.Row.class.equals(regionType))
             return getRowAt(x, y);
-        else if (regionType.equals(Grid.Column.class))
+        else if (Grid.Column.class.equals(regionType))
             return getColumnAt(x, y);
-        else if (regionType.equals(Grid.Block.class))
+        else if (Grid.Block.class.equals(regionType))
             return getBlockAt(x, y);
-        else if (regionType.equals(Grid.Diagonal.class))
+        else if (Grid.Diagonal.class.equals(regionType))
             return getDiagonalAt(x, y);
-        else if (regionType.equals(Grid.AntiDiagonal.class))
+        else if (Grid.AntiDiagonal.class.equals(regionType))
             return getAntiDiagonalAt(x, y);
-        else if (regionType.equals(Grid.DisjointGroup.class))
+        else if (Grid.DisjointGroup.class.equals(regionType))
             return getDisjointGroupAt(x, y);
-        else if (regionType.equals(Grid.Windoku.class))
+        else if (Grid.Windoku.class.equals(regionType))
             return getWindokuAt(x, y);
-        else if (regionType.equals(Grid.Asterisk.class))
+        else if (Grid.Asterisk.class.equals(regionType))
             return getAsteriskAt(x, y);
-        else if (regionType.equals(Grid.CenterDot.class))
+        else if (Grid.CenterDot.class.equals(regionType))
             return getCenterDotAt(x, y);
-        else if (regionType.equals(Grid.Girandola.class))
+        else if (Grid.Girandola.class.equals(regionType))
             return getGirandolaAt(x, y);
-        else if (regionType.equals(Grid.Halloween.class))
+        else if (Grid.Halloween.class.equals(regionType))
             return getHalloweenAt(x, y);
-        else if (regionType.equals(Grid.PerCent.class))
+        else if (Grid.PerCent.class.equals(regionType))
             return getPerCentAt(x, y);
-        else if (regionType.equals(Grid.SdokuBand.class))
+        else if (Grid.SdokuBand.class.equals(regionType))
             return getSdokuBandAt(x, y);
-        else if (regionType.equals(Grid.SdokuStack.class))
+        else if (Grid.SdokuStack.class.equals(regionType))
             return getSdokuStackAt(x, y);
-        else if (regionType.equals(Grid.Custom.class))
+        else if (Grid.Custom.class.equals(regionType))
             return getCustomAt(x, y);
         else
             return null;
@@ -848,35 +848,35 @@ public class Grid {
     }
 
     public int getRegionNum(Class<? extends Grid.Region> regionType, int x, int y) {
-        if (regionType.equals(Grid.Row.class))
+        if (Grid.Row.class.equals(regionType))
             return getRowAt(x, y).getRowNum();
-        else if (regionType.equals(Grid.Column.class))
+        else if (Grid.Column.class.equals(regionType))
             return getColumnAt(x, y).getColumnNum();
-        else if (regionType.equals(Grid.Block.class))
+        else if (Grid.Block.class.equals(regionType))
             return getBlockAt(x, y).getBlockNum();
-        else if (regionType.equals(Grid.Diagonal.class))
+        else if (Grid.Diagonal.class.equals(regionType))
             return getDiagonalAt(x, y).getDiagonalNum();
-        else if (regionType.equals(Grid.AntiDiagonal.class))
+        else if (Grid.AntiDiagonal.class.equals(regionType))
             return getAntiDiagonalAt(x, y).getAntiDiagonalNum();
-        else if (regionType.equals(Grid.DisjointGroup.class))
+        else if (Grid.DisjointGroup.class.equals(regionType))
             return getDisjointGroupAt(x, y).getDisjointGroupNum();
-        else if (regionType.equals(Grid.Windoku.class))
+        else if (Grid.Windoku.class.equals(regionType))
             return getWindokuAt(x, y).getWindokuNum();
-        else if (regionType.equals(Grid.Asterisk.class))
+        else if (Grid.Asterisk.class.equals(regionType))
             return getAsteriskAt(x, y).getAsteriskNum();
-        else if (regionType.equals(Grid.CenterDot.class))
+        else if (Grid.CenterDot.class.equals(regionType))
             return getCenterDotAt(x, y).getCenterDotNum();
-        else if (regionType.equals(Grid.Girandola.class))
+        else if (Grid.Girandola.class.equals(regionType))
             return getGirandolaAt(x, y).getGirandolaNum();
-        else if (regionType.equals(Grid.Halloween.class))
+        else if (Grid.Halloween.class.equals(regionType))
             return getHalloweenAt(x, y).getHalloweenNum();
-        else if (regionType.equals(Grid.PerCent.class))
+        else if (Grid.PerCent.class.equals(regionType))
             return getPerCentAt(x, y).getPerCentNum();
-        else if (regionType.equals(Grid.SdokuBand.class))
+        else if (Grid.SdokuBand.class.equals(regionType))
             return getSdokuBandAt(x, y).getSdokuBandNum();
-        else if (regionType.equals(Grid.SdokuStack.class))
+        else if (Grid.SdokuStack.class.equals(regionType))
             return getSdokuStackAt(x, y).getSdokuStackNum();
-        else if (regionType.equals(Grid.Custom.class))
+        else if (Grid.Custom.class.equals(regionType))
             return getCustomAt(x, y).getCustomNum();
         else
             return -1;
@@ -887,35 +887,35 @@ public class Grid {
     }
 
     public String getRegionName(Class<? extends Grid.Region> regionType, int x, int y) {
-        if (regionType.equals(Grid.Row.class))
+        if (Grid.Row.class.equals(regionType))
             return getRowAt(x, y).toString();
-        else if (regionType.equals(Grid.Column.class))
+        else if (Grid.Column.class.equals(regionType))
             return getColumnAt(x, y).toString();
-        else if (regionType.equals(Grid.Block.class))
+        else if (Grid.Block.class.equals(regionType))
             return getBlockAt(x, y).toString();
-        else if (regionType.equals(Grid.Diagonal.class))
+        else if (Grid.Diagonal.class.equals(regionType))
             return getDiagonalAt(x, y).toString();
-        else if (regionType.equals(Grid.AntiDiagonal.class))
+        else if (Grid.AntiDiagonal.class.equals(regionType))
             return getAntiDiagonalAt(x, y).toString();
-        else if (regionType.equals(Grid.DisjointGroup.class))
+        else if (Grid.DisjointGroup.class.equals(regionType))
             return getDisjointGroupAt(x, y).toString();
-        else if (regionType.equals(Grid.Windoku.class))
+        else if (Grid.Windoku.class.equals(regionType))
             return getWindokuAt(x, y).toString();
-        else if (regionType.equals(Grid.Asterisk.class))
+        else if (Grid.Asterisk.class.equals(regionType))
             return getAsteriskAt(x, y).toString();
-        else if (regionType.equals(Grid.CenterDot.class))
+        else if (Grid.CenterDot.class.equals(regionType))
             return getCenterDotAt(x, y).toString();
-        else if (regionType.equals(Grid.Girandola.class))
+        else if (Grid.Girandola.class.equals(regionType))
             return getGirandolaAt(x, y).toString();
-        else if (regionType.equals(Grid.Halloween.class))
+        else if (Grid.Halloween.class.equals(regionType))
             return getHalloweenAt(x, y).toString();
-        else if (regionType.equals(Grid.PerCent.class))
+        else if (Grid.PerCent.class.equals(regionType))
             return getPerCentAt(x, y).toString();
-        else if (regionType.equals(Grid.SdokuBand.class))
+        else if (Grid.SdokuBand.class.equals(regionType))
             return getSdokuBandAt(x, y).toString();
-        else if (regionType.equals(Grid.SdokuStack.class))
+        else if (Grid.SdokuStack.class.equals(regionType))
             return getSdokuStackAt(x, y).toString();
-        else if (regionType.equals(Grid.Custom.class))
+        else if (Grid.Custom.class.equals(regionType))
             return getCustomAt(x, y).toString();
         else
             return null;
@@ -1036,7 +1036,7 @@ public class Grid {
              * This code is not really used. The method is always overriden
              */
             for (int i = 0; i < 9; i++) {
-                if (getCell(i).equals(cell))
+                if (cell.equals(getCell(i)))
                     return i;
             }
             return -1;

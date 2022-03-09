@@ -25,7 +25,19 @@ public class Potential {
         HiddenBlock,
         HiddenRow,
         HiddenColumn,
-        Advanced
+        Advanced,
+        Diagonal,
+        AntiDiagonal,
+        DisjointGroup,
+        Windoku,
+        Asterisk,
+        CenterDot,
+        Girandola,
+        Halloween,
+        PerCent,
+        SdokuBand,
+        SdokuStack,
+        Custom
     }
 
     public final Cell cell;

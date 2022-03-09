@@ -659,10 +659,10 @@ public class Solver {
                 double ruleDiff = rule.getDifficulty();
                 if (ruleDiff > difficulty)
                     difficulty = ruleDiff;
-                if (difficulty >= min && max >= 12.0)
-                    break;
-                if (difficulty > max)
-                    break;
+            //  if (difficulty >= min && max >= 12.0)
+            //      break;
+            //  if (difficulty > max)
+            //      break;
                 hint.apply(grid);
             }
             return difficulty;
