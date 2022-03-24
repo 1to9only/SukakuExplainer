@@ -1,5 +1,8 @@
 Changes:
 
+20220323
+- add step timings in hints output
+
 20220309
 - changes in Chaining.java, may affect some ratings!
 
