@@ -1,5 +1,8 @@
 Changes:
 
+20220407
+- add Windoku Windows Closed/Open Options for Generate
+
 20220324
 - add fixed lksudoku's fix to Chaining
 - add step timings in hints output

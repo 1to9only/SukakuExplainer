@@ -103,6 +103,9 @@ public class Settings {
     private static String oddshape = "circle";
     private int evenshape = 3;                      // =3 triangle, =4 square
 
+    private boolean isWindowsClosed = false;
+    private boolean isWindowsOpen = false;
+
     private Settings() {
         init();
         load();
@@ -130,6 +133,8 @@ public class Settings {
         isSdoku = false;
         isCustom = false;
         isOddEven = false;
+        isWindowsClosed = false;
+        isWindowsOpen = false;
     }
 
     public void useSolution( Grid grid) {
@@ -509,6 +514,26 @@ public class Settings {
         return isWindoku;
     }
 
+    public void setWindowsClosed(boolean isWindowsClosed) {
+      if ( this.isWindowsClosed != isWindowsClosed ) {
+        this.isWindowsClosed = isWindowsClosed;
+        isChanged = 1;
+      }
+    }
+    public boolean isWindowsClosed() {
+        return isWindowsClosed;
+    }
+
+    public void setWindowsOpen(boolean isWindowsOpen) {
+      if ( this.isWindowsOpen != isWindowsOpen ) {
+        this.isWindowsOpen = isWindowsOpen;
+        isChanged = 1;
+      }
+    }
+    public boolean isWindowsOpen() {
+        return isWindowsOpen;
+    }
+
     public void setClover(boolean isClover) {
       if ( this.isClover != isClover ) {
         this.isClover = isClover;
@@ -831,6 +856,16 @@ public class Settings {
                 }
                 catch (NullPointerException e) { LoadError = 1; }
                 try {
+                    s = (String)stgDetails.get("isWindowsClosed");
+                    isWindowsClosed = s.equals("true")?true:false;
+                }
+                catch (NullPointerException e) { LoadError = 1; }
+                try {
+                    s = (String)stgDetails.get("isWindowsOpen");
+                    isWindowsOpen = s.equals("true")?true:false;
+                }
+                catch (NullPointerException e) { LoadError = 1; }
+                try {
                     s = (String)stgDetails.get("isClover");
                     isClover = s.equals("true")?true:false;
                 }
@@ -994,6 +1029,8 @@ public class Settings {
         stgDetails.put("isDiagonals", isDiagonals?"true":"false");
         stgDetails.put("isDisjointGroups", isDisjointGroups?"true":"false");
         stgDetails.put("isWindoku", isWindoku?"true":"false");
+        stgDetails.put("isWindowsClosed", isWindowsClosed?"true":"false");
+        stgDetails.put("isWindowsOpen", isWindowsOpen?"true":"false");
         stgDetails.put("isClover", isClover?"true":"false");
         stgDetails.put("isAsterisk", isAsterisk?"true":"false");
         stgDetails.put("isCenterDot", isCenterDot?"true":"false");

@@ -159,6 +159,8 @@ public class SudokuFrame extends JFrame implements Asker {
     private JCheckBoxMenuItem mitDiagonals = null;
     private JCheckBoxMenuItem mitDisjointGroups = null;
     private JCheckBoxMenuItem mitWindoku = null;
+    private JCheckBoxMenuItem mitWindowsClosed = null;
+    private JCheckBoxMenuItem mitWindowsOpen = null;
     private JCheckBoxMenuItem mitClover = null;
     private JCheckBoxMenuItem mitAsterisk = null;
     private JCheckBoxMenuItem mitCenterDot = null;
@@ -2597,6 +2599,8 @@ public class SudokuFrame extends JFrame implements Asker {
             VariantsMenu.add(getMitDiagonals());
             VariantsMenu.add(getMitDisjointGroups());
             VariantsMenu.add(getMitWindoku());
+            VariantsMenu.add(getMitWindowsClosed());
+            VariantsMenu.add(getMitWindowsOpen());
             VariantsMenu.add(getMitClover());
             VariantsMenu.addSeparator();
             VariantsMenu.add(getMitAsterisk());
@@ -2671,6 +2675,8 @@ public class SudokuFrame extends JFrame implements Asker {
                     if ( Settings.getInstance().isDiagonals() )      { mitDiagonals.setSelected(false); }
                     if ( Settings.getInstance().isDisjointGroups() ) { mitDisjointGroups.setSelected(false); }
                     if ( Settings.getInstance().isWindoku() )        { mitWindoku.setSelected(false); }
+                    if ( Settings.getInstance().isWindowsClosed() )  { mitWindowsClosed.setSelected(false); } mitWindowsClosed.setVisible(false);
+                    if ( Settings.getInstance().isWindowsOpen() )    { mitWindowsOpen.setSelected(false); } mitWindowsOpen.setVisible(false);
                     if ( Settings.getInstance().isClover() )         { mitClover.setSelected(false); }
                     if ( Settings.getInstance().isAsterisk() )       { mitAsterisk.setSelected(false); }
                     if ( Settings.getInstance().isCenterDot() )      { mitCenterDot.setSelected(false); }
@@ -2790,6 +2796,16 @@ public class SudokuFrame extends JFrame implements Asker {
                 //  if ( Settings.getInstance().isSdoku() )     { mitSdoku.setSelected(false); }
                    }
                     Settings.getInstance().setWindoku(mitWindoku.isSelected());
+                    mitWindowsClosed.setSelected(false);
+                    mitWindowsOpen.setSelected(false);
+                   if ( mitWindoku.isSelected() ) {
+                    mitWindowsClosed.setVisible(true);
+                    mitWindowsOpen.setVisible(true);
+                   }
+                   if (!mitWindoku.isSelected() ) {
+                    mitWindowsClosed.setVisible(false);
+                    mitWindowsOpen.setVisible(false);
+                   }
                    if ( mitAsterisk.isSelected() )
                     Settings.getInstance().setCustom(false);
                     Settings.getInstance().setOddEven(false);
@@ -2811,6 +2827,52 @@ public class SudokuFrame extends JFrame implements Asker {
             });
         }
         return mitWindoku;
+    }
+
+    private JCheckBoxMenuItem getMitWindowsClosed() {
+        if (mitWindowsClosed == null) {
+            mitWindowsClosed = new JCheckBoxMenuItem();
+            mitWindowsClosed.setText("Windows (Closed)");
+            mitWindowsClosed.setToolTipText("Sets the puzzle type to Windows (Closed)");
+            mitWindowsClosed.setSelected(Settings.getInstance().isWindowsClosed());
+            if (!Settings.getInstance().isWindoku() )        { mitWindowsClosed.setVisible(false); }
+            mitWindowsClosed.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                  if ( mitWindowsClosed.isSelected() != Settings.getInstance().isWindowsClosed() ) {
+                    Settings.getInstance().setWindowsClosed(mitWindowsClosed.isSelected());
+                    Settings.getInstance().setWindowsOpen(false);
+                    mitWindowsOpen.setSelected(false);
+                    engine.rebuildSolver();
+                    engine.resetPotentials();
+                    repaint();
+                  }
+                }
+            });
+        }
+        return mitWindowsClosed;
+    }
+
+    private JCheckBoxMenuItem getMitWindowsOpen() {
+        if (mitWindowsOpen == null) {
+            mitWindowsOpen = new JCheckBoxMenuItem();
+            mitWindowsOpen.setText("Windows (Open)");
+            mitWindowsOpen.setToolTipText("Sets the puzzle type to Windows (Open)");
+            mitWindowsOpen.setSelected(Settings.getInstance().isWindowsOpen());
+            if (!Settings.getInstance().isWindoku() )        { mitWindowsOpen.setVisible(false); }
+            mitWindowsOpen.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                  if ( mitWindowsOpen.isSelected() != Settings.getInstance().isWindowsOpen() ) {
+                    Settings.getInstance().setWindowsOpen(mitWindowsOpen.isSelected());
+                    Settings.getInstance().setWindowsClosed(false);
+                    mitWindowsClosed.setSelected(false);
+                    engine.rebuildSolver();
+                    engine.resetPotentials();
+                    repaint();
+                  }
+                }
+            });
+        }
+        return mitWindowsOpen;
     }
 
     private JCheckBoxMenuItem getMitClover() {

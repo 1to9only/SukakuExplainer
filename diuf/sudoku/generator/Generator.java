@@ -22,6 +22,8 @@ public class Generator {
     private boolean isInterrupted = false;
     private boolean isVerbose = false;
 
+    private final static String wco="ccccccccccooocoooccooocoooccooocooocccccccccccooocoooccooocoooccooocooocccccccccc";
+
     public boolean isButtonStopped() {
        return isInterrupted;
     }
@@ -71,6 +73,9 @@ public class Generator {
             }
             System.err.println(s);
             System.err.flush();
+
+            if ( grid.isWindoku() && Settings.getInstance().isWindowsClosed() && cnt == 36 ) { continue; }
+            if ( grid.isWindoku() && Settings.getInstance().isWindowsOpen() && cnt == 45 ) { continue; }
 
             // Analyse difficulty
             Grid copy = new Grid();
@@ -143,6 +148,9 @@ public class Generator {
             System.err.println(s);
             System.err.flush();
 
+            if ( grid.isWindoku() && Settings.getInstance().isWindowsClosed() && cnt == 36 ) { continue; }
+            if ( grid.isWindoku() && Settings.getInstance().isWindowsOpen() && cnt == 45 ) { continue; }
+
             // Analyse difficulty
             Grid copy = new Grid();
             grid.copyTo(copy);
@@ -214,6 +222,21 @@ public class Generator {
                 if ( ch=='o' || ch=='O' || ch=='e' || ch=='E' ) {
                     Cell cell = grid.getCell(i%9, i/9);
                     cell.setValue(0);
+                }
+            }
+        }
+
+        if ( grid.isWindoku() && Settings.getInstance().isWindowsClosed() ) {
+            for (int i = 0; i < 81; i++) {
+                if ( wco.charAt(i)=='c' ) {
+                    grid.getCell(i%9, i/9).setValue(0);
+                }
+            }
+        }
+        if ( grid.isWindoku() && Settings.getInstance().isWindowsOpen() ) {
+            for (int i = 0; i < 81; i++) {
+                if ( wco.charAt(i)=='o' ) {
+                    grid.getCell(i%9, i/9).setValue(0);
                 }
             }
         }
