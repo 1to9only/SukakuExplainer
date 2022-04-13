@@ -1,5 +1,8 @@
 Changes:
 
+20220413
+- various small changes
+
 20220407
 - add Windoku Windows Closed/Open Options for Generate
 
