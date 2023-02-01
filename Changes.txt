@@ -1,5 +1,8 @@
 Changes:
 
+20230201
+- add single diagonal variant
+
 20220512
 - several small updates
 

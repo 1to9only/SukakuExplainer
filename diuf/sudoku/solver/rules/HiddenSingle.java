@@ -31,10 +31,18 @@ public class HiddenSingle implements DirectHintProducer {
         getHints(grid, Grid.Row.class, accu, false);
 
         if ( grid.isDiagonals() ) {
+          if ( grid.isXDiagonal() ) {
             getHints(grid, Grid.Diagonal.class, accu, true);
+          }
+          if ( grid.isXAntiDiagonal() ) {
             getHints(grid, Grid.AntiDiagonal.class, accu, true);
+          }
+          if ( grid.isXDiagonal() ) {
             getHints(grid, Grid.Diagonal.class, accu, false);
+          }
+          if ( grid.isXAntiDiagonal() ) {
             getHints(grid, Grid.AntiDiagonal.class, accu, false);
+          }
         }
         if ( grid.isDisjointGroups() ) {
             getHints(grid, Grid.DisjointGroup.class, accu, true);

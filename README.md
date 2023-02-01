@@ -45,6 +45,10 @@ None, one or more of the following:
 -D      Disjoint Groups
 -W      Windoku
 ```
+```
+-d      Diagonal [/] in Single-Diagonal Sudoku, -X must be specified
+-a      AntiDiagonal [\] in Single-Diagonal Sudoku, -X must be specified
+```
 None or one of the following (can be combined with above options):
 ```
 -A      Asterisk

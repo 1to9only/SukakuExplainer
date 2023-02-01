@@ -49,6 +49,8 @@ public class Grid {
 
     private boolean isLatinSquare = false;
     private boolean isDiagonals = false;
+    private boolean isXDiagonal = true;
+    private boolean isXAntiDiagonal = true;
     private boolean isDisjointGroups = false;
     private boolean isWindoku = false;
     private boolean isAsterisk = false;
@@ -156,6 +158,8 @@ public class Grid {
 
         isLatinSquare = Settings.getInstance().isLatinSquare();
         isDiagonals = Settings.getInstance().isDiagonals();
+        isXDiagonal = Settings.getInstance().isXDiagonal();
+        isXAntiDiagonal = Settings.getInstance().isXAntiDiagonal();
         isDisjointGroups = Settings.getInstance().isDisjointGroups();
         isWindoku = Settings.getInstance().isWindoku();
         isAsterisk = Settings.getInstance().isAsterisk();
@@ -235,6 +239,16 @@ public class Grid {
     public void updateSdoku() { this.isSdoku = Settings.getInstance().isSdoku(); reset_regionTypes(); }
     public void updateCustom() { this.isCustom = Settings.getInstance().isCustom(); reset_regionTypes(); }
     public void updateOddEven() { this.isOddEven = Settings.getInstance().isOddEven(); reset_regionTypes(); }
+
+    public boolean isXDiagonal() { return this.isXDiagonal; }
+    public void setXDiagonal() { this.isXDiagonal = true; }
+    public void setXDiagonal(boolean b) { this.isXDiagonal = b; }
+    public void updateXDiagonal() { this.isXDiagonal = Settings.getInstance().isXDiagonal(); reset_regionTypes(); }
+
+    public boolean isXAntiDiagonal() { return this.isXAntiDiagonal; }
+    public void setXAntiDiagonal() { this.isXAntiDiagonal = true; }
+    public void setXAntiDiagonal(boolean b) { this.isXAntiDiagonal = b; }
+    public void updateXAntiDiagonal() { this.isXAntiDiagonal = Settings.getInstance().isXAntiDiagonal(); reset_regionTypes(); }
 
     public void updateVanilla() { reset_regionTypes(); }
 
@@ -948,7 +962,8 @@ public class Grid {
         if (_regionTypes == null) {
             int count = 3;
           if (  isLatinSquare ) { count -= 1; }
-            if ( isDiagonals ) { count += 2; }
+            if ( isDiagonals && isXDiagonal ) { count += 1; }
+            if ( isDiagonals && isXAntiDiagonal ) { count += 1; }
             if ( isDisjointGroups ) { count += 1; }
             if ( isWindoku ) { count += 1; }
             if ( isAsterisk ) { count += 1; }
@@ -965,8 +980,12 @@ public class Grid {
             _regionTypes.add(Grid.Row.class);
             _regionTypes.add(Grid.Column.class);
             if ( isDiagonals ) {
+              if ( isXDiagonal ) {
                 _regionTypes.add(Grid.Diagonal.class);
+              }
+              if ( isXAntiDiagonal ) {
                 _regionTypes.add(Grid.AntiDiagonal.class);
+              }
             }
             if ( isDisjointGroups ) {
                 _regionTypes.add(Grid.DisjointGroup.class);

@@ -950,8 +950,10 @@ public class SudokuPanel extends JPanel {
         }
         if (grid.isDiagonals()) {
             g.setColor(borderColor);
-            g.drawLine( CELL_OUTER_SIZE / 6, CELL_OUTER_SIZE / 6, 9 * CELL_OUTER_SIZE - CELL_OUTER_SIZE / 6, 9 * CELL_OUTER_SIZE - CELL_OUTER_SIZE / 6);
-            g.drawLine( CELL_OUTER_SIZE / 6, 9 * CELL_OUTER_SIZE - CELL_OUTER_SIZE / 6, 9 * CELL_OUTER_SIZE - CELL_OUTER_SIZE / 6, CELL_OUTER_SIZE / 6);
+          if (grid.isXAntiDiagonal()) {
+            g.drawLine( CELL_OUTER_SIZE / 6, CELL_OUTER_SIZE / 6, 9 * CELL_OUTER_SIZE - CELL_OUTER_SIZE / 6, 9 * CELL_OUTER_SIZE - CELL_OUTER_SIZE / 6); }
+          if (grid.isXDiagonal()) {
+            g.drawLine( CELL_OUTER_SIZE / 6, 9 * CELL_OUTER_SIZE - CELL_OUTER_SIZE / 6, 9 * CELL_OUTER_SIZE - CELL_OUTER_SIZE / 6, CELL_OUTER_SIZE / 6); }
         }
         if (grid.isWindoku()) {
             int lineWidth = 4;
@@ -995,8 +997,10 @@ public class SudokuPanel extends JPanel {
         }
         if (grid.isDiagonals()) {
             g.setColor(borderColor);
-            g.drawLine( CELL_OUTER_SIZE / 6+adj, CELL_OUTER_SIZE / 6+adj, 9 * CELL_OUTER_SIZE - CELL_OUTER_SIZE / 6+adj, 9 * CELL_OUTER_SIZE - CELL_OUTER_SIZE / 6+adj);
-            g.drawLine( CELL_OUTER_SIZE / 6+adj, 9 * CELL_OUTER_SIZE - CELL_OUTER_SIZE / 6+adj, 9 * CELL_OUTER_SIZE - CELL_OUTER_SIZE / 6+adj, CELL_OUTER_SIZE / 6+adj);
+          if (grid.isXAntiDiagonal()) {
+            g.drawLine( CELL_OUTER_SIZE / 6+adj, CELL_OUTER_SIZE / 6+adj, 9 * CELL_OUTER_SIZE - CELL_OUTER_SIZE / 6+adj, 9 * CELL_OUTER_SIZE - CELL_OUTER_SIZE / 6+adj); }
+          if (grid.isXDiagonal()) {
+            g.drawLine( CELL_OUTER_SIZE / 6+adj, 9 * CELL_OUTER_SIZE - CELL_OUTER_SIZE / 6+adj, 9 * CELL_OUTER_SIZE - CELL_OUTER_SIZE / 6+adj, CELL_OUTER_SIZE / 6+adj); }
         }
         if (grid.isWindoku()) {
             int lineWidth = 4;

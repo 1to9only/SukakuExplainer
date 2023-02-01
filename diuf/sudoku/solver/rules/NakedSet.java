@@ -33,8 +33,12 @@ public class NakedSet implements IndirectHintProducer {
         getHints(grid, Grid.Row.class, accu);
 
         if ( grid.isDiagonals() ) {
+          if ( grid.isXDiagonal() ) {
             getHints(grid, Grid.Diagonal.class, accu);
+          }
+          if ( grid.isXAntiDiagonal() ) {
             getHints(grid, Grid.AntiDiagonal.class, accu);
+          }
         }
         if ( grid.isDisjointGroups() ) {
             getHints(grid, Grid.DisjointGroup.class, accu);

@@ -115,6 +115,13 @@ public class pencilmarks {
                     Settings.getInstance().setOddEven(true);
                     break;
 
+                case 'd':   // diagonal
+                    Settings.getInstance().setXAntiDiagonal(false);
+                    break;
+                case 'a':   // antidiagonal
+                    Settings.getInstance().setXDiagonal(false);
+                    break;
+
                 case 'T':   // used saved techniques
                     Settings.getInstance().unpackmethods();
                     break;

@@ -47,8 +47,8 @@ public class serate {
         System.err.println("  but otherwise unsolvable input puzzle.");
         System.err.println("");
         System.err.println("OPTIONS");
-        System.err.println("  -d, --diamond");
-        System.err.println("      Terminate rating if the puzzle is not a diamond.");
+//      System.err.println("  -d, --diamond");
+//      System.err.println("      Terminate rating if the puzzle is not a diamond.");
         System.err.println("  -f, --format=FORMAT");
         System.err.println("      Format the output for each input puzzle according to FORMAT.  Format");
         System.err.println("      conversion are %CHARACTER; all other characters are output unchanged.");
@@ -73,8 +73,8 @@ public class serate {
         System.err.println("      List detailed info in displayed man page form.");
         System.err.println("  -o, --output=FILE");
         System.err.println("      Write output to FILE instead of the standard output.");
-        System.err.println("  -p, --pearl");
-        System.err.println("      Terminate rating if the puzzle is not a pearl.");
+//      System.err.println("  -p, --pearl");
+//      System.err.println("      Terminate rating if the puzzle is not a pearl.");
         System.err.println("  -v, --version");
         System.err.println("      Print the Sukaku Explainer (serate) version and exit.");
         System.err.println("");
@@ -139,9 +139,10 @@ public class serate {
                             v = s.substring(i+1);
                             s = s.substring(0, i);
                         }
-                    if (s.equals("diamond"))
-                        c = 'd';
-                    else if (s.equals("format"))
+//                  if (s.equals("diamond"))
+//                      c = 'd';
+//                  else
+                    if (s.equals("format"))
                         c = 'f';
                     else if (s.equals("html"))
                         c = 'h';
@@ -151,8 +152,8 @@ public class serate {
                         c = 'm';
                     else if (s.equals("out") || s.equals("output"))
                         c = 'o';
-                    else if (s.equals("pearl"))
-                        c = 'p';
+//                  else if (s.equals("pearl"))
+//                      c = 'p';
                     else if (s.equals("version"))
                         c = 'v';
                     else
@@ -174,10 +175,10 @@ public class serate {
                     break;
                 }
                 switch (c) {
-                case 'd':
-                case 'p':
-                    want = c;
-                    break;
+//              case 'd':
+//              case 'p':
+//                  want = c;
+//                  break;
                 case 'f':
                     format = v;
                     break;
@@ -240,6 +241,13 @@ public class serate {
                     break;
                 case 'V':   // OddEven
                     Settings.getInstance().setOddEven(true);
+                    break;
+
+                case 'd':   // diagonal
+                    Settings.getInstance().setXAntiDiagonal(false);
+                    break;
+                case 'a':   // antidiagonal
+                    Settings.getInstance().setXDiagonal(false);
                     break;
 
                 case 'T':   // used saved techniques

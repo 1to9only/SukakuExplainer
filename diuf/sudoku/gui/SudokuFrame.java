@@ -157,6 +157,8 @@ public class SudokuFrame extends JFrame implements Asker {
     private JMenuItem mitVanilla = null;
     private JCheckBoxMenuItem mitLatinSquare = null;
     private JCheckBoxMenuItem mitDiagonals = null;
+    private JCheckBoxMenuItem mitXDiagonal = null;
+    private JCheckBoxMenuItem mitXAntiDiagonal = null;
     private JCheckBoxMenuItem mitDisjointGroups = null;
     private JCheckBoxMenuItem mitWindoku = null;
     private JCheckBoxMenuItem mitWindowsClosed = null;
@@ -2593,6 +2595,8 @@ public class SudokuFrame extends JFrame implements Asker {
             VariantsMenu.add(getMitLatinSquare());
             VariantsMenu.addSeparator();
             VariantsMenu.add(getMitDiagonals());
+            VariantsMenu.add(getMitXDiagonal());
+            VariantsMenu.add(getMitXAntiDiagonal());
             VariantsMenu.add(getMitDisjointGroups());
             VariantsMenu.add(getMitWindoku());
             VariantsMenu.add(getMitWindowsClosed());
@@ -2716,6 +2720,18 @@ public class SudokuFrame extends JFrame implements Asker {
                 //  if ( Settings.getInstance().isSdoku() )     { mitSdoku.setSelected(false); }
                 // }
                     Settings.getInstance().setDiagonals(mitDiagonals.isSelected());
+                  if ( mitDiagonals.isSelected() ) {
+                   if (!Settings.getInstance().isXDiagonal() && !Settings.getInstance().isXAntiDiagonal() ) {
+                    mitXDiagonal.setSelected(true);
+                    mitXAntiDiagonal.setSelected(true);
+                   }
+                    mitXDiagonal.setVisible(true);
+                    mitXAntiDiagonal.setVisible(true);
+                  }
+                  if (!mitDiagonals.isSelected() ) {
+                    mitXDiagonal.setVisible(false);
+                    mitXAntiDiagonal.setVisible(false);
+                  }
                     Settings.getInstance().saveChanged();
                     sudokuPanel.getSudokuGrid().updateDiagonals();
                     engine.rebuildSolver();
@@ -2725,6 +2741,54 @@ public class SudokuFrame extends JFrame implements Asker {
             });
         }
         return mitDiagonals;
+    }
+
+    private JCheckBoxMenuItem getMitXDiagonal() {
+        if (mitXDiagonal == null) {
+            mitXDiagonal = new JCheckBoxMenuItem();
+            mitXDiagonal.setText("Diagonal [/]");
+            mitXDiagonal.setToolTipText("Sets the puzzle type to Diagonal [/]");
+            mitXDiagonal.setSelected(Settings.getInstance().isXDiagonal());
+            if (!Settings.getInstance().isDiagonals() ) { mitXDiagonal.setVisible(false); }
+            mitXDiagonal.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                    Settings.getInstance().setXDiagonal(mitXDiagonal.isSelected());
+                  if (!Settings.getInstance().isXDiagonal() && !Settings.getInstance().isXAntiDiagonal() ) {
+                    mitDiagonals.setSelected(false);
+                  }
+                    Settings.getInstance().saveChanged();
+                    sudokuPanel.getSudokuGrid().updateXDiagonal();
+                    engine.rebuildSolver();
+                    engine.resetPotentials();
+                    repaint();
+                }
+            });
+        }
+        return mitXDiagonal;
+    }
+
+    private JCheckBoxMenuItem getMitXAntiDiagonal() {
+        if (mitXAntiDiagonal == null) {
+            mitXAntiDiagonal = new JCheckBoxMenuItem();
+            mitXAntiDiagonal.setText("AntiDiagonal [\\]");
+            mitXAntiDiagonal.setToolTipText("Sets the puzzle type to AntiDiagonal [\\]");
+            mitXAntiDiagonal.setSelected(Settings.getInstance().isXAntiDiagonal());
+            if (!Settings.getInstance().isDiagonals() ) { mitXAntiDiagonal.setVisible(false); }
+            mitXAntiDiagonal.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                    Settings.getInstance().setXAntiDiagonal(mitXAntiDiagonal.isSelected());
+                  if (!Settings.getInstance().isXDiagonal() && !Settings.getInstance().isXAntiDiagonal() ) {
+                    mitDiagonals.setSelected(false);
+                  }
+                    Settings.getInstance().saveChanged();
+                    sudokuPanel.getSudokuGrid().updateXAntiDiagonal();
+                    engine.rebuildSolver();
+                    engine.resetPotentials();
+                    repaint();
+                }
+            });
+        }
+        return mitXAntiDiagonal;
     }
 
     private JCheckBoxMenuItem getMitDisjointGroups() {

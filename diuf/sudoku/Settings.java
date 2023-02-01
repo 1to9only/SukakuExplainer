@@ -27,9 +27,9 @@ import diuf.sudoku.*;
  */
 public class Settings {
 
-    public final static int VERSION  = 2022;
-    public final static int REVISION = 5;
-    public final static int SUBREV   = 12;
+    public final static int VERSION  = 2023;
+    public final static int REVISION = 2;
+    public final static int SUBREV   = 1;
 
     private static Settings instance = null;
 
@@ -66,6 +66,8 @@ public class Settings {
 
     private boolean isLatinSquare = false;          // variants
     private boolean isDiagonals = false;
+    private boolean isXDiagonal = true;             // diagonal(/)
+    private boolean isXAntiDiagonal = true;         // antidiagonal(\)
     private boolean isDisjointGroups = false;
     private boolean isWindoku = false;
     private boolean isClover = false;
@@ -122,6 +124,8 @@ public class Settings {
         init();                     // enable all solving techniques
         isLatinSquare = false;      // reset variants, i.e. set to vanilla sudoku
         isDiagonals = false;
+        isXDiagonal = true;
+        isXAntiDiagonal = true;
         isDisjointGroups = false;
         isWindoku = false;
         isClover = false;
@@ -494,6 +498,26 @@ public class Settings {
         return isDiagonals;
     }
 
+    public void setXDiagonal(boolean isXDiagonal) {
+      if ( this.isXDiagonal != isXDiagonal ) {
+        this.isXDiagonal = isXDiagonal;
+        isChanged = 1;
+      }
+    }
+    public boolean isXDiagonal() {
+        return isXDiagonal;
+    }
+
+    public void setXAntiDiagonal(boolean isXAntiDiagonal) {
+      if ( this.isXAntiDiagonal != isXAntiDiagonal ) {
+        this.isXAntiDiagonal = isXAntiDiagonal;
+        isChanged = 1;
+      }
+    }
+    public boolean isXAntiDiagonal() {
+        return isXAntiDiagonal;
+    }
+
     public void setDisjointGroups(boolean isDisjointGroups) {
       if ( this.isDisjointGroups != isDisjointGroups ) {
         this.isDisjointGroups = isDisjointGroups;
@@ -846,6 +870,16 @@ public class Settings {
                 }
                 catch (NullPointerException e) { LoadError = 1; }
                 try {
+                    s = (String)stgDetails.get("isXDiagonal");
+                    isXDiagonal = s.equals("true")?true:false;
+                }
+                catch (NullPointerException e) { LoadError = 1; }
+                try {
+                    s = (String)stgDetails.get("isXAntiDiagonal");
+                    isXAntiDiagonal = s.equals("true")?true:false;
+                }
+                catch (NullPointerException e) { LoadError = 1; }
+                try {
                     s = (String)stgDetails.get("isDisjointGroups");
                     isDisjointGroups = s.equals("true")?true:false;
                 }
@@ -1027,6 +1061,8 @@ public class Settings {
 
         stgDetails.put("isLatinSquare", isLatinSquare?"true":"false");
         stgDetails.put("isDiagonals", isDiagonals?"true":"false");
+        stgDetails.put("isXDiagonal", isXDiagonal?"true":"false");
+        stgDetails.put("isXAntiDiagonal", isXAntiDiagonal?"true":"false");
         stgDetails.put("isDisjointGroups", isDisjointGroups?"true":"false");
         stgDetails.put("isWindoku", isWindoku?"true":"false");
         stgDetails.put("isWindowsClosed", isWindowsClosed?"true":"false");
