@@ -58,7 +58,7 @@ public class SudokuExplainer {
     public SudokuExplainer() {
         grid = new Grid();
         savedgrid = new Grid();
-        gridStack = new Stack<Grid>();
+        gridStack = new Stack<Grid>(); // Stack for undo
         pathStack = new Stack<String>(); // Stack for solution path
         solver = new Solver(grid);
         solver.rebuildPotentialValues();
@@ -368,7 +368,7 @@ public class SudokuExplainer {
     public void clearGrid() {
         grid = new Grid();
         savedgrid = new Grid();
-        gridStack = new Stack<Grid>();
+        gridStack = new Stack<Grid>(); // Stack for undo
         pathStack = new Stack<String>(); // Stack for solution path
         solver = new Solver(grid);
         solver.rebuildPotentialValues();
@@ -446,7 +446,7 @@ public class SudokuExplainer {
             if ( solver.isSolved() ||
                 JOptionPane.showConfirmDialog(frame, "Restart, Are you sure?", "Restart", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION ) {
                 savedgrid.copyTo(grid);
-                gridStack = new Stack<Grid>();
+                gridStack = new Stack<Grid>(); // Stack for undo
                 pathStack = new Stack<String>(); // Stack for solution path
                 solver = new Solver(grid);
             //  solver.rebuildPotentialValues();
@@ -461,7 +461,7 @@ public class SudokuExplainer {
 
     public void setGrid(Grid grid) {
         this.grid = grid;
-        gridStack = new Stack<Grid>();
+        gridStack = new Stack<Grid>(); // Stack for undo
         pathStack = new Stack<String>(); // Stack for solution path
         solver = new Solver(grid);
         solver.rebuildPotentialValues();
@@ -474,7 +474,7 @@ public class SudokuExplainer {
 
     public void newGrid(Grid grid) {
         this.grid = grid;
-        gridStack = new Stack<Grid>();
+        gridStack = new Stack<Grid>(); // Stack for undo
         pathStack = new Stack<String>(); // Stack for solution path
         solver = new Solver(grid);
         solver.rebuildPotentialValues();
@@ -528,9 +528,7 @@ public class SudokuExplainer {
         } catch (Throwable t) {
             t.printStackTrace();
         }
-        frame.setExplanations("<html><body><font color=\"red\">" +
-                ex.toString().replace("\n", "<br>") +
-        "</font></body></html>");
+        frame.setExplanations("<html><body><font color=\"red\">" + ex.toString().replace("\n", "<br>") + "</font></body></html>");
     }
 
     /**
@@ -635,6 +633,9 @@ public class SudokuExplainer {
         frame.setExplanations("<html><body><h2>The Sudoku has been solved !</h2></body></html>");
         return;
      }
+     if ( this.pathStack.isEmpty() ) {
+        pushSudoku(grid);
+     }
      int basics = 1;
      while ( basics == 1 ) {
       clearHintsOnly();
@@ -679,6 +680,9 @@ public class SudokuExplainer {
      if ( solved ) {
         frame.setExplanations("<html><body><h2>The Sudoku has been solved !</h2></body></html>");
         return;
+     }
+     if ( this.pathStack.isEmpty() ) {
+        pushSudoku(grid);
      }
      int basics = 1;
      while ( basics == 1 ) {
@@ -833,7 +837,7 @@ public class SudokuExplainer {
             {
                 solver.rebuildPotentialValues();
             }
-            gridStack = new Stack<Grid>();
+            gridStack = new Stack<Grid>(); // Stack for undo
             pathStack = new Stack<String>(); // Stack for solution path
             if ( grid.isSudoku() == 1 )
             {
@@ -880,7 +884,7 @@ public class SudokuExplainer {
             {
                 solver.rebuildPotentialValues();
             }
-            gridStack = new Stack<Grid>();
+            gridStack = new Stack<Grid>(); // Stack for undo
             pathStack = new Stack<String>(); // Stack for solution path
             if ( grid.isSudoku() == 1 )
             {

@@ -4,8 +4,8 @@ Created-By: 1.8.0_361
 Main-Class: diuf.sudoku.gui.SudokuExplainer
 Implementation-Title: "formatted rate entry point"
 Specification-Vendor: "Nicolas Juillerat"
-Specification-Version: "2023.2.1"
-Implementation-Version: "2023.2.1"
+Specification-Version: "2023.3.16"
+Implementation-Version: "2023.3.16"
 Name: SudokuExplainer+serate
 Implementation-Vendor: "gsf+1to9only"
 
