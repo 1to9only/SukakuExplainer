@@ -539,6 +539,11 @@ public class SudokuPanel extends JPanel {
                 }
             }
         }
+        if ( Settings.getInstance().isShowingCandidateMasks() ) {
+            if ( null != selectedCell && selectedCell.getValue() == value ) {
+                col = Color.red;
+            }
+        }
         g.setColor(col);
         return isHighlighted;
     }
@@ -622,25 +627,25 @@ public class SudokuPanel extends JPanel {
             col = selectedColor;
         else if (cell == focusedCell)
             col = focusedColor;
-        else {
-            boolean showing = Settings.getInstance().isShowingCandidateMasks();
-            if ( showing == true ) {
-                // Selected candidates color
-                int value = -1;
-                if (null != selectedCell) {
-                    value = selectedCell.getValue();
-                }
-                if ( value > 0 ) {
-                    if ( value == cell.getValue()) {
-                        col = candidateMaskColor;
-                    }
-                    else
-                    if ( cell.hasPotentialValue(value)) {
-                        col = potentialMaskColor;
-                    }
-                }
-            }
-        }
+    /// else {
+    ///     boolean showing = Settings.getInstance().isShowingCandidateMasks();
+    ///     if ( showing == true ) {
+    ///         // Selected candidates color
+    ///         int value = -1;
+    ///         if (null != selectedCell) {
+    ///             value = selectedCell.getValue();
+    ///         }
+    ///         if ( value > 0 ) {
+    ///             if ( value == cell.getValue()) {
+    ///                 col = candidateMaskColor;
+    ///             }
+    ///             else
+    ///             if ( cell.hasPotentialValue(value)) {
+    ///                 col = potentialMaskColor;
+    ///             }
+    ///         }
+    ///     }
+    /// }
         g.setColor(col);
     }
 
@@ -683,25 +688,25 @@ public class SudokuPanel extends JPanel {
     //      col = selectedColor;
     //  else if (cell == focusedCell)
     //      col = focusedColor;
-        else {
-            boolean showing = Settings.getInstance().isShowingCandidateMasks();
-            if ( showing == true ) {
-                // Selected candidates color
-                int value = -1;
-                if (null != selectedCell) {
-                    value = selectedCell.getValue();
-                }
-                if ( value > 0 ) {
-                    if ( value == cell.getValue()) {
-                        col = candidateMaskColor;
-                    }
-                    else
-                    if ( cell.hasPotentialValue(value)) {
-                        col = potentialMaskColor;
-                    }
-                }
-            }
-        }
+    /// else {
+    ///     boolean showing = Settings.getInstance().isShowingCandidateMasks();
+    ///     if ( showing == true ) {
+    ///         // Selected candidates color
+    ///         int value = -1;
+    ///         if (null != selectedCell) {
+    ///             value = selectedCell.getValue();
+    ///         }
+    ///         if ( value > 0 ) {
+    ///             if ( value == cell.getValue()) {
+    ///                 col = candidateMaskColor;
+    ///             }
+    ///             else
+    ///             if ( cell.hasPotentialValue(value)) {
+    ///                 col = potentialMaskColor;
+    ///             }
+    ///         }
+    ///     }
+    /// }
         g.setColor(col);
     }
 
