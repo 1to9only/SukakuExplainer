@@ -1664,10 +1664,12 @@ public class Solver {
         try {
             SingleHintAccumulator accu = new SingleHintAccumulator();
             try {
+              if ( grid.isSudoku() == 1 ) {
                 for (WarningHintProducer producer : validatorHintProducers)
                     producer.getHints(grid, accu);
                 for (WarningHintProducer producer : warningHintProducers)
                     producer.getHints(grid, accu);
+              }
                 Analyser engine = new Analyser(this, asker);
                 engine.getHints(grid, accu);
             } catch (InterruptedException willProbablyHappen) {}
